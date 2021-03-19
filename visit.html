@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta content="yes" name="apple-touch-fullscreen">
+    <meta content="telephone=no,email=no" name="format-detection">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta name="renderer" content="webkit">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+    <link type="text/css" rel="stylesheet" href="css/reset.css" />
+    <link type="text/css" rel="stylesheet" href="css/swiper.min.css" />
+    <link type="text/css" rel="stylesheet" href="css/visit.css" />
+    <title>故事详情</title>
+</head>
+<body>
+
+<div class="wrap">
+    <div class="header">
+        <video class="top-video"
+               id="playVideo"
+               webkit-playsinline="true"
+               playsinline="true"
+               x5-playsinline="true"
+               x5-video-player-type="h5"
+               x5-video-player-fullscreen=""
+               x5-video-orientation="portraint"
+               x-webkit-airplay="true"
+               controls="controls"
+               src="" style="object-fit: fill"></video>
+    </div>
+
+    <div class="main">
+        <div class="tab">
+            <div class="tab-tits">
+                <div class="tab-tit" data-id="1">推荐</div>
+                <div class="tab-tit" data-id="2">评论(<span id="commentNum">0</span>)</div>
+                <div class="tab-pos">
+                    <img class="tab-pos-icon" src="img/icon_pos_gray.png" alt />
+                    <div class="tab-pos-text" id="location"></div>
+                </div>
+            </div>
+            <div class="tab-cons">
+                <div class="tab-con" id="recommend" data-id="1">
+                    <div class="pan">
+<!--                        <div class="pan-author">-->
+<!--                            <img class="pa-l" id="userAvatar" src="" alt />-->
+<!--                            <div class="pa-c">-->
+<!--                                <div class="pa-ct" id="userNickName"></div>-->
+<!--                                <div class="pa-cd"><span id="fansCount">0</span>粉丝&nbsp;&nbsp;<span id="videoCount">0</span>视频</div>-->
+<!--                            </div>-->
+<!--                            <div class="pa-r link" id="like">+关注</div>-->
+<!--                        </div>-->
+
+                        <div class="pan-wrap">
+                            <div class="pan-tit" id="title"></div>
+                            <div class="pan-stit"><span id="lookNumber">0</span>次观看 · <span id="publishDate"></span></div>
+                            <div class="pan-tags" id="tagName">
+                            </div>
+                            <div class="pan-con" id="content">
+                            </div>
+                            <div class="pan-fun">
+                                <div class="pan-fun-group link">
+                                    <img class="pan-fg-icon" src="img/icon_like_g.png" alt />
+                                    <div class="pan-fg-text" id="likeCount">点赞</div>
+                                </div>
+                                <div class="pan-fun-group link">
+                                    <img class="pan-fg-icon" src="img/icon_share_g.png" alt />
+                                    <div class="pan-fg-text">分享</div>
+                                </div>
+                            </div>
+                            <img class="pan-cols" src="img/icon_arrow_g2.png" alt />
+                        </div>
+
+                    </div>
+
+                    <div class="roll" id="relationHouses">
+                        <div class="roll-tit">相关房源推荐</div>
+                        <div class="roll-con">
+                            <div class="swiper-container swiper-houses">
+                                <div class="swiper-wrapper" id="houseList"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="list" id="relationStory">
+                        <div class="list-tit">相关视频推荐</div>
+                        <div class="list-con showAll" id="tales"></div>
+                    </div>
+
+                </div>
+                <div class="tab-con comment" id="comment" data-id="2">
+                    <div class="comment-list" id="commentList"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+
+</div>
+
+
+<div class="swiper-container" id="fullPageImages" style="display: none">
+    <div class="swiper-wrapper" id="fullPageWrap">
+        <!--        <div class="swiper-slide full-swiper-slide"><img src="img/album.png" alt /></div>-->
+    </div>
+</div>
+
+
+<!-- 遮盖层 -->
+<div class="guide" id="guide" onclick="closeGuide()"></div>
+<!-- 遮盖层引导 -->
+<div class="guide-img" id="guide-img" onclick="closeGuide()"></div>
+<!-- 打开跳转app -->
+<div class="open-app">
+    <div class="open-app-left">
+        <img src="img/open-app-logo.png" style="margin: 0 15px;width: 52px;" alt />
+        <div style="display:flex;flex-direction:column;justify-content:center;align-items:flex-start;">
+            <label style="color:#343434;font-size:16px;font-weight: 400;">打开乡导APP</label>
+            <label style="color:#666;font-size: 13px;line-height: 22px;">旅居租房</label>
+        </div>
+    </div>
+    <div class="open-app-right" onclick="openApp()">
+        立即打开
+    </div>
+</div>
+
+<script type="text/javascript">
+    function GetQueryString(name) {
+        var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+        var r = window.location.search.substr(1).match(reg);
+        if(r!=null)return  unescape(r[2]); return null;
+    }
+    //打开app逻辑判断: 如果在微信打开引导层，非微信打开app，app未安装直接下载
+    function openApp(href){
+        //检测是否微信内核浏览器
+        var ua = navigator.userAgent.toLowerCase();//获取判断用的对象
+        if (ua.match(/MicroMessenger/i) == "micromessenger") {
+            //在微信中打开，引导跳转外部浏览器
+            document.getElementById("guide").style.display="block";
+            document.getElementById("guide-img").style.display="block";
+        }else{
+            //执行打开app逻辑
+            //ios设备或安卓设备
+            if (navigator.userAgent.match(/(iPhone|iPod|iPad);?/i) || navigator.userAgent.match(/android/i)) {
+                try {
+                    //视频  android://h5/open?type=1&id=64
+                    //文章	android://h5/open?type=2&id=64
+                    //房源  android://h5/open?type=4&id=64
+                    //故事  android://h5/open?type=5&id=64
+                    window.location = "android://h5/open?type=5&id="+GetQueryString("id");
+                    window.setTimeout(function() {
+                        //未响应，响应超时则判断未安装app执行下载apk
+                        window.location = "http://www.xiangdao.info/download/sz.xinagdao.apk";
+                    }, 500);
+                } catch (e) {}
+            }
+        }
+
+    }
+    //关闭遮盖层
+    function closeGuide(){
+        document.getElementById("guide").style.display="none";
+        document.getElementById("guide-img").style.display="none";
+    }
+</script>
+<div id="mcontainer"></div>
+<script type="text/javascript">
+
+</script>
+<script src="js/require.js" data-main="js/visit"></script>
+<script>
+    require(['visit'], function (modal) {});
+    requirejs.config({
+        urlArgs: "v=" +  (new Date()).getTime()
+    });
+</script>
+
+</body>
+</html>

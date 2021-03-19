@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta content="yes" name="apple-touch-fullscreen">
+    <meta content="telephone=no,email=no" name="format-detection">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta name="renderer" content="webkit">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+    <link type="text/css" rel="stylesheet" href="css/reset.css" />
+    <link type="text/css" rel="stylesheet" href="css/swiper.min.css" />
+    <link type="text/css" rel="stylesheet" href="css/house_details.css?t=1" />
+    <title>房屋详情</title>
+</head>
+<body>
+
+<div class="wrap">
+    <div class="header">
+        <div class="swiper-container swiper-container-head">
+            <div class="swiper-wrapper" id="headImgs"></div>
+            <div class="swiper-pagination" id="pag"></div>
+        </div>
+<!--        <img class="header-img" src="" alt />-->
+        <div class="header-con">
+            <div class="hc-ver verified"></div>
+            <img class="hc-user" src="" alt />
+            <div class="hc-st" id="profileStr"></div>
+            <div class="hc-tit"></div>
+            <div class="hc-code">房源编号 <span id="houseNo"></span></div>
+            <div class="hc-info">
+<!--                <div class="hci-li">-->
+<!--                    <div class="hci-tit">室内面积</div>-->
+<!--                    <div class="hci-con"><span id="baseIndoorArea"></span>m<sup>2</sup></div>-->
+<!--                </div>-->
+                <div class="hci-li">
+                    <div class="hci-tit">朝向</div>
+                    <div class="hci-con" id="baseOrientation"></div>
+                </div>
+                <div class="hci-li">
+                    <div class="hci-tit">装修时间</div>
+                    <div class="hci-con" id="baseEstablishDate"></div>
+                </div>
+                <div class="hci-li">
+                    <div class="hci-tit">楼层</div>
+                    <div class="hci-con"><span id="floor"></span>层</div>
+                </div>
+                <div class="hci-li">
+                    <div class="hci-tit">租赁方式</div>
+                    <div class="hci-con" id="profileRentMode"></div>
+                </div>
+            </div>
+            <div class="hc-info-hwrap">
+                <div class="hc-info-h">
+                    <div class="hci-l">房&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;型</div>
+                    <div class="hci-r" id="baseHouseType"></div>
+                </div>
+            </div>
+            <div class="hc-info-hwrap">
+                <div class="hc-info-h">
+                    <div class="hci-l">建筑面积</div>
+                    <div class="hci-r"><span id="baseIndoorArea"></span>m<sup>2</sup></div>
+                </div>
+            </div>
+            <div class="hc-info-hwrap">
+                <div class="hc-info-h">
+                    <div class="hci-l">院子面积</div>
+                    <div class="hci-r"><span id="baseCourtyardArea"></span>m<sup>2</sup></div>
+                </div>
+            </div>
+            <div class="hc-info-hwrap" id="baseIndoorScenery">
+                <div class="hc-info-h">
+                    <div class="hci-l">室内看外</div>
+                    <div class="hci-r hci-labels" id="baseScenery">
+
+                    </div>
+                </div>
+            </div>
+            <div class="hc-info-hwrap" id="baseNoiseWrap">
+                <div class="hc-info-h">
+                    <div class="hci-l">安静参考</div>
+                    <div class="hci-r hci-labels" id="baseNoise">
+
+                    </div>
+                </div>
+            </div>
+            <div class="hc-info2">
+                <div class="swiper-container swiper-container-bed">
+                    <div class="swiper-wrapper" id="hcInfo2">
+                        <div class="hci-tli-wrap swiper-slide">
+                            <div class="hci-tli">
+                                <img class="hci-icon" src="img/icon_guest.png" alt />
+                                <div class="hci-text"><span id="baseLiveNumber"></span>个房客</div>
+                            </div>
+                        </div>
+                        <div class="hci-tli-wrap swiper-slide">
+                            <div class="hci-tli">
+                                <img class="hci-icon" src="img/icon_room.png" alt />
+                                <div class="hci-text"><span id="roomCount"></span>间卧室</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+<!--            <div class="hc-bottom"><span class="rb link">区域介绍</span></div>-->
+        </div>
+    </div>
+    <div class="pan">
+        <div class="pan-tit">房源介绍<div class="pan-tit-r link">举报房源</div></div>
+        <div class="pan-con pan-txt pan-brf" id="infoBrief"></div>
+        <div class="pan-showall2">详情 >></div>
+    </div>
+    <div class="pan">
+        <div class="pan-tit">设施</div>
+        <div class="pan-con pan-ist" id="insWrap"></div>
+        <div class="pan-showall2">详情 >></div>
+    </div>
+
+    <div class="nearby">
+        <div class="nearby-l">
+            <div class="nearby-tit">周边环境介绍</div>
+            <div class="nearby-con">房源所在区域环境视频、 照片、位置及相关介绍</div>
+        </div>
+        <img class="nearby-r" src="img/nearby_thumb.png" alt />
+    </div>
+
+<!--    <div class="pan">-->
+<!--        <div class="pan-tit">房东介绍</div>-->
+<!--        <div class="pan-user">-->
+<!--            <img class="pu-l" id="ownerAvatar2" src="" alt />-->
+<!--            <div class="pu-r">-->
+<!--                <div class="pu-name" id="ownerNickName"></div>-->
+<!--                <div class="pu-stit" id="ownerHouseIsAuthentication2"></div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        <div class="pan-con pan-txt" id="baseOwnerBrief"></div>-->
+<!--        <div class="pan-showall">了解更多 >></div>-->
+<!--    </div>-->
+
+    <div class="pan" id="ask">
+        <div class="pan-tit">
+            <span>问答</span>
+            <img class="pan-tit-img link" src="img/btn_ask.png" alt />
+        </div>
+        <div class="pan-list" id="askList">
+        </div>
+        <div class="ask-nodata">
+            <div class="an-t link">
+                <img class="an-avatar" src="http://resource.xiangdao.info/user/avatar/default_avatar.png" alt />
+                <div class="an-input">看对眼了就问问更多细节~</div>
+            </div>
+            <img class="an-icon" src="img/ask_nodata.png" alt />
+            <div class="an-txt">还没有人问答，还不快来抢沙发...</div>
+        </div>
+        <div class="pan-show link" id="askShowAll">查看更多 >></div>
+    </div>
+
+    <div class="pan" id="ruleRequire">
+        <div class="pan-tit">租房注意事项</div>
+        <div class="pan-con">
+            <div class="pan-rules rule-pet"></div>
+            <div class="pan-rules rule-party"></div>
+            <div class="pan-rules rule-other"></div>
+        </div>
+    </div>
+
+    <div class="pan">
+        <div class="pan-tit">同区房源</div>
+        <div class="h-list" id="hlist">
+        </div>
+    </div>
+
+    <div class="bar">
+        <div class="bar-l" id="togglePrice">
+            <div class="bar-l-t">
+                <div class="bar-price"><i>￥</i><span class="bar-lg" id="ruleYearMoney"></span>元/月起</div>
+<!--                <div class="bar-btn-more">查看更多</div>-->
+            </div>
+            <div class="bar-l-b">价格可能有波动，电话沟通为准</div>
+        </div>
+        <a class="bar-r rb" id="phone">电话</a>
+    </div>
+    <div class="gap-fix"></div>
+
+</div>
+
+<div class="multi-price" style="display: none;position: fixed;bottom:1.69rem;z-index: 30">
+    <div class="mp-mask"></div>
+    <div class="multi-price-list">
+        <div class="mpl-btn" id="mpConfirm">确定</div>
+        <div class="mpl-con" id="otherDesc"></div>
+    </div>
+</div>
+
+<!-- 遮盖层 -->
+<div class="guide" id="guide" onclick="closeGuide()"></div>
+<!-- 遮盖层引导 -->
+<div class="guide-img" id="guide-img" onclick="closeGuide()"></div>
+<!-- 打开跳转app -->
+<div class="open-app">
+    <div class="open-app-left">
+        <img src="img/open-app-logo.png" style="margin: 0 15px;width: 52px;" alt />
+        <div style="display:flex;flex-direction:column;justify-content:center;align-items:flex-start;">
+            <label style="color:#343434;font-size:16px;font-weight: 400;">打开乡导APP</label>
+            <label style="color:#666;font-size: 13px;line-height: 22px;">旅居租房</label>
+        </div>
+    </div>
+    <div class="open-app-right" onclick="openApp()">
+        立即打开
+    </div>
+</div>
+
+<script type="text/javascript">
+    function GetQueryString(name) {
+        var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+        var r = window.location.search.substr(1).match(reg);
+        if(r!=null)return  unescape(r[2]); return null;
+    }
+    //打开app逻辑判断: 如果在微信打开引导层，非微信打开app，app未安装直接下载
+    function openApp(href){
+        //检测是否微信内核浏览器
+        var ua = navigator.userAgent.toLowerCase();//获取判断用的对象
+        if (ua.match(/MicroMessenger/i) == "micromessenger") {
+            //在微信中打开，引导跳转外部浏览器
+            document.getElementById("guide").style.display="block";
+            document.getElementById("guide-img").style.display="block";
+        }else{
+            //执行打开app逻辑
+            //ios设备或安卓设备
+            if (navigator.userAgent.match(/(iPhone|iPod|iPad);?/i) || navigator.userAgent.match(/android/i)) {
+                try {
+                    //视频  android://h5/open?type=1&id=64
+                    //文章	android://h5/open?type=2&id=64
+                    //房源  android://h5/open?type=4&id=64
+                    //故事  android://h5/open?type=5&id=64
+                    window.location = "android://h5/open?type=4&id="+GetQueryString("houseId");
+                    window.setTimeout(function() {
+                        //未响应，响应超时则判断未安装app执行下载apk
+                        window.location = "http://www.xiangdao.info/download/sz.xinagdao.apk";
+                    }, 500);
+                } catch (e) {}
+            }
+        }
+
+    }
+    //关闭遮盖层
+    function closeGuide(){
+        document.getElementById("guide").style.display="none";
+        document.getElementById("guide-img").style.display="none";
+    }
+</script>
+<script src="js/require.js" data-main="js/house_details"></script>
+<script>
+    require(['house_details'], function (modal) {});
+    requirejs.config({
+        urlArgs: "v=" +  (new Date()).getTime()
+    });
+</script>
+
+</body>
+</html>

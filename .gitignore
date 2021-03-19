@@ -1,0 +1,15 @@
+# Created by .ignore support plugin (hsz.mobi)
+### Example user template template
+### Example user template
+
+# IntelliJ project files
+.idea
+*.iml
+out
+gen
+*.7z
+*.zip
+.gitignore
+*.txt
+微信图片_20200927141336.png
+uglify.json
