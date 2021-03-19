@@ -112,6 +112,10 @@ body{
     font-size: .37rem;
     color: #E02A1C;
 }
+.pa-r.liked{
+    border-color: #ccc;
+    color: #666;
+}
 .pan-wrap{
     position: relative;
 }
@@ -142,6 +146,18 @@ body{
     padding: .16rem .24rem;
     font-size: .37rem;
     color: #666;
+}
+.pan-tags .pan-tag:nth-child(3n+1){
+    background-color: #FDD9D5;
+    color: #E17166;
+}
+.pan-tags .pan-tag:nth-child(3n+2){
+    background-color: #FDF4E7;
+    color: #F3BA5B;
+}
+.pan-tags .pan-tag:nth-child(3n+3){
+    background-color: #EDF4FB;
+    color: #5394F1;
 }
 .pan-con{
     font-size: .4rem;

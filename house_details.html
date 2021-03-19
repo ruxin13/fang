@@ -250,9 +250,9 @@
         document.getElementById("guide-img").style.display="none";
     }
 </script>
-<script src="js/require.js" data-main="js/house_details"></script>
+<script src="js/require.js" data-main="js/house_details.min"></script>
 <script>
-    require(['house_details'], function (modal) {});
+    require(['house_details.min'], function (modal) {});
     requirejs.config({
         urlArgs: "v=" +  (new Date()).getTime()
     });

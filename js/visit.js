@@ -112,6 +112,7 @@ define(['common', 'swiper', 'jquery'], function (core, Swiper, $) {
             }
         });
     };
+
     modal.q = function(selector) {
         return document.querySelector(selector)
     };
@@ -329,7 +330,8 @@ define(['common', 'swiper', 'jquery'], function (core, Swiper, $) {
                         // modal.q("#fansCount").innerText = data.fansCount;
                         // modal.q("#videoCount").innerText = data.videoCount;
                         modal.q("#title").innerText = data.title;
-                        modal.q("#location").innerText = data.locationCityName + "·" + data.locationTownName;
+                        // modal.q("#location").innerText = data.locationCityName + "·" + data.locationTownName;
+                        modal.q("#location").innerText = data.locationProvinceName;
                         modal.q("#lookNumber").innerText = data.lookNumber;
                         modal.q("#likeCount").innerText = data.likeCount > 0 ? data.likeCount : "点赞";
                         modal.q("#publishDate").innerText = modal.parseDate(data.publishDate) + "发布";
@@ -350,7 +352,7 @@ define(['common', 'swiper', 'jquery'], function (core, Swiper, $) {
                         }
                         if (data.locationTown) {
                             $.ajax({
-                                url: modal.server[modal.env] + "/xiangdao-api/api/news/tale_list",
+                                url: modal.server[modal.env] + "/xiangdao-api/api/news/visit_list",
                                 method: "POST",
                                 dataType: "json",
                                 headers: {
@@ -365,8 +367,8 @@ define(['common', 'swiper', 'jquery'], function (core, Swiper, $) {
                                         if (data2 && data2.length > 0) {
                                             var listHtml = '';
                                             data2.forEach(function (item2) {
-                                                if (parseInt(modal.id) !== item2.taleId) {
-                                                    listHtml += '<a class="lli" data-id="'+item2.taleId+'" href="story.html?id='+item2.taleId+'">\n' +
+                                                if (parseInt(modal.id) !== item2.visitId) {
+                                                    listHtml += '<a class="lli" data-id="'+item2.visitId+'" href="story.html?id='+item2.visitId+'">\n' +
                                                         '                                <div class="lli-l">\n' +
                                                         '                                    <img class="lli-img" src="'+item2.cover+'" alt />\n' +
                                                         '                                    <div class="lli-time">'+item2.videoDuration+'</div>\n' +
