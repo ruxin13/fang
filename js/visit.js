@@ -368,7 +368,7 @@ define(['common', 'swiper', 'jquery'], function (core, Swiper, $) {
                                             var listHtml = '';
                                             data2.forEach(function (item2) {
                                                 if (parseInt(modal.id) !== item2.visitId) {
-                                                    listHtml += '<a class="lli" data-id="'+item2.visitId+'" href="story.html?id='+item2.visitId+'">\n' +
+                                                    listHtml += '<a class="lli" data-id="'+item2.visitId+'" href="visit.html?id='+item2.visitId+'">\n' +
                                                         '                                <div class="lli-l">\n' +
                                                         '                                    <img class="lli-img" src="'+item2.cover+'" alt />\n' +
                                                         '                                    <div class="lli-time">'+item2.videoDuration+'</div>\n' +
