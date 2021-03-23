@@ -359,7 +359,7 @@ define(['common', 'swiper', 'jquery'], function (core, Swiper, $) {
                                     "Accept": "application/json",
                                     "Content-Type": "application/json"
                                 },
-                                data: JSON.stringify({"code": data.locationTown, "pageNo": 1, "pageSize": 8}),
+                                data: JSON.stringify({"code": data.locationTown, "pageSize": 8}),
                                 success: function (res2) {
                                     console.log(res2);
                                     if (res2.status === 0) {
@@ -430,7 +430,6 @@ define(['common', 'swiper', 'jquery'], function (core, Swiper, $) {
                 // }
             // }
         // });
-
 
         $.ajax({
             url: modal.server[modal.env] + "/xiangdao-api/api/news/new_comment_list",
