@@ -325,10 +325,10 @@ define(['common', 'swiper', 'jquery'], function (core, Swiper, $) {
                     if (data) {
                         modal.q("#playVideo").src = data.video;
                         modal.q("#playVideo").poster = data.cover;
-                        // modal.q("#userAvatar").src = data.userAvatar;
-                        // modal.q("#userNickName").innerText = data.userNickName;
-                        // modal.q("#fansCount").innerText = data.fansCount;
-                        // modal.q("#videoCount").innerText = data.videoCount;
+                        modal.q("#userAvatar").src = data.userAvatar;
+                        modal.q("#userNickName").innerText = data.userNickName;
+                        modal.q("#fansCount").innerText = data.likeCount || 0;
+                        modal.q("#videoCount").innerText = data.commentCount || 0;
                         modal.q("#title").innerText = data.title;
                         // modal.q("#location").innerText = data.locationCityName + "·" + data.locationTownName;
                         modal.q("#location").innerText = data.locationProvinceName;
@@ -359,7 +359,7 @@ define(['common', 'swiper', 'jquery'], function (core, Swiper, $) {
                                     "Accept": "application/json",
                                     "Content-Type": "application/json"
                                 },
-                                data: JSON.stringify({"code": data.locationTown, "pageSize": 20}),
+                                data: JSON.stringify({"code": data.locationTown, "pageNo": 1, "pageSize": 8}),
                                 success: function (res2) {
                                     console.log(res2);
                                     if (res2.status === 0) {
@@ -393,41 +393,43 @@ define(['common', 'swiper', 'jquery'], function (core, Swiper, $) {
                                 }
                             });
                         }
-                    }
-
-                }
-            }
-        });
-
-        core.request({
-            url: modal.server[modal.env] + "/xiangdao-api/api/news/tale/" + modal.id + "/house_list",
-            method: "GET",
-            success: function (res) {
-                console.log(res);
-                if (res.status === 0) {
-                    var data = res.json;
-                    if (data && data.length > 0) {
-                        var houseHtml = "";
-                        data.forEach(function (item) {
-                            houseHtml += '<a class="swiper-slide" data-id="'+item.houseId+'" href="house_details.html?houseId='+item.houseId+'">\n' +
-                                '             <img class="roll-slide-img" src="'+item.infoCover+'" alt />\n' +
-                                '             <div class="roll-slide-stit">'+item.profileStr+'</div>\n' +
-                                '             <div class="roll-slide-tit">'+item.infoTitle+'</div>\n' +
-                                '         </a>'
-                        });
-                        modal.q("#houseList").innerHTML = houseHtml;
-                        swiper1.init();
-                        if (houseHtml === '') {
+                        var rList = data.list;
+                        if (rList && rList.length > 0) {
+                            var houseHtml = "";
+                            rList.forEach(function (item) {
+                                houseHtml += '<a class="swiper-slide" data-id="'+item.houseId+'" href="house_details.html?houseId='+item.houseId+'">\n' +
+                                    '             <img class="roll-slide-img" src="'+item.infoCover+'" alt />\n' +
+                                    '             <div class="roll-slide-stit">'+item.profileStr+'</div>\n' +
+                                    '             <div class="roll-slide-tit">'+item.infoTitle+'</div>\n' +
+                                    '         </a>'
+                            });
+                            modal.q("#houseList").innerHTML = houseHtml;
+                            swiper1.init();
+                            if (houseHtml === '') {
+                                modal.q("#relationHouses").style.display = "none";
+                            }
+                        } else {
                             modal.q("#relationHouses").style.display = "none";
                         }
-                    } else {
-                        modal.q("#relationHouses").style.display = "none";
                     }
-                } else {
-                    modal.q("#relationHouses").style.display = "none";
+
                 }
             }
         });
+
+        // core.request({
+        //     url: modal.server[modal.env] + "/xiangdao-api/api/news/tale/" + modal.id + "/house_list",
+        //     method: "GET",
+        //     success: function (res) {
+        //         console.log(res);
+        //         if (res.status === 0) {
+        //             var data = res.json;
+
+                // } else {
+                //     modal.q("#relationHouses").style.display = "none";
+                // }
+            // }
+        // });
 
 
         $.ajax({

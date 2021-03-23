@@ -169,6 +169,7 @@ define(['common', 'swiper', 'jquery'], function (core, Swiper, $) {
                                 }
                             })
                         });
+
                         repHtml += modal.renderReplyList(repList);
                         // $obj.before(repHtml);
                         // $obj.prev(".comment-reply").append(repHtml);

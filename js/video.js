@@ -350,6 +350,7 @@ define(['common', 'swiper', 'jquery'], function (core, Swiper, $) {
         var map = new AMap.Map("mapContainer", {zoom: 11,});
         var geocoder = new AMap.Geocoder();
         // geocoder.getLocation(modal.locationDetail, function(status, result) {
+
         geocoder.getLocation(modal.locationProvinceName+modal.locationCityName+modal.locationTownName, function(status, result) {
             if (status === 'complete'&&result.geocodes.length) {
                 var lnglat = result.geocodes[0].location;

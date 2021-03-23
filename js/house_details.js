@@ -454,6 +454,7 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
             //         mul.style.display = "none"
             //     }
             // }, false);
+            
 
 
             $.ajax({
