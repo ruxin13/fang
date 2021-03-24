@@ -337,7 +337,7 @@ define(['common', 'swiper', 'jquery'], function (core, Swiper, $) {
                         }
                         modal.q("#title").innerText = data.title;
                         // modal.q("#location").innerText = data.locationCityName + "·" + data.locationTownName;
-                        modal.q("#location").innerText = data.locationProvinceName;
+                        modal.q("#location").innerText = data.locationProvinceName + data.locationCityName;
                         modal.q("#lookNumber").innerText = data.lookNumber;
                         modal.q("#likeCount").innerText = data.likeCount > 0 ? data.likeCount : "点赞";
                         modal.q("#publishDate").innerText = modal.parseDate(data.publishDate) + "发布";

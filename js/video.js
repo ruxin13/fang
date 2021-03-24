@@ -134,7 +134,7 @@ define(['common', 'swiper', 'jquery'], function (core, Swiper, $) {
 
             if (data.villageIcon) {
                 core.request({
-                    url: modal.server[modal.env] + "/xiangdao-api/api/houseEditor/get_house_icon_group",
+                    url: modal.server[modal.env] + "/xiangdao-api/api/houseEditor/get_village_icon_group",
                     success: function (res2) {
                         console.log(res2);
                         var insData = res2.json;
