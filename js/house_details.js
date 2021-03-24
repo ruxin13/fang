@@ -7,7 +7,9 @@ require.config({
 });
 define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
     core.init();
-    var modal = {};
+    var modal = {
+        s: ["", "栋", "间", "套", "人"]
+    };
 
 
     modal.env = "dev";
@@ -131,6 +133,7 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
             var baseOrientation = modal.q("#baseOrientation");
             var baseEstablishDate = modal.q("#baseEstablishDate");
             var profileRentMode = modal.q("#profileRentMode");
+            var profileRentMode2= modal.q("#profileRentMode2");
             var baseCourtyardArea = modal.q("#baseCourtyardArea");
             var ownerAvatar2 = modal.q("#ownerAvatar2");
             var ownerNickName = modal.q("#ownerNickName");
@@ -239,7 +242,7 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
                                     // '                <img class="hli-avatar" src="'+item.ownerAvatar+'" alt />\n' +
                                     '                <div class="hli-stit">' + item.profileStr + '</div>\n' +
                                     '                <div class="hli-tit">' + item.infoTitle + '</div>\n' +
-                                    '                <div class="hli-price">￥<span>' + item.ruleMonthMoney + '</span>/月</div>\n' +
+                                    '                <div class="hli-price">￥<span>' + item.ruleMonthMoney + '</span>'+(item.profileRentMode ? ('/'+modal.s[item.profileRentMode]):'')+'/月</div>\n' +
                                     '            </div>';
                             });
                             modal.q("#hlist").innerHTML = houseHtml;
@@ -317,6 +320,7 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
             baseOrientation.innerText = data.baseOrientation;
             baseEstablishDate.innerText = new Date(data.baseEstablishDate).getFullYear();
             profileRentMode.innerText = [null, "整栋出租", "独立出租", "整套出租"][data.profileRentMode];
+            profileRentMode2.innerText = data.profileRentMode ? ('/' + modal.s[data.profileRentMode]) : '';
             // ownerAvatar2.src = data.ownerAvatar;
             // lastFaqAvatar.src = data.lastFaqAvatar;
             // ownerNickName.innerText = data.ownerNickName;
@@ -454,7 +458,7 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
             //         mul.style.display = "none"
             //     }
             // }, false);
-            
+
 
 
             $.ajax({

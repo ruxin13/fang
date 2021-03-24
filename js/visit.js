@@ -327,8 +327,8 @@ define(['common', 'swiper', 'jquery'], function (core, Swiper, $) {
                         modal.q("#playVideo").poster = data.cover;
                         modal.q("#userAvatar").src = data.userAvatar;
                         modal.q("#userNickName").innerText = data.userNickName;
-                        modal.q("#fansCount").innerText = data.likeCount || 0;
-                        modal.q("#videoCount").innerText = data.commentCount || 0;
+                        modal.q("#fansCount").innerText = data.fansCount || 0;
+                        modal.q("#videoCount").innerText = data.videoCount || 0;
                         modal.q("#title").innerText = data.title;
                         // modal.q("#location").innerText = data.locationCityName + "·" + data.locationTownName;
                         modal.q("#location").innerText = data.locationProvinceName;

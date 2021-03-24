@@ -9,7 +9,9 @@ require.config({
 
 define(['common', 'swiper', 'jquery'], function (core, Swiper, $) {
     core.init();
-    var modal = {};
+    var modal = {
+        s: ["", "栋", "间", "套", "人"]
+    };
 
 
     modal.env = "dev";
@@ -103,7 +105,7 @@ define(['common', 'swiper', 'jquery'], function (core, Swiper, $) {
                                         '                <div class="vp-r">\n' +
                                         '                    <div class="vp-st">'+item.profileStr+'</div>\n' +
                                         '                    <div class="vp-ti">'+item.infoTitle+'</div>\n' +
-                                        '                    <div class="vp-price"><span>￥<i>'+item.ruleMonthMoney+'</i></span>/月</div>\n' +
+                                        '                    <div class="vp-price"><span>￥<i>'+item.ruleMonthMoney+'</i></span>'+(item.profileRentMode ? ('/'+modal.s[item.profileRentMode]):'')+'/月</div>\n' +
                                         '                </div>\n' +
                                         '            </div>'
                                 });
@@ -358,7 +360,7 @@ define(['common', 'swiper', 'jquery'], function (core, Swiper, $) {
                 modal.lng = lnglat.lng;
                 modal.lat = lnglat.lat;
                 var marker = new AMap.Marker({
-                    icon: "../img/pos.png",
+                    icon: "/h5/img/pos.png",
                     position: [lnglat.lng, lnglat.lat],
                     anchor:'bottom-center'
                 });
