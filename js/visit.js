@@ -136,6 +136,18 @@ define(['common', 'swiper', 'jquery'], function (core, Swiper, $) {
             (date.getHours() < 10 ? ("0" + date.getHours()) : date.getHours()) + ":" +
             (date.getMinutes() < 10 ? ("0" + date.getMinutes()) : date.getMinutes())
     };
+    modal.pcaFilter = function(addr) {
+        if (addr) {
+            var arr = ["省", "市", "区"];
+            if (arr.indexOf(addr.substr(addr.length - 1,1)) > -1) {
+                return addr.substring(0, addr.length - 1)
+            } else {
+                return addr
+            }
+        } else {
+            return ""
+        }
+    };
 
     // 更多回复的列表
     modal.requestReplyList = function(commentId, pageSize, $obj, page) {
@@ -331,7 +343,9 @@ define(['common', 'swiper', 'jquery'], function (core, Swiper, $) {
                         modal.q("#videoCount").innerText = data.videoCount || 0;
                         modal.q("#title").innerText = data.title;
                         // modal.q("#location").innerText = data.locationCityName + "·" + data.locationTownName;
-                        modal.q("#location").innerText = data.locationProvinceName + data.locationCityName;
+                        modal.q("#location").innerText =
+                            modal.pcaFilter(data.locationProvinceName) +
+                            (data.locationCityName ? (" · " + modal.pcaFilter(data.locationCityName)) : "");
                         modal.q("#lookNumber").innerText = data.lookNumber;
                         modal.q("#likeCount").innerText = data.likeCount > 0 ? data.likeCount : "点赞";
                         modal.q("#publishDate").innerText = modal.parseDate(data.publishDate) + "发布";
