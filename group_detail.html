@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta content="yes" name="apple-touch-fullscreen">
+    <meta content="telephone=no,email=no" name="format-detection">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta name="renderer" content="webkit">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+    <link type="text/css" rel="stylesheet" href="css/reset.css" />
+    <link type="text/css" rel="stylesheet" href="css/swiper.min.css" />
+    <link type="text/css" rel="stylesheet" href="css/group_detail.css" />
+    <title>房屋详情</title>
+</head>
+<body>
+
+<div class="wrap">
+    <div class="header">
+        <div class="swiper-container swiper-container-head">
+            <div class="swiper-wrapper" id="headImgs"></div>
+            <div class="swiper-pagination" id="pag"></div>
+        </div>
+        <div class="header-con">
+            <div class="hc-ver verified"></div>
+            <div class="hc-tit">温馨雅致双人房</div>
+            <div class="hc-tags">
+
+                <div class="hc-tag">有厨具</div>
+                <div class="hc-tag">有阳台</div>
+            </div>
+            <div class="hc-info-hwrap">
+                <div class="hc-info-h">
+                    <div class="hci-l">房&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;型</div>
+                    <div class="hci-r" id="baseHouseType"></div>
+                </div>
+            </div>
+            <div class="hc-info2">
+                <div class="swiper-container swiper-container-bed">
+                    <div class="swiper-wrapper" id="hcInfo2">
+                        <div class="hci-tli-wrap swiper-slide">
+                            <div class="hci-tli">
+                                <img class="hci-icon" src="img/icon_guest.png" alt />
+                                <div class="hci-text"><span id="baseLiveNumber"></span>个房客</div>
+                            </div>
+                        </div>
+                        <div class="hci-tli-wrap swiper-slide">
+                            <div class="hci-tli">
+                                <img class="hci-icon" src="img/icon_room.png" alt />
+                                <div class="hci-text"><span id="roomCount"></span>间卧室</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="hc-ad">
+                <div class="hc-ad-l">
+                    <div class="hc-ad-t">已<span id="joinPersonNumber"></span>人参与正在拼团</div>
+                    <div class="hc-ad-s">可直接参与</div>
+                    <div class="hc-ad-b">居住时段: <span id="tuanBeginTime"></span>~<span id="tuanEndTime"></span></div>
+                </div>
+                <div class="hc-ad-r">
+                    <div class="hc-ad-g">拼团剩余<span id="restDays"></span>天</div>
+                    <div class="hc-ad-m" id="restTime"></div>
+                </div>
+            </div>
+
+            <div class="hc-order">
+                <div class="hc-ast">预订类型
+<!--                    <span>最少需入住30个晚上</span>-->
+                </div>
+                <div class="st-li st-se">
+                    <div class="st-l">
+                        <div class="st-t">单人订床位</div>
+                        <div class="st-b">拼团价: <i>￥</i><span class="st-price" id="tuanPrice"></span><span class="st-inf">人/日/床位/包吃住</span></div>
+                    </div>
+                    <div class="st-r link">订</div>
+                </div>
+                <div class="st-li st-se">
+                    <div class="st-l">
+                        <div class="st-t">整间房单人入住</div>
+                        <div class="st-b">拼团价: <i>￥</i><span class="st-price" id="singleTuanPrice"></span><span class="st-inf">人/日/床位/包吃住</span></div>
+                    </div>
+                    <div class="st-r link">订</div>
+                </div>
+                <div class="st-li st-se">
+                    <div class="st-l">
+                        <div class="st-t">整间房两人入住</div>
+                        <div class="st-b">拼团价: <i>￥</i><span class="st-price" id="doubleTuanPrice"></span><span class="st-inf">人/日/床位/包吃住</span></div>
+                    </div>
+                    <div class="st-r link">订</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="tips">
+        <div class="t-tit">拼团须知</div>
+        <div class="t-con" id="tuanNotice"></div>
+    </div>
+
+
+    <div class="pan">
+        <div class="pan-tit">设施</div>
+        <div class="pan-con pan-ist" id="insWrap"></div>
+        <div class="ins-more pan-showall2">查看全部</div>
+    </div>
+
+
+    <div class="pan" id="ask">
+        <div class="pan-tit">
+            <span>问答</span>
+            <img class="pan-tit-img link" src="img/btn_ask.png" alt />
+        </div>
+        <div class="pan-list" id="askList">
+        </div>
+        <div class="ask-nodata">
+            <div class="an-t link">
+                <img class="an-avatar" src="http://resource.xiangdao.info/user/avatar/default_avatar.png" alt />
+                <div class="an-input">看对眼了就问问更多细节~</div>
+            </div>
+            <img class="an-icon" src="img/ask_nodata.png" alt />
+            <div class="an-txt">还没有人问答，还不快来抢沙发...</div>
+        </div>
+        <div class="pan-show link" id="askShowAll">查看更多 >></div>
+    </div>
+
+    <div class="pan" id="ruleRequire">
+        <div class="pan-tit">租房注意事项</div>
+        <div class="pan-con">
+            <div class="pan-rules rule-pet"></div>
+            <div class="pan-rules rule-party"></div>
+            <div class="pan-rules rule-other"></div>
+        </div>
+    </div>
+
+
+
+    <div class="bar">
+        <div class="bar-l"></div>
+        <a class="bar-r rs" id="phone">电话咨询乡导平台</a>
+    </div>
+    <div class="gap-fix"></div>
+
+</div>
+
+
+
+<!-- 遮盖层 -->
+<div class="guide" id="guide" onclick="closeGuide()"></div>
+<!-- 遮盖层引导 -->
+<div class="guide-img" id="guide-img" onclick="closeGuide()"></div>
+<!-- 打开跳转app -->
+<div class="open-app">
+    <div class="open-app-left">
+        <img src="img/open-app-logo.png" style="margin: 0 15px;width: 52px;" alt />
+        <div style="display:flex;flex-direction:column;justify-content:center;align-items:flex-start;">
+            <label style="color:#343434;font-size:16px;font-weight: 400;">打开乡导APP</label>
+            <label style="color:#666;font-size: 13px;line-height: 22px;">旅居租房</label>
+        </div>
+    </div>
+    <div class="open-app-right" onclick="openApp()">
+        立即打开
+    </div>
+</div>
+
+<script type="text/javascript">
+    function GetQueryString(name) {
+        var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+        var r = window.location.search.substr(1).match(reg);
+        if(r!=null)return  unescape(r[2]); return null;
+    }
+    //打开app逻辑判断: 如果在微信打开引导层，非微信打开app，app未安装直接下载
+    function openApp(href){
+        //检测是否微信内核浏览器
+        var ua = navigator.userAgent.toLowerCase();//获取判断用的对象
+        if (ua.match(/MicroMessenger/i) == "micromessenger") {
+            //在微信中打开，引导跳转外部浏览器
+            document.getElementById("guide").style.display="block";
+            document.getElementById("guide-img").style.display="block";
+        }else{
+            //执行打开app逻辑
+            //ios设备或安卓设备
+            if (navigator.userAgent.match(/(iPhone|iPod|iPad);?/i) || navigator.userAgent.match(/android/i)) {
+                try {
+                    //视频  android://h5/open?type=1&id=64
+                    //文章	android://h5/open?type=2&id=64
+                    //房源  android://h5/open?type=4&id=64
+                    //故事  android://h5/open?type=5&id=64
+                    window.location = "android://h5/open?type=4&id="+GetQueryString("houseId");
+                    window.setTimeout(function() {
+                        //未响应，响应超时则判断未安装app执行下载apk
+                        window.location = "http://www.xiangdao.info/download/sz.xinagdao.apk";
+                    }, 500);
+                } catch (e) {}
+            }
+        }
+
+    }
+    //关闭遮盖层
+    function closeGuide(){
+        document.getElementById("guide").style.display="none";
+        document.getElementById("guide-img").style.display="none";
+    }
+</script>
+<script src="js/require.js" data-main="js/group_detail.min"></script>
+<script>
+    requirejs.config({
+        urlArgs: "v=" +  (new Date()).getTime()
+    });
+</script>
+
+</body>
+</html>

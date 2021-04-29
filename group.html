@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta content="yes" name="apple-touch-fullscreen">
+    <meta content="telephone=no,email=no" name="format-detection">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta name="renderer" content="webkit">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+    <link type="text/css" rel="stylesheet" href="css/reset.css"/>
+    <link type="text/css" rel="stylesheet" href="css/swiper.min.css"/>
+    <link type="text/css" rel="stylesheet" href="css/group.css"/>
+    <title>团购</title>
+</head>
+<body>
+
+<div class="wrap">
+    <div class="swiper-container top-swiper-container">
+        <div class="swiper-wrapper" id="headImgs"></div>
+        <div class="swiper-pagination top-swiper-pagination" id="pag">
+        </div>
+    </div>
+
+    <div class="top">
+        <div class="top-tit"></div>
+        <div class="top-inf">编号：<span id="villageNo"></span></div>
+        <div class="top-tags">
+            <div class="top-tags-l"></div>
+            <img class="top-tags-r" src="img/icon_arrow_rs.png" alt/>
+        </div>
+        <div class="top-sif link">
+            <div class="top-sif-l"></div>
+            <div class="top-sif-c">详情</div>
+            <img class="top-sif-r" src="img/icon_arrow_rr.png" alt/>
+        </div>
+    </div>
+
+    <div class="group">
+        <div class="m-tit">
+            <div class="m-tit-l">拼团</div>
+<!--            <div class="m-tit-c">最少需入住30个晚上</div>-->
+            <div class="m-tit-r">剩余 <span class="m-tit-rm"></span></div>
+        </div>
+        <div class="group-con">
+<!--            <div class="group-li">-->
+<!--                <img class="gli-l" src="img/article_img.png" alt/>-->
+<!--                <div class="gli-r">-->
+<!--                    <div class="gli-tit">温馨雅致双床房</div>-->
+<!--                    <div class="gli-tags">-->
+<!--                        <div class="gli-tag">有家电</div>-->
+<!--                        <div class="gli-tag">有厨具</div>-->
+<!--                        <div class="gli-tag">有阳台</div>-->
+<!--                    </div>-->
+<!--                    <div class="gli-price">拼团价：<i>￥</i><span>200</span></div>-->
+<!--                    <div class="gli-inf">人/日/床位/包吃住</div>-->
+<!--                    <div class="gli-od gli-in">订</div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div class="group-li gl-out">-->
+<!--                <img class="gli-l" src="img/article_img.png" alt/>-->
+<!--                <div class="gli-r">-->
+<!--                    <div class="gli-tit">温馨雅致双床房</div>-->
+<!--                    <div class="gli-tags">-->
+<!--                        <div class="gli-tag">有家电</div>-->
+<!--                        <div class="gli-tag">有厨具</div>-->
+<!--                        <div class="gli-tag">有阳台</div>-->
+<!--                    </div>-->
+<!--                    <div class="gli-price">拼团价：<i>￥</i><span>200</span></div>-->
+<!--                    <div class="gli-inf">人/日/床位/包吃住</div>-->
+<!--                    <div class="gli-od gli-out"></div>-->
+<!--                </div>-->
+<!--            </div>-->
+
+        </div>
+    </div>
+
+    <div class="m-map">
+        <div class="m-tit">
+            <div class="m-tit-l">位置周边</div>
+        </div>
+        <div class="map-con">
+            <div class="map" id="mapContainer"></div>
+            <div class="map-row">
+                <div class="mr-l">
+                    <img class="mr-icon" src="img/icon_crossing.png" alt/>
+                    <div class="mr-text">高速路口</div>
+                </div>
+                <div class="mr-r">
+                    <div class="swiper-container s-crossing">
+                        <div class="swiper-wrapper" id="crossing"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="map-row">
+                <div class="mr-l">
+                    <img class="mr-icon" src="img/icon_bus.png" alt/>
+                    <div class="mr-text">汽车站</div>
+                </div>
+                <div class="mr-r">
+                    <div class="swiper-container s-bus">
+                        <div class="swiper-wrapper" id="busStation"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="map-row">
+                <div class="mr-l">
+                    <img class="mr-icon" src="img/icon_crh.png" alt/>
+                    <div class="mr-text">火车站</div>
+                </div>
+                <div class="mr-r">
+                    <div class="swiper-container s-crh">
+                        <div class="swiper-wrapper" id="railwayStation"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="m-ist">
+        <div class="m-tit">
+            <div class="m-tit-l">设施</div>
+        </div>
+        <div class="ist-con pan-ist showAll" id="insWrap">
+
+        </div>
+        <div class="ist-more show-more pan-showall" id="insMore">全部设施</div>
+    </div>
+
+    <div class="m-rules">
+        <div class="m-tit">
+            <div class="m-tit-l">订房必读</div>
+        </div>
+        <div class="rules-con" id="mustSee"></div>
+    </div>
+
+    <div class="m-rules">
+        <div class="m-tit">
+            <div class="m-tit-l">酒店政策</div>
+        </div>
+        <div class="rules-con" id="hotelPolicy"></div>
+    </div>
+
+    <div class="comment">
+        <div class="m-tit">
+            <div class="m-tit-l">评论</div>
+            <div class="com-tit-r link">写评论</div>
+        </div>
+        <div id="comment">
+            <div class="comment-list" id="commentList"></div>
+        </div>
+    </div>
+
+
+
+
+</div>
+
+<div class="swiper-container" id="fullPageImages" style="display: none">
+    <div class="swiper-wrapper" id="fullPageWrap">
+        <!--        <div class="swiper-slide full-swiper-slide"><img src="img/album.png" alt /></div>-->
+    </div>
+</div>
+
+<!-- 遮盖层 -->
+<div class="guide" id="guide" onclick="closeGuide()"></div>
+<!-- 遮盖层引导 -->
+<div class="guide-img" id="guide-img" onclick="closeGuide()"></div>
+<!-- 打开跳转app -->
+<div class="open-app">
+    <div class="open-app-left">
+        <img src="img/open-app-logo.png" style="margin: 0 15px;width: 52px;" alt/>
+        <div style="display:flex;flex-direction:column;justify-content:center;align-items:flex-start;">
+            <label style="color:#343434;font-size:16px;font-weight: 400;">打开乡导APP</label>
+            <label style="color:#666;font-size: 13px;line-height: 22px;">旅居租房</label>
+        </div>
+    </div>
+    <div class="open-app-right" onclick="openApp()">
+        立即打开
+    </div>
+</div>
+<script type="text/javascript" src="https://webapi.amap.com/maps?v=2.0&key=1acf89333f048989b606d856cba42d2d"></script>
+<script type="text/javascript">
+    function GetQueryString(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+        var r = window.location.search.substr(1).match(reg);
+        if (r != null) return unescape(r[2]);
+        return null;
+    }
+
+    //打开app逻辑判断: 如果在微信打开引导层，非微信打开app，app未安装直接下载
+    function openApp(href) {
+        //检测是否微信内核浏览器
+        var ua = navigator.userAgent.toLowerCase();//获取判断用的对象
+        if (ua.match(/MicroMessenger/i) == "micromessenger") {
+            //在微信中打开，引导跳转外部浏览器
+            document.getElementById("guide").style.display = "block";
+            document.getElementById("guide-img").style.display = "block";
+        } else {
+            //执行打开app逻辑
+            //ios设备或安卓设备
+            if (navigator.userAgent.match(/(iPhone|iPod|iPad);?/i) || navigator.userAgent.match(/android/i)) {
+                try {
+                    //视频  android://h5/open?type=1&id=64
+                    //文章	android://h5/open?type=2&id=64
+                    //房源  android://h5/open?type=4&id=64
+                    //故事  android://h5/open?type=5&id=64
+                    window.location = "android://h5/open?type=5&id=" + GetQueryString("id");
+                    window.setTimeout(function () {
+                        //未响应，响应超时则判断未安装app执行下载apk
+                        window.location = "http://www.xiangdao.info/download/sz.xinagdao.apk";
+                    }, 500);
+                } catch (e) {
+                }
+            }
+        }
+
+    }
+
+    //关闭遮盖层
+    function closeGuide() {
+        document.getElementById("guide").style.display = "none";
+        document.getElementById("guide-img").style.display = "none";
+    }
+</script>
+<div id="mcontainer"></div>
+<script type="text/javascript">
+
+</script>
+
+<script src="js/require.js" data-main="js/group.min"></script>
+<script>
+    requirejs.config({
+        urlArgs: "v=" + (new Date()).getTime()
+    });
+</script>
+
+</body>
+</html>
