@@ -141,12 +141,22 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
                         htArr.forEach(function (item, index) {
                             var itemArr = item.split("-");
                             if (itemArr[1] > 0) {
-                                htStr += itemArr[1] + houseTypeArr[parseInt(itemArr[0])];
+                                if (index === 0 && itemArr[2]) {
+                                    htStr += itemArr[1] + "~" + itemArr[2] + houseTypeArr[parseInt(itemArr[0])];
+                                } else {
+                                    htStr += itemArr[1] + houseTypeArr[parseInt(itemArr[0])];
+                                }
                                 (index + 1) < htArr.length && (htStr += "/");
                             }
                             if (itemArr[0] === "2") {
                                 modal.q("#roomCount").innerText = itemArr[1]
                             }
+                            // if (itemArr[0] === "1") {
+                            //     floor.innerText = itemArr[1]
+                            // }
+                            // if (index === 0 && itemArr[2]) {
+                            //     floor.innerText = itemArr[1] + "~" + itemArr[2]
+                            // }
                         });
                         modal.q("#baseHouseType").innerText = htStr;
                     }
@@ -228,6 +238,7 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
                                                             ' x5-video-player-fullscreen=""\n' +
                                                             ' x5-video-orientation="portraint"\n' +
                                                             ' x-webkit-airplay="true"\n' +
+                                                            ' controlsList="nodownload"' +
                                                             ' controls="controls"' +
                                                             ' src="' + item2 + '" poster="' + item2 + '?vframe/jpg/offset/2/w/640/h/360" />';
                                                         modal.videoIndexArr.push({"index": index2, "item": item2});
@@ -291,7 +302,9 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
 
                     if (data.faqCount) {
                         $(".ask-nodata").hide();
-                        $("#askShowAll").show();
+                        if (data.faqCount >= 2) {
+                            $("#askShowAll").show();
+                        }
                         var faqHtml = '<div class="ask-li">\n' +
                             '                <div class="ali-t">\n' +
                             '                    <img class="ali-avatar" src="' + data.lastFaqAvatar + '" alt />\n' +

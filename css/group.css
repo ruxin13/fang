@@ -327,6 +327,9 @@ a{
     padding-top: .4rem;
     padding-bottom: .4rem;
 }
+.ist.align-center{
+    align-items: center;
+}
 .ist-l{
     width: 1.4rem;
     display: flex;
@@ -409,7 +412,9 @@ a{
 .rules-con{
     padding: .27rem 0;
     font-size: .4rem;
-
+    white-space: pre-wrap;
+    line-height: .61rem;
+    color: #666;
 }
 .rules-tit{
     font-size: .43rem;
@@ -433,6 +438,15 @@ a{
 
 
 
+.com-tit-r{
+    height: .64rem;
+    line-height: .64rem;
+    border: solid 1px #ccc;
+    border-radius: .32rem;
+    padding: 0 .48rem;
+    font-size: .35rem;
+    color: #666;
+}
 .comment{
     background-color: #fff;
     padding: 0 .43rem;
@@ -484,6 +498,7 @@ a{
     border-radius: .32rem;
     margin-right: .16rem;
     margin-bottom: .16rem;
+    object-fit: cover;
 }
 .comment-fun{
     display: flex;
@@ -712,4 +727,68 @@ a{
 .full-swiper-slide{
     padding: .2rem;
     box-sizing: border-box;
+}
+
+.pe{
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    z-index: 9101;
+    display: none;
+    align-items: center;
+    justify-content: center;
+}
+.pe-mask{
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    z-index: 9102;
+    background-color: rgba(0,0,0,.55);
+}
+.pe-main{
+    position: fixed;
+    z-index: 9103;
+    width: 8.8rem;
+    padding: .69rem .32rem;
+    background-color: white;
+    border-radius: .43rem;
+}
+.pe-tit{
+    font-size: .43rem;
+    text-align: center;
+    margin-bottom: .56rem;
+}
+.pe-list{
+    display: flex;
+    flex-wrap: wrap;
+}
+.pe-close{
+    width: .33rem;
+    height: .33rem;
+    position: absolute;
+    right: .71rem;
+    top: .73rem;
+}
+.top-tag-pop{
+    height: 1rem;
+    line-height: 1rem;
+    border: solid 1px #ccc;
+    border-radius: .5rem;
+    padding: 0 .53rem;
+    margin-right: .2rem;
+    margin-left: .2rem;
+    margin-bottom: .37rem;
+    font-size: .4rem;
+    color: #666;
+}
+.top-tag-pop:nth-child(3n){
+    margin-bottom: 0;
 }

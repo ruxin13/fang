@@ -921,9 +921,10 @@ body{
     border-radius: .01rem;
     margin-right: .23rem;
 }
-.hc-st span{
+.hc-ast span{
     color: #999;
-    padding-left: .16rem;
+    padding-left: .24rem;
+    display: block;
 }
 .st-li{
     padding: .33rem 0 .35rem;

@@ -94,6 +94,7 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
                                         ' x5-video-player-fullscreen=""\n' +
                                         ' x5-video-orientation="portraint"\n' +
                                         ' x-webkit-airplay="true"\n' +
+                                        ' controlsList="nodownload"' +
                                         ' controls="controls"' +
                                         ' src="' + item2 + '" poster="' + item2 + '?vframe/jpg/offset/2/w/640/h/360" />';
                                     modal.videoIndexArr.push({"index": index2, "item": item2});

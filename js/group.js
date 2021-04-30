@@ -83,6 +83,12 @@ define(['common', 'swiper', 'jquery'], function (core, Swiper, $) {
                 swiper2.update();
             }
         });
+        $(".top-tags-r").on("click", function () {
+            $(".pe").css("display", "flex");
+        });
+        $(".pe-close").on("click", function () {
+            $(".pe").css("display", "none");
+        });
     };
     modal.q = function(selector) {
         return document.querySelector(selector)
@@ -141,6 +147,7 @@ define(['common', 'swiper', 'jquery'], function (core, Swiper, $) {
                     var villageName = modal.q(".top-tit");
                     var villageNo = modal.q("#villageNo");
                     var tagWrap = modal.q(".top-tags-l");
+                    var tagWrapPop = modal.q(".pe-list");
                     var brief = modal.q(".top-sif-l");
                     var restTime = modal.q(".m-tit-rm");
                     var headImgs = modal.q("#headImgs");
@@ -155,6 +162,7 @@ define(['common', 'swiper', 'jquery'], function (core, Swiper, $) {
                             ' x5-video-player-fullscreen=""\n' +
                             ' x5-video-orientation="portraint"\n' +
                             ' x-webkit-airplay="true"\n' +
+                            ' controlsList="nodownload"' +
                             ' controls="controls"' +
                             ' src="' + data.video + '" poster="' + data.videoGif + '" /></div>';
                     }
@@ -172,14 +180,17 @@ define(['common', 'swiper', 'jquery'], function (core, Swiper, $) {
                     if (data.tagName) {
                         var tagArr = data.tagName.split(",");
                         var tagStr = '';
+                        var allTagStr = '';
                         tagArr.forEach(function (item, index) {
                             if (index < 4) {
                                 tagStr += '<div class="top-tag">'+item+'</div>';
                             } else {
                                 modal.q(".top-tags-r").style.display = 'block'
                             }
+                            allTagStr += '<div class="top-tag-pop">'+item+'</div>';
                         });
                         tagWrap.innerHTML = tagStr;
+                        tagWrapPop.innerHTML = allTagStr;
                     }
                     if (data.brief) {
                         brief.innerText = data.brief;
@@ -202,8 +213,6 @@ define(['common', 'swiper', 'jquery'], function (core, Swiper, $) {
                         var hStr = '';
                         data.list.forEach(function (item) {
 
-                            // todo 测试用
-                            item.status = 1;
 
                             hStr += '<div class="group-li '+(item.status === 2 ? 'gl-out' : '')+'" data-id="'+item.tuanId+'">\n' +
                                 '                <img class="gli-l" src="'+item.infoCover+'" alt/>\n' +
@@ -222,20 +231,14 @@ define(['common', 'swiper', 'jquery'], function (core, Swiper, $) {
                                 hStr += tagStr;
                             }
 
-                            hStr += '        </div>\n' +
-                            '                    <div class="gli-price">拼团价：<i>￥</i><span>'+item.tuanPrice+'</span></div>\n' +
-                            '                    <div class="gli-inf">'+(item.tuanNotice ? item.tuanNotice : '' )+'</div>\n';
+                            hStr += '</div>\n' +
+                            '<div class="gli-price">拼团价：<i>￥</i><span>'+item.tuanPrice+'</span></div>\n' +
+                            '<div class="gli-inf">'+(item.tuanNotice ? item.tuanNotice : '' )+'</div><a class="gli-od gli-in" href="group_detail.html?id='+item.tuanId+'">订</a></div></div>';
 
-                            if (item.status === 1) {
-                                hStr += '<div class="gli-od gli-in">订</div>';
-                            } else if (item.status === 2) {
-                                hStr += '<div class="gli-od gli-out"></div>';
-                            }
 
-                            hStr += '                </div>\n' +
-                            '            </div>';
                         });
                         modal.q(".group-con").innerHTML = hStr;
+
                     }
 
                     if (data.villageIcon) {
@@ -282,6 +285,8 @@ define(['common', 'swiper', 'jquery'], function (core, Swiper, $) {
                                             var len = $(istR[m]).find(".ist-li").length;
                                             if (len === 0) {
                                                 tmpArr.push($(".ist").eq(m))
+                                            } else if (len < 3) {
+                                                $(istR[m]).addClass("align-center");
                                             }
                                         }
                                         if (tmpArr.length > 0) {
@@ -338,7 +343,7 @@ define(['common', 'swiper', 'jquery'], function (core, Swiper, $) {
                             "Accept": "application/json",
                             "Content-Type": "application/json"
                         },
-                        data: JSON.stringify({"bizId": modal.id, "bizType": 5}),
+                        data: JSON.stringify({"bizId": data.villageId, "bizType": 1}),
                         success: function (res) {
                             console.log(res);
                             if (res.status === 0) {
