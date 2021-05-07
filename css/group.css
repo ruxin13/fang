@@ -179,7 +179,7 @@ a{
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: .4rem 0 .43rem;
+    padding: .37rem 0 .41rem;
     border-bottom: solid 1px #DEDEDE;
     position: relative;
 }
@@ -195,25 +195,30 @@ a{
 }
 .gli-r{
     flex: 1;
+    height: 2.64rem;
+    padding-top: .07rem;
+    padding-bottom: .07rem;
+    /*display: flex;*/
+    /*flex-direction: column;*/
+    /*justify-content: space-between;*/
 }
 .gli-tit{
     font-size: .43rem;
     color: #333;
     font-weight: bold;
-    margin-bottom: .25rem;
-    /*display: -webkit-box;*/
-    /*-webkit-box-orient: vertical;*/
-    /*-webkit-line-clamp: 1;*/
+    margin-bottom: .22rem;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    line-height: .64rem;
     width: 6rem;
+    height:.46rem;
+    line-height: .5rem;
 }
 .gli-tags{
     display: flex;
     align-items: center;
-    margin-bottom: .21rem;
+    margin-bottom: .27rem;
+    height:.51rem;
 }
 .gli-tag{
     background-color: #F0F0F0;
@@ -229,6 +234,8 @@ a{
     color: #F55245;
     font-size: .37rem;
     margin-bottom: .2rem;
+    flex: 1;
+    height:.47rem;
 }
 .gli-price i{
     font-style: normal;
@@ -244,12 +251,13 @@ a{
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    line-height: .64rem;
+    height:.38rem;
+    line-height: .42rem;
 }
 .gli-od{
     position: absolute;
     right: 0;
-    bottom: .43rem;
+    bottom: .5rem;
 }
 .gli-in{
     width: 1.12rem;
@@ -452,9 +460,10 @@ a{
 }
 .desc-more.show{
     display: flex;
-    background: linear-gradient(0deg, #FFFFFF, rgba(255, 255, 255, 0));
+    background: linear-gradient(0deg, #FFFFFF 24%, rgba(255, 255, 255, 0));
     position: absolute;
     height: 3.44rem;
+    /*background-color: red;*/
 }
 .desc-more-img{
     width: .37rem;
