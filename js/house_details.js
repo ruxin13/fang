@@ -183,7 +183,7 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
             var baseNoiseArr = [null, "靠近小区内主路", "靠近主路", "靠近停车场", "靠近公园或广场", "靠近夜市", "周边较安静", "周边很安静", "靠近飞机场", "靠近小区出入口"];
             var baseSceneryArr = [null, "小区内部", "可见花园", "可见山景", "可见湖景", "可见江景", "可见海景", "可见树林", "可见街景", "可见游泳池", "可见高尔夫球场"];
             // console.log(data);
-            // data.baseBedType = "1-1-1,3-1-1";
+            // data.baseBedType = "1-1-2,3-1-5,3-2-3";
             if (data.baseBedType) {
                 var houseTypeSplit = data.baseBedType.split(",");
                 if (houseTypeSplit && houseTypeSplit.length > 0) {
@@ -269,9 +269,13 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
             bdArr.forEach(function (item) {
                 var hcHtml = '';
                 if (item.bed.length > 0) {
+                    var bedNum = 0;
+                    item.bed.forEach(function (item3) {
+                        bedNum += parseInt(item3[2]);
+                    });
                     hcHtml += '<div class="hci-tli">\n';
                     hcHtml += '<img class="hci-icon" src="img/' + item.icon + '" alt />';
-                    hcHtml += '<div class="hci-text">' + (item.bed[0][2] + "张" + item.name) + '</div></div>';
+                    hcHtml += '<div class="hci-text">' + (bedNum + "张" + item.name) + '</div></div>';
                     hcHtml += '<div class="hci-trli">';
                     item.bed.forEach(function (item2) {
                         hcHtml += '<div class="hci-trli-row"><span>(' + item.list[item2[1]] + ')</span>&times;' + item2[2] + '</div>'

@@ -261,7 +261,7 @@ define(['common', 'swiper', 'jquery'], function (core, Swiper, $) {
 
                             hStr += '</div>\n' +
                             '<div class="gli-price">拼团价：<i>￥</i><span>'+(item.tuanPrice ? item.tuanPrice : 0)+'</span></div>\n' +
-                            '<div class="gli-inf">'+(item.tuanNotice ? item.tuanNotice : '' )+'</div><a class="gli-od gli-in" href="group_detail.html?id='+item.tuanId+'">订</a></div></div>';
+                            '<div class="gli-inf">'+(item.reserveTypeStr.indexOf("1") > -1 ? "人/日/床位/包吃住" : "日/整间房/包吃住" )+'</div><a class="gli-od gli-in" href="group_detail.html?id='+item.tuanId+'">订</a></div></div>';
                         });
                         modal.q(".group-con").innerHTML = hStr;
 

@@ -184,9 +184,13 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
                     bdArr.forEach(function (item) {
                         var hcHtml = '';
                         if (item.bed.length > 0) {
+                            var bedNum = 0;
+                            item.bed.forEach(function (item3) {
+                                bedNum += parseInt(item3[2]);
+                            });
                             hcHtml += '<div class="hci-tli">\n';
                             hcHtml += '<img class="hci-icon" src="img/' + item.icon + '" alt />';
-                            hcHtml += '<div class="hci-text">' + (item.bed[0][2] + "张" + item.name) + '</div></div>';
+                            hcHtml += '<div class="hci-text">' + (bedNum + "张" + item.name) + '</div></div>';
                             hcHtml += '<div class="hci-trli">';
                             item.bed.forEach(function (item2) {
                                 hcHtml += '<div class="hci-trli-row"><span>(' + item.list[item2[1]] + ')</span>&times;' + item2[2] + '</div>'
