@@ -323,7 +323,8 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
                     }
 
                     modal.q("#joinPersonNumber").innerText = data.joinPersonNumber || 0;
-                    modal.q("#phone").setAttribute("href", "tel:" + data.rulePhone);
+                    // modal.q("#phone").setAttribute("href", "tel:" + data.rulePhone);
+                    modal.q("#phone").setAttribute("href", "tel:4006992388");
                     if (data.tuanNotice) {
                         modal.q("#tuanNotice").innerHTML = data.tuanNotice;
                     }
@@ -350,7 +351,8 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
                                     typeStr += '<div class="st-li st-se">\n' +
                                         '            <div class="st-l">\n' +
                                         '                 <div class="st-t">'+item.name+'</div>\n' +
-                                        '                 <div class="st-b">拼团价: <i>￥</i><span class="st-price" id="'+item.key+'">'+data[item.key]+'</span><span class="st-inf">人/日/床位/包吃住</span></div>\n' +
+                                        '                 <div class="st-b">拼团价: <i>￥</i><span class="st-price" id="'+item.key+'">'+
+                                        (data[item.key] ? data[item.key] : 0)+'</span><span class="st-inf">'+(item.id === 1 ? '人/日/床位' : '日/整间房')+'/包吃住</span></div>\n' +
                                         '            </div>\n' +
                                         '            <div class="st-r link">订</div>\n' +
                                         '       </div>'

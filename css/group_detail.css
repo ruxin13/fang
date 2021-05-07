@@ -1023,10 +1023,11 @@ body{
     font-size: .4rem;
     color: #666;
     line-height: .59rem;
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 3;
-    overflow: hidden;
+    white-space: pre-wrap;
+    /*display: -webkit-box;*/
+    /*-webkit-box-orient: vertical;*/
+    /*-webkit-line-clamp: 3;*/
+    /*overflow: hidden;*/
 }
 .ins-more{
     width: 2.77rem;
