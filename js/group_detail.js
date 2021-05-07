@@ -211,9 +211,9 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
                     var rulePet = modal.q(".rule-pet");
                     var ruleParty = modal.q(".rule-party");
 
-                    if (data.tuanBeginTime && data.tuanEndTime) {
-                        modal.q("#tuanBeginTime").innerText = modal.parseTime(data.tuanBeginTime);
-                        modal.q("#tuanEndTime").innerText = modal.parseTime(data.tuanEndTime);
+                    if (data.liveBeginTime && data.liveEndTime) {
+                        modal.q("#tuanBeginTime").innerText = modal.parseTime(data.liveBeginTime);
+                        modal.q("#tuanEndTime").innerText = modal.parseTime(data.liveEndTime);
                     }
 
                     if (data.ruleRequireJson) {

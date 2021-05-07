@@ -202,8 +202,8 @@ define(['common', 'swiper', 'jquery'], function (core, Swiper, $) {
                         brief.innerText = data.brief;
                     }
 
-                    if (data.tuanBeginTime && data.tuanEndTime && startEnd) {
-                        startEnd.innerText = modal.parseDateToStr(data.tuanBeginTime) + "-" + modal.parseDateToStr(data.tuanEndTime);
+                    if (data.liveBeginTime && data.liveEndTime && startEnd) {
+                        startEnd.innerText = modal.parseDateToStr(data.liveBeginTime) + "-" + modal.parseDateToStr(data.liveEndTime);
                     }
 
                     if (houseDesc && data.content) {
