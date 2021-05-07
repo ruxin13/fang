@@ -8,7 +8,14 @@ require.config({
 define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
     core.init();
     var modal = {
-        s: ["", "栋", "间", "套", "人"]
+        s: ["", "栋", "间", "套", "人"],
+        tuan: [
+            {id:1,key:"tuanPrice1",name:"单人订床位"},
+            {id:2,key:"tuanPrice2",name:"单人订整间"},
+            {id:3,key:"tuanPrice3",name:"双人订整间"},
+            {id:4,key:"tuanPrice4",name:"三人订整间"},
+            {id:5,key:"tuanPrice5",name:"四人订整间"}
+        ]
     };
 
     modal.env = "dev";
@@ -334,14 +341,23 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
                             }
                         }, 1000);
                     }
-                    if (data.tuanPrice) {
-                        modal.q("#tuanPrice").innerText = data.tuanPrice;
-                    }
-                    if (data.singleTuanPrice) {
-                        modal.q("#singleTuanPrice").innerText = data.singleTuanPrice;
-                    }
-                    if (data.doubleTuanPrice) {
-                        modal.q("#doubleTuanPrice").innerText = data.doubleTuanPrice;
+                    if (data.reserveTypeStr) {
+                        var typeStr = '';
+                        var types = data.reserveTypeStr.split(",");
+                        modal.tuan.forEach(function (item) {
+                            types.forEach(function (item2) {
+                                if (item.id === parseInt(item2)) {
+                                    typeStr += '<div class="st-li st-se">\n' +
+                                        '            <div class="st-l">\n' +
+                                        '                 <div class="st-t">'+item.name+'</div>\n' +
+                                        '                 <div class="st-b">拼团价: <i>￥</i><span class="st-price" id="'+item.key+'">'+data[item.key]+'</span><span class="st-inf">人/日/床位/包吃住</span></div>\n' +
+                                        '            </div>\n' +
+                                        '            <div class="st-r link">订</div>\n' +
+                                        '       </div>'
+                                }
+                            });
+                        });
+                        modal.q(".st-list").innerHTML = typeStr;
                     }
                 }
             }

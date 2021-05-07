@@ -113,6 +113,10 @@ define(['common', 'swiper', 'jquery'], function (core, Swiper, $) {
             (date.getHours() < 10 ? ("0" + date.getHours()) : date.getHours()) + ":" +
             (date.getMinutes() < 10 ? ("0" + date.getMinutes()) : date.getMinutes())
     };
+    modal.parseDateToStr = function(timestamp) {
+        var date = new Date(timestamp);
+        return date.getFullYear() + "年" + (date.getMonth() + 1) + "月" + date.getDate() + "日"
+    };
 
 
     modal.init = function () {
@@ -149,8 +153,10 @@ define(['common', 'swiper', 'jquery'], function (core, Swiper, $) {
                     var tagWrap = modal.q(".top-tags-l");
                     var tagWrapPop = modal.q(".pe-list");
                     var brief = modal.q(".top-sif-l");
+                    var startEnd = modal.q(".top-srf-r");
                     var restTime = modal.q(".m-tit-rm");
                     var headImgs = modal.q("#headImgs");
+                    var houseDesc = modal.q("#houseDesc");
 
                     var headStr = '';
                     if (data.video) {
@@ -192,8 +198,30 @@ define(['common', 'swiper', 'jquery'], function (core, Swiper, $) {
                         tagWrap.innerHTML = tagStr;
                         tagWrapPop.innerHTML = allTagStr;
                     }
-                    if (data.brief) {
+                    if (data.brief && brief) {
                         brief.innerText = data.brief;
+                    }
+
+                    if (data.tuanBeginTime && data.tuanEndTime && startEnd) {
+                        startEnd.innerText = modal.parseDateToStr(data.tuanBeginTime) + "-" + modal.parseDateToStr(data.tuanEndTime);
+                    }
+
+                    if (houseDesc && data.content) {
+                        houseDesc.innerHTML = data.content;
+                        setTimeout(function () {
+                            var conMore = modal.q(".desc-more");
+                            var conCon = modal.q(".desc-con");
+                            if (conMore) {
+                                if ((houseDesc.clientHeight / rem) > 8) {
+                                    conMore.classList.add("show");
+                                    conCon.classList.remove("showAll");
+                                } else {
+                                    conMore.classList.remove("show");
+                                    conCon.classList.add("showAll");
+                                    conMore.style.display = 'none';
+                                }
+                            }
+                        }, 1000);
                     }
 
                     if (data.surplusTimestamp && data.surplusTimestamp > 0) {
@@ -308,7 +336,6 @@ define(['common', 'swiper', 'jquery'], function (core, Swiper, $) {
                                             });
                                         });
                                         insWrap.style.height = totalHeight + "px";
-                                        console.log(totalHeight);
                                     } else {
                                         $("#insMore").parents(".pan").hide();
                                     }
@@ -626,6 +653,26 @@ define(['common', 'swiper', 'jquery'], function (core, Swiper, $) {
                 openApp();
             }, false);
         }
+    }
+    var conShowAll = document.querySelector(".desc-more");
+    if (conShowAll) {
+        conShowAll.addEventListener("click", function () {
+            var isShow = this.dataset.stat;
+            if (isShow === "1") {
+                this.querySelector(".desc-more-img").classList.remove("up");
+                modal.q("#houseDesc").classList.remove("showAll");
+                this.querySelector(".desc-more-txt").innerText = "查看全部";
+                this.classList.add("show");
+                this.dataset.stat = "2";
+            } else {
+                modal.q("#houseDesc").classList.add("showAll");
+                this.querySelector(".desc-more-img").classList.add("up");
+                this.querySelector(".desc-more-txt").innerText = "收起";
+                this.classList.remove("show");
+                this.dataset.stat = "1";
+            }
+
+        }, false);
     }
 
     modal.onAMapLoaded = function() {

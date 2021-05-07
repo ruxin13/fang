@@ -244,8 +244,7 @@ body{
     background-color: #fff;
 }
 .pan-tit{
-    font-size: 0.48rem;
-    font-weight: bold;
+    font-size: 0.43rem;
     color: #333;
     line-height: 0.64rem;
     margin-bottom: .45rem;
@@ -253,6 +252,14 @@ body{
     display: flex;
     align-items: center;
     justify-content: space-between;
+}
+.pan-tit:before{
+    content: '';
+    display: block;
+    width: .08rem;
+    height: .48rem;
+    background-color: #E02A1C;
+    margin-right: .25rem;
 }
 .pan-tit span{
     flex: 1;
@@ -998,10 +1005,19 @@ body{
     border-bottom: solid 1px #dedede;
 }
 .t-tit{
-    font-size: .45rem;
+    font-size: .43rem;
     color: #333;
     margin-bottom: .37rem;
-    font-weight: bold;
+    display: flex;
+    align-items: center;
+}
+.t-tit:before{
+    content: '';
+    display: block;
+    width: .08rem;
+    height: .48rem;
+    background-color: #E02A1C;
+    margin-right: .25rem;
 }
 .t-con{
     font-size: .4rem;
