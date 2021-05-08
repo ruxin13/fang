@@ -428,7 +428,7 @@ a{
 
 .m-desc{
     background-color: #fff;
-    padding: 0 .43rem;
+    padding: 0 .43rem .48rem;
     border-top: solid 1px #dedede;
     border-bottom: solid 1px #dedede;
     margin-bottom: .27rem;
@@ -450,7 +450,6 @@ a{
     flex-direction: column;
     align-items: center;
     justify-content: flex-end;
-    padding-bottom: .48rem;
     position: initial;
     width: 100%;
     height: auto;
@@ -460,10 +459,10 @@ a{
 }
 .desc-more.show{
     display: flex;
-    background: linear-gradient(0deg, #FFFFFF 24%, rgba(255, 255, 255, 0));
+    background: linear-gradient(0deg, #FFFFFF 20%, rgba(255, 255, 255, 0));
     position: absolute;
     height: 3.44rem;
-    /*background-color: red;*/
+    padding-bottom: .48rem;
 }
 .desc-more-img{
     width: .37rem;
