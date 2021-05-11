@@ -851,13 +851,25 @@ body{
 .hc-tag{
     height: .53rem;
     line-height: .53rem;
-    background-color: #F7F7F7;
+    background-color: #FDD9D5;
+    color: #E17166;
     border-radius: .11rem;
     padding: 0 .12rem;
     font-size: .32rem;
-    color: #555;
     margin-right: .24rem;
     margin-bottom: .2rem;
+}
+.hc-tag:nth-child(2n){
+    background-color: #FDF4E7;
+    color: #F3BA5B;
+}
+.hc-tag:nth-child(3){
+    background-color: #EDF4FB;
+    color: #5394F1;
+}
+.hc-tag:nth-child(4){
+    background-color: #FBF2ED;
+    color: #F18B53;
 }
 .hc-ad{
     width: 9.15rem;
