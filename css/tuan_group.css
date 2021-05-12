@@ -442,6 +442,10 @@ a{
     max-height: 8rem;
     overflow: hidden;
 }
+.desc-con img{
+    max-width: 100% !important;
+    height: auto !important;
+}
 .desc-con.showAll{
     max-height: inherit;
 }
