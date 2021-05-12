@@ -662,6 +662,9 @@ define(['common', 'swiper', 'jquery'], function (core, Swiper, $) {
                 this.querySelector(".desc-more-txt").innerText = "查看全部";
                 this.classList.add("show");
                 this.dataset.stat = "2";
+                window.scrollTo({
+                    top: modal.q(".m-desc").offsetTop
+                })
             } else {
                 modal.q("#houseDesc").classList.add("showAll");
                 this.querySelector(".desc-more-img").classList.add("up");
