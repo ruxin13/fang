@@ -211,10 +211,10 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
                     var rulePet = modal.q(".rule-pet");
                     var ruleParty = modal.q(".rule-party");
 
-                    if (data.liveBeginTime && data.liveEndTime) {
-                        modal.q("#tuanBeginTime").innerText = modal.parseTime(data.liveBeginTime);
-                        modal.q("#tuanEndTime").innerText = modal.parseTime(data.liveEndTime);
-                    }
+                    // if (data.liveBeginTime && data.liveEndTime) {
+                        // modal.q("#tuanBeginTime").innerText = modal.parseTime(data.liveBeginTime);
+                        // modal.q("#tuanEndTime").innerText = modal.parseTime(data.liveEndTime);
+                    // }
 
                     if (data.ruleRequireJson) {
                         ruleOther.innerText = data.ruleRequireJson;
@@ -326,40 +326,42 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
                         $("#askList").html(faqHtml);
                     }
 
-                    modal.q("#joinPersonNumber").innerText = data.joinPersonNumber || 0;
+                    // modal.q("#joinPersonNumber").innerText = data.joinPersonNumber || 0;
                     // modal.q("#phone").setAttribute("href", "tel:" + data.rulePhone);
                     modal.q("#phone").setAttribute("href", "tel:4006992388");
                     if (data.tuanNotice) {
                         modal.q("#tuanNotice").innerHTML = data.tuanNotice;
                     }
-                    if (data.surplusTimestamp && data.surplusTimestamp > 0) {
-                        modal.surplusTimestamp = data.surplusTimestamp;
-                        restTime.innerHTML = modal.formatTime(data.surplusTimestamp);
-                        var int = setInterval(function () {
-                            var newTime = modal.surplusTimestamp - 1;
-                            var restTime = modal.formatTime(newTime > 0 ? newTime : 0);
-                            modal.q("#restDays").innerText = restTime.day;
-                            modal.q("#restTime").innerHTML = restTime.time;
-                            modal.surplusTimestamp = newTime;
-                            if (newTime <= 0) {
-                                clearInterval(int);
-                            }
-                        }, 1000);
-                    }
+                    // if (data.surplusTimestamp && data.surplusTimestamp > 0) {
+                    //     modal.surplusTimestamp = data.surplusTimestamp;
+                    //     restTime.innerHTML = modal.formatTime(data.surplusTimestamp);
+                    //     var int = setInterval(function () {
+                    //         var newTime = modal.surplusTimestamp - 1;
+                    //         // var restTime = modal.formatTime(newTime > 0 ? newTime : 0);
+                    //         // modal.q("#restDays").innerText = restTime.day;
+                    //         // modal.q("#restTime").innerHTML = restTime.time;
+                    //         modal.surplusTimestamp = newTime;
+                    //         if (newTime <= 0) {
+                    //             clearInterval(int);
+                    //         }
+                    //     }, 1000);
+                    // }
                     if (data.reserveTypeStr) {
                         var typeStr = '';
-                        var types = data.reserveTypeStr.split(",");
+                        var types = data.reserveTypeStr ? data.reserveTypeStr.split(",") : [];
+                        var forbids = data.reserveTypeStatus ? data.reserveTypeStatus.split(",") : [];
                         modal.tuan.forEach(function (item) {
                             types.forEach(function (item2) {
                                 if (item.id === parseInt(item2)) {
-                                    typeStr += '<div class="st-li st-se">\n' +
-                                        '            <div class="st-l">\n' +
-                                        '                 <div class="st-t">'+item.name+'</div>\n' +
-                                        '                 <div class="st-b">拼团价: <i>￥</i><span class="st-price" id="'+item.key+'">'+
-                                        (data[item.key] ? data[item.key] : 0)+'</span><span class="st-inf">'+(item.id === 1 ? '人/日/床位' : '日/整间房')+'/包吃住</span></div>\n' +
-                                        '            </div>\n' +
-                                        '            <div class="st-r link">订</div>\n' +
-                                        '       </div>'
+                                    typeStr += '<div class="st-li '+(data.isBookUp > 0 ? '' : ((forbids.length > 0 && forbids.indexOf(item.id.toString()) > -1) ? '' : 'st-se'))+'" data-id="'+item.id+'">' +
+                                        '            <div class="st-l">' +
+                                        '                 <div class="st-t">'+item.name+'</div>' +
+                                        '                 <div class="st-b">预订价: <i>￥</i><span class="st-price" id="'+item.key+'">'+
+                                        (data[item.key] ? (modal.accMul(data[item.key], 30)) : 0)+'</span><span class="st-inf">'+(item.id === 1 ? '人/月/床位' : '月/整间房')+'/包三餐</span></div>' +
+                                        '            </div>' +
+                                        '            <div class="st-r link">订</div>' +
+                                        '       </div>';
+
                                 }
                             });
                         });
@@ -411,7 +413,12 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
     };
 
 
-
+    modal.accMul = function(arg1, arg2){
+        var m = 0, s1 = arg1.toString(), s2 = arg2.toString();
+        try{ m += s1.split(".")[1].length } catch (e){}
+        try{ m += s2.split(".")[1].length } catch (e){}
+        return Number(s1.replace(".","")) * Number(s2.replace(".","")) / Math.pow(10, m)
+    };
 
     modal.formatTime = function(time) {
         var day = parseInt(time / 86400);

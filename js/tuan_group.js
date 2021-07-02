@@ -149,12 +149,12 @@ define(['common', 'swiper', 'jquery'], function (core, Swiper, $) {
                     modal.locationTownName = data.locationTownName;
 
                     var villageName = modal.q(".top-tit");
-                    var villageNo = modal.q("#villageNo");
+                    // var villageNo = modal.q("#villageNo");
                     var tagWrap = modal.q(".top-tags-l");
                     var tagWrapPop = modal.q(".pe-list");
                     var brief = modal.q(".top-sif-l");
                     var startEnd = modal.q(".top-srf-r");
-                    var restTime = modal.q(".m-tit-rm");
+                    // var restTime = modal.q(".m-tit-rm");
                     var headImgs = modal.q("#headImgs");
                     var houseDesc = modal.q("#houseDesc");
 
@@ -182,7 +182,7 @@ define(['common', 'swiper', 'jquery'], function (core, Swiper, $) {
                     modal.swiper2.update();
 
                     villageName.innerText = data.villageName;
-                    villageNo.innerText = data.villageNo;
+                    // villageNo.innerText = data.villageNo;
                     if (data.tagName) {
                         var tagArr = data.tagName.split(",");
                         var tagStr = '';
@@ -224,29 +224,29 @@ define(['common', 'swiper', 'jquery'], function (core, Swiper, $) {
                         }, 1000);
                     }
 
-                    if (data.surplusTimestamp && data.surplusTimestamp > 0) {
-                        modal.surplusTimestamp = data.surplusTimestamp;
-                        restTime.innerHTML = modal.formatTime(data.surplusTimestamp);
-                        var int = setInterval(function () {
-                            var newTime = modal.surplusTimestamp - 1;
-                            restTime.innerHTML = modal.formatTime(newTime > 0 ? newTime : 0);
-                            modal.surplusTimestamp = newTime;
-                            if (newTime <= 0) {
-                                clearInterval(int);
-                            }
-                        }, 1000);
-                    }
+                    // if (data.surplusTimestamp && data.surplusTimestamp > 0) {
+                    //     modal.surplusTimestamp = data.surplusTimestamp;
+                        // restTime.innerHTML = modal.formatTime(data.surplusTimestamp);
+                        // var int = setInterval(function () {
+                        //     var newTime = modal.surplusTimestamp - 1;
+                        //     restTime.innerHTML = modal.formatTime(newTime > 0 ? newTime : 0);
+                        //     modal.surplusTimestamp = newTime;
+                        //     if (newTime <= 0) {
+                        //         clearInterval(int);
+                        //     }
+                        // }, 1000);
+                    // }
 
                     if (data.list && data.list.length > 0) {
                         var hStr = '';
                         data.list.forEach(function (item) {
 
 
-                            hStr += '<div class="group-li '+(item.status === 2 ? 'gl-out' : '')+'" data-id="'+item.tuanId+'">\n' +
-                                '                <img class="gli-l" src="'+item.infoCover+'" alt/>\n' +
-                                '                <div class="gli-r">\n' +
-                                '                    <div class="gli-tit">'+item.infoTitle+'</div>\n' +
-                                '                    <div class="gli-tags">\n';
+                            hStr += '<a class="group-li '+((item.status === 2 || item.isBookUp === 1) ? 'gl-out' : '')+'" data-id="'+item.tuanId+'" href="tuan.html?id='+item.tuanId+'">' +
+                                '                <img class="gli-l" src="'+item.infoCover+'" alt/>' +
+                                '                <div class="gli-r">' +
+                                '                    <div class="gli-tit">'+item.infoTitle+'</div>' +
+                                '                    <div class="gli-tags">';
 
                             if (item.tagName) {
                                 var tagStr = '';
@@ -260,8 +260,14 @@ define(['common', 'swiper', 'jquery'], function (core, Swiper, $) {
                             }
 
                             hStr += '</div>\n' +
-                            '<div class="gli-price">拼团价：<i>￥</i><span>'+(item.tuanPrice ? item.tuanPrice : 0)+'</span></div>\n' +
-                            '<div class="gli-inf">'+(item.reserveTypeStr.indexOf("1") > -1 ? "人/日/床位/包吃住" : "日/整间房/包吃住" )+'</div><a class="gli-od gli-in" href="tuan.html?id='+item.tuanId+'">订</a></div></div>';
+                            '<div class="gli-price">预订价：<i>￥</i><span>'+(item.tuanPrice ? (modal.accMul(item.tuanPrice, 30)) : 0)+'</span></div>' +
+                            '<div class="gli-inf">'+(item.reserveTypeStr.indexOf("1") > -1 ? "人/月/床位/包三餐" : "月/整间房/包三餐" )+'</div>';
+                            if (item.isBookUp > 0) {
+                                hStr += '<div class="gli-od gli-out"></div>';
+                            } else {
+                                hStr += '<div class="gli-od gli-in">详情</div>';
+                            }
+                            hStr += '</div></div>';
                         });
                         modal.q(".group-con").innerHTML = hStr;
 
@@ -442,6 +448,13 @@ define(['common', 'swiper', 'jquery'], function (core, Swiper, $) {
         if (minute < 10) {minute = "0" + minute}
         if (second < 10) {second = "0" + second}
         return (day > 0 ? ('<i>' + day + "</i>天") : "") + '<i>'+hour+'</i>:' + '<i>'+minute+'</i>:' + '<i>'+second+'</i>'
+    };
+
+    modal.accMul = function(arg1, arg2){
+        var m = 0, s1 = arg1.toString(), s2 = arg2.toString();
+        try{ m += s1.split(".")[1].length } catch (e){}
+        try{ m += s2.split(".")[1].length } catch (e){}
+        return Number(s1.replace(".","")) * Number(s2.replace(".","")) / Math.pow(10, m)
     };
 
     modal.requestReplyList = function(commentId, pageSize, $obj, page) {
