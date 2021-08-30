@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta content="yes" name="apple-touch-fullscreen">
+    <meta content="telephone=no,email=no" name="format-detection">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta name="renderer" content="webkit">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+    <link type="text/css" rel="stylesheet" href="css/reset.css"/>
+    <link type="text/css" rel="stylesheet" href="css/swiper.min.css"/>
+    <link type="text/css" rel="stylesheet" href="css/gearDate.css"/>
+    <link type="text/css" rel="stylesheet" href="css/hotel_details.css"/>
+    <title>酒店详情</title>
+</head>
+<body>
+
+<div class="wrap">
+    <div class="header">
+        <video class="top-video"
+               id="playVideo"
+               webkit-playsinline="true"
+               playsinline="true"
+               x5-playsinline="true"
+               x5-video-player-type="h5"
+               x5-video-player-fullscreen=""
+               x5-video-orientation="portraint"
+               x-webkit-airplay="true"
+               controlsList="nodownload"
+               src="" style="object-fit: fill"></video>
+        <div class="top-info">
+            <div class="hc-inf"></div>
+            <div class="hc-tit"></div>
+            <div class="hc-tags"></div>
+            <div class="hc-row">
+                <div class="hcr-l">房源/周边介绍</div>
+                <div class="hcr-r">详情 》</div>
+            </div>
+            <div class="hc-row" style="padding-bottom: 0">
+                <div class="hcr-l">
+                    <div class="hcr-lt">海南省万宁市东澳镇</div>
+                    <div class="hcr-lb">距**火车站驾车距离20公里，约10分钟</div>
+                </div>
+                <div class="hcr-r">
+                    <img class="hcr-rt" src="img/pos.png" alt/>
+                    <div class="hcr-rb">地图</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="pan" style="padding: 0 .43rem;">
+        <div class="pan-tit">可选时段：
+            <div class="valid-date" id="validDate">21年08月20日-22年03月31日</div>
+        </div>
+        <div class="pan-cons">
+            <div class="pan-tit" style="border-bottom: 0;">价格说明</div>
+            <div class="pan-coi">按换住，居住总时长90晚，就平均在每一个房源用， 连住90晚占住30晚，按换住，居住总时长90晚，就 平均在每一个房源用，连住90晚占住30晚</div>
+        </div>
+    </div>
+
+    <div class="pan">
+        <div class="pan-sticky">
+            <div class="pan-tit">包三餐房型<span>(30晚起租)</span></div>
+            <div class="stk-row" id="firstSelect">
+                <div class="stk-l">
+                    <span class="stk-t">入住时间</span>
+                    <input class="stk-b" value="" readonly="readonly" name="startDate" id="startDate" type="text"
+                           placeholder="请选择入住时间">
+                </div>
+<!--                <div class="stk-c" id="totalDays">—</div>-->
+                <div class="stk-r">
+                    <span class="stk-t">离店时间</span>
+                    <input class="stk-b" value="" readonly="readonly" name="endDate" id="endDate" type="text"
+                           placeholder="请选择退房时间">
+                </div>
+            </div>
+        </div>
+        <div class="pan-list">
+            <div class="nli-t">
+                <img class="nli-tl" src="https://p.ihuada.com/sample/sample_head.jpg" alt/>
+                <div class="nli-tr">
+                    <div class="nli-tit">高级双床房01高级双床房01高级双床房01高级双床房01</div>
+                    <div class="nli-tags">
+                        <div class="nli-tag">包三餐</div>
+                        <div class="nli-tag">包水电</div>
+                        <div class="nli-tag">有阳台</div>
+                    </div>
+                    <div class="nli-inf">
+                        <div class="nli-inl">
+                            <p>面积约为30m<sup>2</sup></p>
+                            <p class="nli-inline">不可取消</p>
+                            <p class="nli-inline">需等待确认</p>
+                        </div>
+                        <div class="nli-inr">详情</div>
+                    </div>
+                </div>
+            </div>
+            <div class="nli-m">
+                <div class="nli">
+                    <div class="nli-ml">
+                        <div class="nli-mlt">单人订床位</div>
+                        <div class="nli-mlb">单价<span>￥3599</span>起/人/床位/30晚</div>
+                    </div>
+                    <div class="nli-mr">预订</div>
+                </div>
+                <div class="nli">
+                    <div class="nli-ml">
+                        <div class="nli-mlt">整间房单人入住</div>
+                        <div class="nli-mlb">单价<span>￥5999</span>起/人/床位/30晚</div>
+                    </div>
+                    <div class="nli-mr">预订</div>
+                </div>
+                <div class="nli">
+                    <div class="nli-ml">
+                        <div class="nli-mlt">整间房双人入住</div>
+                        <div class="nli-mlb">单价<span>￥7999</span>起/人/床位/30晚</div>
+                    </div>
+                    <div class="nli-mr nli-sl"></div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="pan">
+        <div class="pan-sticky">
+            <div class="pan-tit">不包餐房型<span>(30晚起租)</span></div>
+            <div class="stk-row" id="secondSelect">
+                <div class="stk-l" id="selectIn2">
+                    <div class="stk-t">入住时间</div>
+                    <input class="stk-b" value="" readonly="readonly" name="startDate2" id="startDate2" type="text"
+                           placeholder="请选择入住时间">
+                </div>
+                <div class="stk-c" id="totalDays2">—</div>
+                <div class="stk-r" id="selectOut2">
+                    <div class="stk-t">离店时间</div>
+                    <input class="stk-b" value="" readonly="readonly" name="endDate2" id="endDate2" type="text"
+                           placeholder="请选择退房时间">
+                </div>
+            </div>
+        </div>
+        <div class="pan-list">
+            <div class="nli-t">
+                <img class="nli-tl" src="https://p.ihuada.com/sample/sample_head.jpg" alt/>
+                <div class="nli-tr">
+                    <div class="nli-tit">高级双床房01高级双床房01高级双床房01高级双床房01</div>
+                    <div class="nli-tags">
+                        <div class="nli-tag">包三餐</div>
+                        <div class="nli-tag">包水电</div>
+                        <div class="nli-tag">有阳台</div>
+                    </div>
+                    <div class="nli-inf">
+                        <div class="nli-inl">
+                            <p>面积约为30m<sup>2</sup></p>
+                            <p class="nli-inline">不可取消</p>
+                            <p class="nli-inline">需等待确认</p>
+                        </div>
+                        <div class="nli-inr">详情</div>
+                    </div>
+                </div>
+            </div>
+            <div class="nli-m">
+                <div class="nli">
+                    <div class="nli-ml">
+                        <div class="nli-mlt">单人订床位</div>
+                        <div class="nli-mlb">单价<span>￥3599</span>起/人/床位/30晚</div>
+                    </div>
+                    <div class="nli-mr">预订</div>
+                </div>
+                <div class="nli">
+                    <div class="nli-ml">
+                        <div class="nli-mlt">整间房单人入住</div>
+                        <div class="nli-mlb">单价<span>￥5999</span>起/人/床位/30晚</div>
+                    </div>
+                    <div class="nli-mr">预订</div>
+                </div>
+                <div class="nli">
+                    <div class="nli-ml">
+                        <div class="nli-mlt">整间房双人入住</div>
+                        <div class="nli-mlb">单价<span>￥7999</span>起/人/床位/30晚</div>
+                    </div>
+                    <div class="nli-mr nli-sl"></div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="pan" style="padding:0 .43rem;">
+        <div class="pan-tit">房源介绍</div>
+        <div class="pan-con pan-des" id="content">
+            <img src="https://p.ihuada.com/sample/sample_head.jpg" alt/>
+            <p>本店位于深圳市龙华区民治街道南景新村内，青年旅 舍毗临深圳北站，往深圳机场，蛇口码头，人才市场 约50分钟车程。 房内提供宽带上网，淋浴间，手机 充电设备，洗衣机，洗衣粉，饮水机，是您入住及找
+                工作的理想之所。</p>
+        </div>
+        <div class="pan-showAll">查看全部房源介绍</div>
+    </div>
+
+    <div class="m-rules">
+        <div class="pan-tit">订房须知</div>
+        <div class="rules-con" id="bookingNotice">
+            中廖村内还配备有黎族传统小吃、乡村特色美食、阿爸茶社、花瓣咖啡厅、黎夫彩园、村内中和湖及黎家小院内每天都将免费表演海南特色歌、舞、乐器等...
+        </div>
+    </div>
+
+    <div class="m-rules">
+        <div class="pan-tit">房源政策</div>
+        <div class="rules-con" id="housePolicy"></div>
+    </div>
+
+    <div class="pan" style="padding:0 .43rem;">
+        <div class="pan-tit">设施<span>(照片仅供示意，不是实拍效果)</span></div>
+        <div class="pt-group">
+            <div class="pt-tit pt-yqss">园区设施</div>
+            <div class="pt-con">
+                <div class="pt-li">
+                    <img class="pt-img" src="https://p.ihuada.com/sample/sample_head.jpg" alt/>
+                    <div class="pt-name">公共花园</div>
+                </div>
+                <div class="pt-li">
+                    <img class="pt-img" src="https://p.ihuada.com/sample/sample_head.jpg" alt/>
+                    <div class="pt-name">儿童乐园</div>
+                </div>
+                <div class="pt-li">
+                    <img class="pt-img" src="https://p.ihuada.com/sample/sample_head.jpg" alt/>
+                    <div class="pt-name">充电桩</div>
+                </div>
+                <div class="pt-li">
+                    <img class="pt-img" src="https://p.ihuada.com/sample/sample_head.jpg" alt/>
+                    <div class="pt-name">便利店</div>
+                </div>
+                <div class="pt-li">
+                    <img class="pt-img" src="https://p.ihuada.com/sample/sample_head.jpg" alt/>
+                    <div class="pt-name">ATM机</div>
+                </div>
+            </div>
+        </div>
+        <div class="pt-group">
+            <div class="pt-tit pt-zbss">周边设施</div>
+            <div class="pt-con">
+                <div class="pt-li">
+                    <img class="pt-img" src="https://p.ihuada.com/sample/sample_head.jpg" alt/>
+                    <div class="pt-name">电影院</div>
+                </div>
+                <div class="pt-li">
+                    <img class="pt-img" src="https://p.ihuada.com/sample/sample_head.jpg" alt/>
+                    <div class="pt-name">派出所</div>
+                </div>
+                <div class="pt-li">
+                    <img class="pt-img" src="https://p.ihuada.com/sample/sample_head.jpg" alt/>
+                    <div class="pt-name">药店</div>
+                </div>
+            </div>
+        </div>
+        <div class="pt-btn">查看全部</div>
+    </div>
+
+    <div class="pan2">
+        <div class="pan-tit">房源周边</div>
+        <div class="pan-con2">
+            <div class="zb-tabs">
+                <div class="zb-tab cur">景点</div>
+                <div class="zb-tab">超市</div>
+                <div class="zb-tab">菜场</div>
+                <div class="zb-tab">医护</div>
+                <div class="zb-tab">活动</div>
+            </div>
+            <div class="zb-con swiper-container" id="nearbyScene">
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide">
+                        <img class="zb-img" src="https://p.ihuada.com/sample/sample_head.jpg" alt/>
+                        <div class="zb-tit">甘坑客家小镇</div>
+                        <div class="zb-pos">直线距离约2.5km</div>
+                    </div>
+                    <div class="swiper-slide">
+                        <img class="zb-img" src="https://p.ihuada.com/sample/sample_head.jpg" alt/>
+                        <div class="zb-tit">甘坑客家小镇</div>
+                        <div class="zb-pos">直线距离约2.5km</div>
+                    </div>
+                    <div class="swiper-slide">
+                        <img class="zb-img" src="https://p.ihuada.com/sample/sample_head.jpg" alt/>
+                        <div class="zb-tit">甘坑客家小镇</div>
+                        <div class="zb-pos">直线距离约2.5km</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="pan2">
+        <div class="pan-tit">常见问题/答疑</div>
+        <div class="pan-con2" style="padding-top: 0">
+            <div class="pan-question">
+                <div class="pq-ask">这个民宿的性价比特别高？</div>
+                <div class="pq-ans"><span>鉴于房源所在地相关法律法规及房东收到的监管要求，该房源暂时只接待持有中国大陆居民身份证或护照的房客。请使用中国大陆居民身份证或护照入住该房源，对您造成的不便我们深表歉意。</span>
+                </div>
+            </div>
+            <div class="pan-question">
+                <div class="pq-ask">这个民宿的性价比特别高？</div>
+                <div class="pq-ans"><span>鉴于房源所在地相关法律法规及房东收到的监管要求，该房源暂时只接待持有中国大陆居民身份证或护照的房客。请使用中国大陆居民身份证或护照入住该房源，对您造成的不便我们深表歉意。</span>
+                </div>
+            </div>
+            <div class="pt-btn2">查看全部</div>
+        </div>
+    </div>
+
+    <div class="pan2" id="ask">
+        <div class="pan-tit">
+            <span>问答</span>
+        </div>
+        <!--        <div class="pan-list" id="askList"></div>-->
+        <div class="ask-nodata">
+            <div class="an-t link">
+                <img class="an-avatar" src="http://resource.xiangdao.info/user/avatar/default_avatar.png" alt/>
+                <div class="an-input">看对眼了就问问更多细节~</div>
+            </div>
+            <img class="an-icon" src="img/ask_nodata.png" alt/>
+            <div class="an-txt">还没有人问答，还不快来抢沙发...</div>
+        </div>
+    </div>
+
+    <div class="comment">
+        <div class="m-tit">
+            <div class="m-tit-l">评论</div>
+            <div class="com-tit-r link">写评论</div>
+        </div>
+        <div id="comment">
+            <div class="comment-list" id="commentList"></div>
+        </div>
+    </div>
+
+
+</div>
+
+
+<script type="text/javascript" src="https://webapi.amap.com/maps?v=2.0&key=1acf89333f048989b606d856cba42d2d"></script>
+<script type="text/javascript">
+    function GetQueryString(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+        var r = window.location.search.substr(1).match(reg);
+        if (r != null) return unescape(r[2]);
+        return null;
+    }
+
+    //打开app逻辑判断: 如果在微信打开引导层，非微信打开app，app未安装直接下载
+    function openApp(href) {
+        //检测是否微信内核浏览器
+        var ua = navigator.userAgent.toLowerCase();//获取判断用的对象
+        if (ua.match(/MicroMessenger/i) == "micromessenger") {
+            //在微信中打开，引导跳转外部浏览器
+            document.getElementById("guide").style.display = "block";
+            document.getElementById("guide-img").style.display = "block";
+        } else {
+            //执行打开app逻辑
+            //ios设备或安卓设备
+            if (navigator.userAgent.match(/(iPhone|iPod|iPad);?/i) || navigator.userAgent.match(/android/i)) {
+                try {
+                    //视频  android://h5/open?type=1&id=64
+                    //文章	android://h5/open?type=2&id=64
+                    //房源  android://h5/open?type=4&id=64
+                    //故事  android://h5/open?type=5&id=64
+                    window.location = "android://h5/open?type=1&id=" + GetQueryString("id");
+                    window.setTimeout(function () {
+                        //未响应，响应超时则判断未安装app执行下载apk
+                        window.location = "http://www.xiangdao.info/download/sz.xinagdao.apk";
+                    }, 500);
+                } catch (e) {
+                }
+            }
+        }
+
+    }
+
+    //关闭遮盖层
+    function closeGuide() {
+        document.getElementById("guide").style.display = "none";
+        document.getElementById("guide-img").style.display = "none";
+    }
+</script>
+<script src="js/require.js" data-main="js/hotel_detail"></script>
+<script>
+    requirejs.config({
+        urlArgs: "v=" + (new Date()).getTime()
+    });
+</script>
+
+
+</body>
+</html>
