@@ -3,8 +3,8 @@ require.config({
         'common': 'common.min',
         'jquery': "jquery-3.2.1",
         'swiper': 'swiper.min',
-        // 'gearDate': '../dist/js/gearDate.min'
-        'gearDate': 'gearDate'
+        'gearDate': '../dist/js/gearDate.min'
+        // 'gearDate': 'gearDate'
     },
 });
 define(['common', 'jquery', 'swiper', 'gearDate'], function (core, $, Swiper, gearDate) {
@@ -106,6 +106,16 @@ define(['common', 'jquery', 'swiper', 'gearDate'], function (core, $, Swiper, ge
                         var begin = modal.parseTime(data.validBeginTime);
                         var end = modal.parseTime(data.validEndTime);
                         validDate.it(begin + "-" + end);
+                    }
+                    if (!data.commentCount) {
+                        var html = '';
+                        html += '<div class="comment-nodata">' +
+                            '<img class="comment-nodata-icon" src="img/comment_nodata.png" alt />' +
+                            '<div class="comment-nodata-tit">暂无评论</div>' +
+                            '<div class="comment-nodata-stit">还没有房客对该房源发出评论</div></div>';
+                        modal.q("#commentList").innerHTML = html;
+                    } else {
+                        // 评论列表
                     }
                 }
             }

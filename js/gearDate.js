@@ -5,32 +5,83 @@ window.GearDate = (function () {
         this.startValue = "";
         this.endValue = "";
         this.clickTag = 0;
-        this.q = function (selector) { return document.querySelector(selector) };
-        this.qa = function (selector) { return document.querySelectorAll(selector) };
         Element.prototype.ca = function (cls) { return cls ? this.classList.add(cls) : false };
         Element.prototype.cm = function (cls) { return cls ? this.classList.remove(cls) : false };
         Element.prototype.cc = function (cls) { return cls ? this.classList.contains(cls) : false };
     }
+    function q(selector) { return document.querySelector(selector) }
+    function qa(selector) { return document.querySelectorAll(selector) }
+    const START_CLASS = "gde-sel-start";
+    const CENTER_CLASS = "gde-sel-center";
+    const END_CLASS = "gde-sel-end";
+    const DISABLED_CLASS = "gde-head-disabled";
+    const START_STRING = "请选择入住日期";
+    const END_STRING = "请选择退房日期";
+    const DATE_STRING = "请选择日期";
+    function translateMonth (month) {
+        month = ~~month;
+        return ["一", "二", "三", "四", "五", "六", "七", "八", "九", "十", "十一", "十二"][month]
+    }
+    function translateDay (day) {
+        day = ~~day;
+        return ["周日", "周一", "周二", "周三", "周四", "周五", "周六"][day]
+    }
+    function isLeapYear (year) {
+        return (year % 4 === 0 && year % 100 !== 0) || (year % 400 === 0)
+    }
+    function dayToArray (startDate, endDate) {
+        let startArr = startDate.split("-");
+        let endArr = endDate.split("-");
+        let start = new Date(startArr[0], ~~startArr[1] - 1, startArr[2]);
+        let end = new Date(endArr[0], ~~endArr[1] - 1, endArr[2]);
+        let retArr = [];
+        if (end > start) {
+            let days = (end.getTime() - start.getTime()) / 86400000 ;
+            for (let i=0;i<=days;i++) {
+                let obj = {};
+                if (i === 0) {
+                    obj.isStart = true
+                } else if (i === days) {
+                    obj.isEnd = true
+                } else {
+                    obj.isCenter = true
+                }
+                obj.date = start.getTime() + 86400000 * i;
+                retArr.push(obj)
+            }
+        }
+        return retArr;
+    }
+    function dateToStr (date, noGap) {
+        if (date instanceof Date) {
+            return ymdToStr(date.getFullYear(), date.getMonth(), date.getDate(), noGap);
+        } else {
+            return ""
+        }
+    }
+    function ymdToStr (y, m, d, noGap) {
+        m = ~~m + 1;
+        if (m < 10) { m = `0${m}` }
+        if (d < 10) { d = `0${d}` }
+        if (noGap) {
+            return `${y}${m}${d}`
+        } else {
+            return `${y}-${m}-${d}`
+        }
+    }
     GearDate.prototype = {
         init: function (params) {
             this.params = params;
-            this.startClass = "gde-sel-start";
-            this.centerClass = "gde-sel-center";
-            this.endClass = "gde-sel-end";
-            this.hdClass = "gde-head-disabled";
-            this.startString = "请选择入住日期";
-            this.endString = "请选择退房日期";
-            this.dateString = "请选择日期";
-            this.startInput = this.q(params.startInput);
-            this.endInput = this.q(params.endInput);
-            this.totalDaysEl = this.q(params.totalDays);
-            this.trigger = this.q(params.trigger);
+            this.startInput = q(params.startInput);
+            this.endInput = q(params.endInput);
+            this.totalDaysEl = q(params.totalDays);
+            this.trigger = q(params.trigger);
             this.totalMonth = params.totalMonth || 12;
             if (this.startValue && this.endValue) {
                 if (this.startInput.value && this.endInput.value) {
                     this.startValue = this.startInput.value;
                     this.endValue = this.endInput.value;
-                    this.selectedArray = this.dayToArray(this.startValue, this.endValue);
+                    this.selectedArray = dayToArray(this.startValue, this.endValue);
                 }
             }
             this.bindEvent();
@@ -55,10 +106,10 @@ window.GearDate = (function () {
                         }
                     }
                     monthHeadHtml += `<div class="gde-head-mon ${i === 0 ? 'gde-month-cur' : ''}" data-y="${yPlus ? (currentYear + Math.floor((i + currentMonth) / 12)) : currentYear}"
-                        data-m="${month % 12}" data-index="${i}">${_self.translateMonth(month % 12)}月</div>`;
+                        data-m="${month % 12}" data-index="${i}">${translateMonth(month % 12)}月</div>`;
                 }
                 for (let m=0;m<7;m++) {
-                    dayHeadHtml += `<div class="gde-head-d ${m === 0 || m === 6 ? 'gde-weekend' : ''}">${_self.translateDay(m)}</div>`
+                    dayHeadHtml += `<div class="gde-head-d ${m === 0 || m === 6 ? 'gde-weekend' : ''}">${translateDay(m)}</div>`
                 }
                 for (let i=0;i<_self.totalMonth;i++) {
                     monthHtml += '<div class="gde-month">';
@@ -76,7 +127,7 @@ window.GearDate = (function () {
                     monthHtml += `<div class="gde-head-ym" id="M${_year}${_monthStr}">${_year}年${_month + 1}月</div>`;
                     monthHtml += '<div class="gde-dates">';
                     let daysInMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-                    if (_self.isLeapYear(_year)) { daysInMonth[1] = 29 }
+                    if (isLeapYear(_year)) { daysInMonth[1] = 29 }
                     for (let m=0;m<_firstDateDay;m++) {
                         monthHtml += `<div class="gde-mdd-emp"></div>`;
                     }
@@ -91,17 +142,17 @@ window.GearDate = (function () {
                                     let dateObj = new Date(_self.selectedArray[k].date);
                                     if (dateObj.getFullYear() === _year && dateObj.getMonth() === _month && dateObj.getDate() === j + 1) {
                                         if (_self.selectedArray[k].isStart) {
-                                            otherClass = _self.startClass;
+                                            otherClass = START_CLASS;
                                         } else if (_self.selectedArray[k].isCenter) {
-                                            otherClass = _self.centerClass;
+                                            otherClass = CENTER_CLASS;
                                         } else if (_self.selectedArray[k].isEnd) {
-                                            otherClass = _self.endClass;
+                                            otherClass = END_CLASS;
                                         }
                                     }
                                 }
                             }
                         }
-                        let _dateStr = _self.ymdToStr(_year, _month, j + 1, true);
+                        let _dateStr = ymdToStr(_year, _month, j + 1, true);
                         monthHtml += `<div class="gde-mdd ${otherClass}" data-y="${_year}" data-m="${_month}" data-d="${j + 1}" id="D${_dateStr}">${j + 1}</div>`;
                     }
                     monthHtml += '</div></div>';
@@ -121,44 +172,44 @@ window.GearDate = (function () {
                             <div class="gde-ret">
                                 <div class="gde-ret-l">
                                     <div class="gde-ret-t">入住时间</div>
-                                    <div class="gde-ret-b" id="startDateMirror">${ _self.startInput ? (_self.startInput.value ? _self.startInput.value : _self.dateString) : ''}</div>
+                                    <div class="gde-ret-b" id="startDateMirror">${ _self.startInput ? (_self.startInput.value ? _self.startInput.value : DATE_STRING) : ''}</div>
                                 </div>
                                 <div class="gde-ret-c" id="totalDaysMirror">${_self.totalDaysEl ? (_self.totalDaysEl.innerText ? _self.totalDaysEl.innerText.replace(/^\d/, "") : "-") : ""}</div>
                                 <div class="gde-ret-r">
                                     <div class="gde-ret-t">离开时间</div>
-                                    <div class="gde-ret-b" id="endDateMirror">${_self.endInput ? (_self.endInput.value ? _self.endInput.value : _self.dateString) : ''}</div>
+                                    <div class="gde-ret-b" id="endDateMirror">${_self.endInput ? (_self.endInput.value ? _self.endInput.value : DATE_STRING) : ''}</div>
                                 </div>
                             </div>
                             <div class="gde-head-year">
-                                <img class="gde-head-yl ${_self.hdClass}" id="prevYear" src="img/icon_arrow_down.png" alt />
+                                <img class="gde-head-yl ${DISABLED_CLASS}" id="prevYear" src="img/icon_arrow_down.png" alt />
                                 <div class="gde-head-yn">${currentYear}年</div>
                                 <img class="gde-head-yr" id="nextYear" src="img/icon_arrow_down.png" alt />
                             </div>
                             <div class="gde-head-month">${monthHeadHtml}</div>
                             <div class="gde-head-day">${dayHeadHtml}</div>
                             <div class="gde-body">${monthHtml}</div>
-                            <div class="gde-btn-confirm gde-disabled" id="gdeNext">${_self.startString}</div>
+                            <div class="gde-btn-confirm gde-disabled" id="gdeNext">${START_STRING}</div>
                         </div>`;
                 document.body.appendChild(_self.gearArea);
-                _self.q(".gde").ca("slideIn");
-                const _body = _self.q(".gde-body");
-                const gdeNext = _self.q("#gdeNext");
-                let yearShow = _self.q(".gde-head-yn");
-                let prevYear = _self.q("#prevYear");
-                let nextYear = _self.q("#nextYear");
+                q(".gde").ca("slideIn");
+                const _body = q(".gde-body");
+                const gdeNext = q("#gdeNext");
+                let yearShow = q(".gde-head-yn");
+                let prevYear = q("#prevYear");
+                let nextYear = q("#nextYear");
                 if (_self.startValue && _self.endValue) {
                     let _startYear = ~~_self.startValue.split("-")[0];
                     let startValueArr = _self.startValue.split("-");
-                    let targetMonthHead = _self.q(`#M${startValueArr[0]}${startValueArr[1]}`);
+                    let targetMonthHead = q(`#M${startValueArr[0]}${startValueArr[1]}`);
                     if (targetMonthHead) { _body.scrollTo(0, targetMonthHead.offsetTop - _body.offsetTop) }
                     if (yearShow) { yearShow.innerText = `${_startYear}年` }
-                    if (_startYear > currentYear) { prevYear.cm(_self.hdClass) }
+                    if (_startYear > currentYear) { prevYear.cm(DISABLED_CLASS) }
                     let _nextFY = ~~_self.endValue.split("-")[0];
-                    let _nextFYEl = _self.q(`#M${_nextFY + 1}01`);
+                    let _nextFYEl = q(`#M${_nextFY + 1}01`);
                     if (_nextFY && _nextFYEl) {
-                        nextYear.cm(_self.hdClass)
+                        nextYear.cm(DISABLED_CLASS)
                     } else {
-                        nextYear.ca(_self.hdClass)
+                        nextYear.ca(DISABLED_CLASS)
                     }
                     gdeNext.cm("gde-disabled");
                     gdeNext.innerText = "完成";
@@ -166,14 +217,14 @@ window.GearDate = (function () {
                         if (!this.cc("gde-disabled")) {
                             _self.startInput && (_self.startInput.value = _self.startValue);
                             _self.endInput && (_self.endInput.value = _self.endValue);
-                            _self.selectedArray = _self.dayToArray(_self.startValue, _self.endValue);
+                            _self.selectedArray = dayToArray(_self.startValue, _self.endValue);
                             _self.close();
                         }
                     }, false);
                 }
 
-                let months = _self.qa(".gde-head-mon");
-                let tits = _self.qa(".gde-head-ym");
+                let months = qa(".gde-head-mon");
+                let tits = qa(".gde-head-ym");
                 if (months && months.length > 0) {
                     let changeTitLock = false, targetIndex = 0;
                     months.forEach(function (item) {
@@ -181,7 +232,7 @@ window.GearDate = (function () {
                             changeTitLock = true;
                             let {y, m} = item.dataset;
                             targetIndex = item.dataset.index;
-                            let selected = _self.qa(".gde-month-cur");
+                            let selected = qa(".gde-month-cur");
                             if (selected && selected.length > 0) {
                                 selected.forEach(function (item2) {
                                     item2.cm("gde-month-cur");
@@ -192,7 +243,7 @@ window.GearDate = (function () {
                             if (_monthStr < 10) { _monthStr = `0${_monthStr}` }
 
                             // ios的平滑滚动，因为有小bug,所以暂时不放出来
-                                // let targetElemPosition = _self.q(`#M${y}${_monthStr}`).offsetTop - _body.offsetTop
+                                // let targetElemPosition = q(`#M${y}${_monthStr}`).offsetTop - _body.offsetTop
                                 // if (typeof window.getComputedStyle(document.body).scrollBehavior == "undefined") {
                                 //     let scrollTop = _body.scrollTop;
                                 //     const step = function() {
@@ -214,7 +265,7 @@ window.GearDate = (function () {
                                 // }
 
                             _body.scrollTo({
-                                top: _self.q(`#M${y}${_monthStr}`).offsetTop - _body.offsetTop,
+                                top: q(`#M${y}${_monthStr}`).offsetTop - _body.offsetTop,
                                 behavior: "smooth"
                             });
                         }, false);
@@ -251,7 +302,7 @@ window.GearDate = (function () {
                                 if (!changeTitLock) {
                                     if (idx === index) {
                                         item.ca("gde-month-cur");
-                                        _self.q(".gde-head-month").scrollTo({
+                                        q(".gde-head-month").scrollTo({
                                             left: item.offsetLeft,
                                             behavior: "smooth"
                                         });
@@ -266,16 +317,16 @@ window.GearDate = (function () {
                     function inArea(arr, num){for(let i = 0; i < arr.length; i++){if(arr[i] > num){return i - 1;}}}
                 }
 
-                _self.q("#gdeReset").addEventListener('click', function () {
+                q("#gdeReset").addEventListener('click', function () {
                     _self.clear();
                 }, false);
 
-                const close = _self.q(".gde-close");
+                const close = q(".gde-close");
                 close.addEventListener('click', function () {
                     _self.close();
                 }, false);
 
-                let gds = _self.qa(".gde-mdd");
+                let gds = qa(".gde-mdd");
                 if (gds && gds.length > 0) {
                     for (let i=0;i<gds.length;i++) {
                         if (!gds[i].cc("gde-out")) {
@@ -283,39 +334,39 @@ window.GearDate = (function () {
                                 let {y, m, d} = this.dataset;
                                 if (_self.clickTag === 0) {
                                     _self.clear();
-                                    this.ca(_self.startClass);
+                                    this.ca(START_CLASS);
                                     _self.selectedArray.push({
                                         date: new Date(~~y, ~~m, ~~d).getTime(),
                                         isStart: true
                                     });
-                                    _self.q("#startDateMirror").innerText = _self.ymdToStr(y, m, d);
+                                    q("#startDateMirror").innerText = ymdToStr(y, m, d);
                                     gdeNext.ca("gde-disabled");
-                                    gdeNext.innerText = _self.endString;
+                                    gdeNext.innerText = END_STRING;
                                     _self.clickTag = 1;
                                 } else if (_self.clickTag === 1) {
                                     let _date = new Date(~~y, ~~m, ~~d);
                                     let _dateTime = _date.getTime();
                                     if (_dateTime < _self.selectedArray[0].date) {
                                         _self.clear();
-                                        this.ca(_self.startClass);
+                                        this.ca(START_CLASS);
                                         _self.selectedArray.push({
                                             date: new Date(~~y, ~~m, ~~d).getTime(),
                                             isStart: true
                                         });
-                                        _self.q("#startDateMirror").innerText = _self.ymdToStr(y, m, d);
+                                        q("#startDateMirror").innerText = ymdToStr(y, m, d);
                                     } else if (_dateTime > _self.selectedArray[0].date) {
-                                        let _days = _self.dayToArray(_self.dateToStr(new Date(_self.selectedArray[0].date)), _self.ymdToStr(y, m, d));
+                                        let _days = dayToArray(dateToStr(new Date(_self.selectedArray[0].date)), ymdToStr(y, m, d));
                                         if (_days && _days.length > 0) {
                                             _days.forEach(function (item) {
-                                                let el = _self.q(`#D${_self.dateToStr(new Date(item.date), true)}`);
-                                                if (item.isStart) { el.ca(_self.startClass) }
-                                                if (item.isCenter) { el.ca(_self.centerClass) }
-                                                if (item.isEnd) { el.ca(_self.endClass) }
+                                                let el = q(`#D${dateToStr(new Date(item.date), true)}`);
+                                                if (item.isStart) { el.ca(START_CLASS) }
+                                                if (item.isCenter) { el.ca(CENTER_CLASS) }
+                                                if (item.isEnd) { el.ca(END_CLASS) }
                                             });
-                                            let _startStr = _self.dateToStr(new Date(_days[0].date));
-                                            let _endStr = _self.ymdToStr(y, m, d);
-                                            _self.q("#endDateMirror").innerText = _endStr;
-                                            _self.q("#totalDaysMirror").innerText = `共${_days.length - 1}晚`;
+                                            let _startStr = dateToStr(new Date(_days[0].date));
+                                            let _endStr = ymdToStr(y, m, d);
+                                            q("#endDateMirror").innerText = _endStr;
+                                            q("#totalDaysMirror").innerText = `共${_days.length - 1}晚`;
 
                                             gdeNext.addEventListener("click", function () {
                                                 _self.startInput && (_self.startInput.value = _startStr);
@@ -339,9 +390,9 @@ window.GearDate = (function () {
                 }
 
                 prevYear.addEventListener('click', function () {
-                    if (!this.cc(_self.hdClass)) {
-                        let _curY = _self.q(".gde-month-cur");
-                        let _yearPref = _self.q(`#M${(_curY ? ~~_curY.dataset.y : currentYear) - 1}01`);
+                    if (!this.cc(DISABLED_CLASS)) {
+                        let _curY = q(".gde-month-cur");
+                        let _yearPref = q(`#M${(_curY ? ~~_curY.dataset.y : currentYear) - 1}01`);
                         if (_yearPref) {
                             _body.scrollTo({top: _yearPref.offsetTop - _body.offsetTop, behavior: "smooth"})
                         } else {
@@ -350,9 +401,9 @@ window.GearDate = (function () {
                     }
                 }, false);
                 nextYear.addEventListener('click', function () {
-                    if (!this.cc(_self.hdClass)) {
-                        let _curY = _self.q(".gde-month-cur");
-                        let _yearNext = _self.q(`#M${(_curY ? ~~_curY.dataset.y : currentYear) + 1}01`);
+                    if (!this.cc(DISABLED_CLASS)) {
+                        let _curY = q(".gde-month-cur");
+                        let _yearNext = q(`#M${(_curY ? ~~_curY.dataset.y : currentYear) + 1}01`);
                         if (_yearNext) {
                             _body.scrollTo({top: _yearNext.offsetTop - _body.offsetTop, behavior: "smooth"})
                         }
@@ -360,21 +411,21 @@ window.GearDate = (function () {
                 }, false);
 
                 function resetYearBtn() {
-                    let curMonth = _self.q(".gde-month-cur");
+                    let curMonth = q(".gde-month-cur");
                     if (curMonth) {
                         let {y} = curMonth.dataset;
                         if (y <= currentYear) {
-                            prevYear.ca(_self.hdClass);
+                            prevYear.ca(DISABLED_CLASS);
                         } else {
-                            prevYear.cm(_self.hdClass);
+                            prevYear.cm(DISABLED_CLASS);
                         }
-                        let _nextY = _self.q(`#M${~~y + 1}01`);
+                        let _nextY = q(`#M${~~y + 1}01`);
                         if (_nextY) {
-                            nextYear.cm(_self.hdClass);
+                            nextYear.cm(DISABLED_CLASS);
                         } else {
-                            nextYear.ca(_self.hdClass);
+                            nextYear.ca(DISABLED_CLASS);
                         }
-                        let _yn = _self.q(".gde-head-yn");
+                        let _yn = q(".gde-head-yn");
                         if (_yn) { _yn.innerText = `${y}年` }
                     }
                 }
@@ -390,7 +441,7 @@ window.GearDate = (function () {
             let _self = this;
             let evt = new CustomEvent('input');
             this.startInput && this.startInput.dispatchEvent(evt);
-            let wrap = this.q(".gde");
+            let wrap = q(".gde");
             wrap.cm("slideIn");
             wrap.ca("slideOut");
             this.unlockBg();
@@ -403,33 +454,33 @@ window.GearDate = (function () {
         },
         clear: function () {
             let _self = this;
-            let starts = this.qa(`.${_self.startClass}`);
-            let centers = this.qa(`.${_self.centerClass}`);
-            let ends = this.qa(`.${_self.endClass}`);
-            let startDateMirror = this.q(`#startDateMirror`);
-            let endDateMirror = this.q(`#endDateMirror`);
-            let totalDaysMirror = this.q("#totalDaysMirror")
-            let gdeNext = this.q("#gdeNext");
+            let starts = qa(`.${START_CLASS}`);
+            let centers = qa(`.${CENTER_CLASS}`);
+            let ends = qa(`.${END_CLASS}`);
+            let startDateMirror = q(`#startDateMirror`);
+            let endDateMirror = q(`#endDateMirror`);
+            let totalDaysMirror = q("#totalDaysMirror")
+            let gdeNext = q("#gdeNext");
             if (starts && starts.length > 0) {
                 starts.forEach(function (item) {
-                    item.cm(_self.startClass);
+                    item.cm(START_CLASS);
                 })
             }
             if (centers && centers.length > 0) {
                 centers.forEach(function (item) {
-                    item.cm(_self.centerClass)
+                    item.cm(CENTER_CLASS)
                 })
             }
             if (ends && ends.length > 0) {
                 ends.forEach(function (item) {
-                    item.cm(_self.endClass)
+                    item.cm(END_CLASS)
                 })
             }
-            if (startDateMirror) { startDateMirror.innerText = this.dateString }
-            if (endDateMirror) { endDateMirror.innerText = this.dateString }
+            if (startDateMirror) { startDateMirror.innerText = DATE_STRING }
+            if (endDateMirror) { endDateMirror.innerText = DATE_STRING }
             if (totalDaysMirror) { totalDaysMirror.innerText = '-' }
             if (gdeNext) {
-                gdeNext.innerText = this.startString;
+                gdeNext.innerText = START_STRING;
                 gdeNext.ca("gde-disabled")
             }
             this.startInput && (this.startInput.value = "");
@@ -454,59 +505,8 @@ window.GearDate = (function () {
         unlockBg: function (scrollTop) {
             document.body.style.position = "static";
             window.scroll(0, scrollTop ? scrollTop : document.body.dataset.st);
-        },
-        translateMonth: function (month) {
-            month = ~~month;
-            return ["一", "二", "三", "四", "五", "六", "七", "八", "九", "十", "十一", "十二"][month]
-        },
-        translateDay: function (day) {
-            day = ~~day;
-            return ["周日", "周一", "周二", "周三", "周四", "周五", "周六"][day]
-        },
-        isLeapYear: function (year) {
-            return (year % 4 === 0 && year % 100 !== 0) || (year % 400 === 0)
-        },
-        dayToArray: function (startDate, endDate) {
-            let startArr = startDate.split("-");
-            let endArr = endDate.split("-");
-            let start = new Date(startArr[0], ~~startArr[1] - 1, startArr[2]);
-            let end = new Date(endArr[0], ~~endArr[1] - 1, endArr[2]);
-            let retArr = [];
-            if (end > start) {
-                let days = (end.getTime() - start.getTime()) / 86400000 ;
-                for (let i=0;i<=days;i++) {
-                    let obj = {};
-                    if (i === 0) {
-                        obj.isStart = true
-                    } else if (i === days) {
-                        obj.isEnd = true
-                    } else {
-                        obj.isCenter = true
-                    }
-                    obj.date = start.getTime() + 86400000 * i;
-                    retArr.push(obj)
-                }
-            }
-            return retArr;
-        },
-        dateToStr: function (date, noGap) {
-            if (date instanceof Date) {
-                return this.ymdToStr(date.getFullYear(), date.getMonth(), date.getDate(), noGap);
-            } else {
-                return ""
-            }
-        },
-        ymdToStr: function (y, m, d, noGap) {
-            m = ~~m + 1;
-            if (m < 10) { m = `0${m}` }
-            if (d < 10) { d = `0${d}` }
-            if (noGap) {
-                return `${y}${m}${d}`
-            } else {
-                return `${y}-${m}-${d}`
-            }
-        },
-
+        }
     }
+
     return GearDate;
 })()

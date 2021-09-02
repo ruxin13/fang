@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta content="yes" name="apple-touch-fullscreen">
+    <meta content="telephone=no,email=no" name="format-detection">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta name="renderer" content="webkit">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+    <link type="text/css" rel="stylesheet" href="css/reset.css" />
+    <link type="text/css" rel="stylesheet" href="css/login.css" />
+    <title>欢迎来到乡导</title>
+</head>
+<body>
+
+<div class="wrap">
+
+    <div class="lg-tit">欢迎来到乡导</div>
+    <div class="lg-stit">让每一次旅居都能成为美好的回忆</div>
+
+    <div class="lg-m">
+        <div class="lg-input-wrap">
+            <input type="tel" class="lg-input-t" id="phone" placeholder="" value="" maxlength="11" />
+        </div>
+        <div class="lg-input-wrap">
+            <input type="tel" class="lg-input-v" placeholder="" value="" maxlength="6" />
+            <button class="lg-btn-v">获取验证码</button>
+        </div>
+        <button class="lg-submit" disabled="disabled">登录</button>
+
+        <div class="lg-btn-start">手机号登录</div>
+    </div>
+
+    <div class="lg-bottom">
+        <label class="lg-bc">
+            <input type="checkbox" >
+        </label>
+        我已同意<a class="lg-ba" href="javascript:">《乡导平台服务协议》</a>和<a class="lg-ba" href="javascript:">《隐私政策》</a>
+    </div>
+
+</div>
+
+
+<script src="js/require.js" data-main="js/login"></script>
+<script>
+    requirejs.config({
+        urlArgs: "v=" + (new Date()).getTime()
+    });
+</script>
+
+</body>
+</html>
