@@ -1785,3 +1785,93 @@ body{
 .hci-trli-row span{
     color: #999;
 }
+
+
+.house-list{
+    padding: .43rem 0;
+}
+.hli{
+    width: 9.15rem;
+    height: 5.72rem;
+    padding: .47rem .37rem .51rem;
+    border-radius: .27rem;
+    background: #fff;
+    margin: 0 auto .27rem;
+    box-shadow: 0 0 .1rem rgba(0,0,0,.12);
+    position: relative;
+}
+.hli-tit{
+    font-size: .45rem;
+    color: #333;
+    line-height: .64rem;
+    padding-bottom: .33rem;
+    border-bottom: dashed 1px #dedede;
+}
+.hli-row{
+    padding: .36rem 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.hli-l{
+    width: 2.85rem;
+    height: 2.85rem;
+    border-radius: .24rem;
+    object-fit: cover;
+    margin-right: .27rem;
+}
+.hli-r{
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 2.85rem;
+}
+.hli-tags{
+    display: flex;
+}
+.hli-tag{
+    height: .51rem;
+    line-height: .51rem;
+    border-radius: .11rem;
+    background: #f0f0f0;
+    padding: 0 .12rem;
+    font-size: .32rem;
+    color: #666;
+    margin-right: .24rem;
+    margin-bottom: .11rem;
+}
+.hli-inf{
+    font-size: .4rem;
+    color: #666;
+    flex: 1;
+}
+.hli-pri{
+    color: #E02A1C;
+    font-size: .43rem;
+    margin-bottom: .2rem;
+}
+.hli-pri i{
+    font-style: normal;
+    font-size: .4rem;
+}
+.hli-pri span{
+    font-size: .56rem;
+    font-weight: bold;
+}
+.hli-dw{
+    font-size: .37rem;
+    color: #333;
+}
+.hli-btn{
+    height: .72rem;
+    line-height: .72rem;
+    border: solid 1px #E02A1C;
+    border-radius: .16rem;
+    padding: 0 .27rem;
+    font-size: .4rem;
+    color: #E02A1C;
+    position: absolute;
+    right: .37rem;
+    bottom: .63rem;
+}

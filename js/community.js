@@ -30,7 +30,7 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
     };
     modal.env = "dev";
     modal.videoIndexArr = [];
-    modal.id = core.parseQueryString().roomId;
+    modal.id = core.parseQueryString().villageId;
     modal.parseTime = function (timestamp) {
         if (timestamp) {
             var date = new Date(timestamp);
@@ -73,7 +73,7 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
     modal.init = function () {
 
         $.ajax({
-            url: modal.server[modal.env] + "/xiangdao-api/api/news/hotel_details/" + modal.id,
+            url: modal.server[modal.env] + "/xiangdao-api/api/news/village_details/" + modal.id,
             method: "POST",
             dataType: "json",
             headers: {"Accept": "application/json", "Content-Type": "application/json"},
@@ -107,8 +107,8 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
                     var tagWrapPop = q(".pe-list");
                     var areaAddress = q("#areaAddress");
                     var priceRemark = q("#priceRemark");
-                    hotelTitle.innerText = data.hotelTitle;
-                    hotelName.innerText = data.hotelName;
+                    hotelTitle.innerText = data.villageTitle;
+                    hotelName.innerText = data.villageName;
                     if (data.housePolicy && housePolicy) {
                         housePolicy.innerHTML = data.housePolicy;
                     } else {
@@ -126,8 +126,8 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
                     }
                     bookingNotice.innerHTML = data.bookingNotice;
 
-                    if (data.hotelTagName) {
-                        var tagArr = data.hotelTagName.split(",");
+                    if (data.villageTagName) {
+                        var tagArr = data.villageTagName.split(",");
                         var tagStr = '';
                         var allTagStr = '';
                         tagArr.forEach(function (item, index) {
@@ -153,30 +153,10 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
                         priceRemark.innerHTML = data.priceRemark;
                     }
 
-                    modal.getRoomsList(null, null, "1", modal.id, function (roomStr) {
-                        if (roomStr) {
-                            q("#hasFood").innerHTML = roomStr;
-                        } else {
-                            q("#hasFoodWrap").style.display = 'none';
-                        }
-                        modal.getRoomsList(null, null, "1,2,3", modal.id, function (roomStr) {
-                            if (roomStr) {
-                                q("#noFood").innerHTML = roomStr;
-                            } else {
-                                q("#noFoodWrap").style.display = 'none';
-                            }
-                            // modal.eventBind();
-                            modal.openRoom();
-                            modal.closeRoom();
-                        });
-                    });
-
-
-
-                    if (data.hotelIcon && data.hotelIconList && data.hotelIconList.length > 0) {
+                    if (data.villageIcon && data.villageIconList && data.villageIconList.length > 0) {
                         let insStr = '';
-                        let iconArr = data.hotelIcon.split(",");
-                        data.hotelIconList.forEach(item => {
+                        let iconArr = data.villageIcon.split(",");
+                        data.villageIconList.forEach(item => {
                             insStr += `<div class="pt-group">
                                                     <div class="pt-tit"><img class="pt-yqss" src="${item.typeUrl}" alt />${item.typeName}</div>
                                                     <div class="pt-con">`;
@@ -617,23 +597,22 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
                     if (list && list.length > 0) {
                         let str = '';
                         list.forEach(item => {
-                            if (item.type === 2) {
-                                let tagStr = '';
-                                let tagList = [];
-                                if (item.tagName) {
-                                    let tagArr = item.tagName.split(",");
-                                    tagArr.forEach((item2, index2) => {
-                                        tagList.push(item2);
-                                        if (index2 < 4) {
-                                            tagStr += `<div class="sai-tro sai-tro-all" data-id="${item.id}">${item2}</div>`;
-                                        }
-                                    });
-                                    if (tagArr && tagArr.length > 4) {
-                                        tagStr += `<img class="sai-tro-more sai-tro-all" data-id="${item.id}" src="img/icon_arrow_rs.png" alt />`;
+                            let tagStr = '';
+                            let tagList = [];
+                            if (item.tagName) {
+                                let tagArr = item.tagName.split(",");
+                                tagArr.forEach((item2, index2) => {
+                                    tagList.push(item2);
+                                    if (index2 < 4) {
+                                        tagStr += `<div class="sai-tro sai-tro-all" data-id="${item.id}">${item2}</div>`;
                                     }
-                                    item.tagList = tagList;
+                                });
+                                if (tagArr && tagArr.length > 4) {
+                                    tagStr += `<img class="sai-tro-more sai-tro-all" data-id="${item.id}" src="img/icon_arrow_rs.png" alt />`;
                                 }
-                                str += `<div class="sa-li">
+                                item.tagList = tagList;
+                            }
+                            str += `<div class="sa-li">
                                         <div class="sai-t">
                                             <div class="sai-tl">
                                                 <img class="sai-tl-img" src="${item.cover}" alt />
@@ -652,8 +631,6 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
                                             <div class="sai-detail">详情</div>
                                         </div>
                                     </div>`;
-                            }
-
                         });
                         q("#saList").innerHTML = str;
 

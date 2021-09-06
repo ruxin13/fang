@@ -11,8 +11,8 @@
           content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
     <link type="text/css" rel="stylesheet" href="css/reset.css"/>
     <link type="text/css" rel="stylesheet" href="css/swiper.min.css"/>
-    <link type="text/css" rel="stylesheet" href="css/hotel_details.css?t=4"/>
-    <title>酒店详情</title>
+    <link type="text/css" rel="stylesheet" href="css/community.css"/>
+    <title>小区详情</title>
 </head>
 <body>
 
@@ -20,22 +20,22 @@
     <div class="header">
         <div class="video-wrap">
             <video class="top-video"
-                id="playVideo"
-                webkit-playsinline="true"
-                playsinline="true"
-                x5-playsinline="true"
-                x5-video-player-type="h5"
-                x5-video-player-fullscreen=""
-                x5-video-orientation="portraint"
-                x-webkit-airplay="true"
-                preload="auto"
-                loop
-                controls
-                controlsList="nodownload"
-                cover=""
-                src="" style="object-fit: contain;background: black"></video>
-                <div class="video-full" id="videoFullScreen">全屏</div>
-                <div class="video-album">全部照片</div>
+                   id="playVideo"
+                   webkit-playsinline="true"
+                   playsinline="true"
+                   x5-playsinline="true"
+                   x5-video-player-type="h5"
+                   x5-video-player-fullscreen=""
+                   x5-video-orientation="portraint"
+                   x-webkit-airplay="true"
+                   preload="auto"
+                   loop
+                   controls
+                   controlsList="nodownload"
+                   cover=""
+                   src="" style="object-fit: contain;background: black"></video>
+            <div class="video-full" id="videoFullScreen">全屏</div>
+            <div class="video-album">全部照片</div>
         </div>
         <div class="top-info">
             <div class="hc-inf"></div>
@@ -62,58 +62,34 @@
         </div>
     </div>
 
-    <div class="pan" style="padding: 0 .43rem;">
-        <div class="pan-tit">可选时段：
-            <div class="valid-date" id="validDate"></div>
-        </div>
-        <div class="pan-cons">
-            <div class="pan-tit" style="border-bottom: 0;">价格说明</div>
-            <div class="pan-coi" id="priceRemark"></div>
-        </div>
-    </div>
-
-    <div class="pan" id="hasFoodWrap">
-        <div class="pan-sticky">
-            <div class="pan-tit">包三餐房型<span>(30晚起租)</span></div>
-            <div class="stk-row" id="firstSelect">
-                <div class="stk-l">
-                    <span class="stk-t">入住时间</span>
-                    <input class="stk-b" value="" readonly="readonly" name="startDate" id="startDate" type="text"
-                           placeholder="请选择入住时间">
-                </div>
-                <div class="stk-c" id="totalDays">—</div>
-                <div class="stk-r">
-                    <span class="stk-t">离店时间</span>
-                    <input class="stk-b" value="" readonly="readonly" name="endDate" id="endDate" type="text"
-                           placeholder="请选择退房时间">
+    <div class="pan2">
+        <div class="pan-tit">预订房型</div>
+        <div class="house-list">
+            <div class="hli">
+                <div class="hli-tit">A座/15楼/南北通透/2房3厅1厨2卫/空中花园/有厨具</div>
+                <div class="hli-row">
+                    <img class="hli-l" src="https://p.ihuada.com/sample/sample_head.jpg" alt />
+                    <div class="hli-r">
+                        <div class="hli-tags">
+                            <div class="hli-tag">有家电</div>
+                            <div class="hli-tag">有阳台</div>
+                            <div class="hli-tag">有厨具</div>
+                        </div>
+                        <div class="hli-inf">30晚起租</div>
+                        <div class="hli-pri">单价<i>￥</i><span>7699</span></div>
+                        <div class="hli-dw">起/整套/30晚</div>
+                        <div class="hli-btn">详情</div>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="room-wrap" id="hasFood"></div>
-
-
     </div>
 
-    <div class="pan" id="noFoodWrap">
-        <div class="pan-sticky">
-            <div class="pan-tit">不包餐房型<span>(30晚起租)</span></div>
-            <div class="stk-row" id="secondSelect">
-                <div class="stk-l" id="selectIn2">
-                    <div class="stk-t">入住时间</div>
-                    <input class="stk-b" value="" readonly="readonly" name="startDate2" id="startDate2" type="text"
-                           placeholder="请选择入住时间">
-                </div>
-                <div class="stk-c" id="totalDays2">—</div>
-                <div class="stk-r" id="selectOut2">
-                    <div class="stk-t">离店时间</div>
-                    <input class="stk-b" value="" readonly="readonly" name="endDate2" id="endDate2" type="text"
-                           placeholder="请选择退房时间">
-                </div>
-            </div>
-        </div>
-        <div class="pan-list" id="noFood"></div>
 
-    </div>
+
+
+
+
 
     <div class="pan" style="padding:0 .43rem;" id="contentEl">
         <div class="pan-tit">房源介绍</div>
@@ -122,7 +98,7 @@
     </div>
 
     <div class="m-rules" id="bookingNoticeEl">
-        <div class="pan-tit">订房须知</div>
+        <div class="pan-tit">小区注意事项</div>
         <div class="rules-con" id="bookingNotice"></div>
     </div>
 
@@ -136,38 +112,6 @@
         <div id="insWrap"></div>
         <div class="pt-btn">查看全部</div>
     </div>
-
-<!--    <div class="pan2">-->
-<!--        <div class="pan-tit">房源周边</div>-->
-<!--        <div class="pan-con2">-->
-<!--            <div class="zb-tabs">-->
-<!--                <div class="zb-tab cur">景点</div>-->
-<!--                <div class="zb-tab">超市</div>-->
-<!--                <div class="zb-tab">菜场</div>-->
-<!--                <div class="zb-tab">医护</div>-->
-<!--                <div class="zb-tab">活动</div>-->
-<!--            </div>-->
-<!--            <div class="zb-con swiper-container" id="nearbyScene">-->
-<!--                <div class="swiper-wrapper">-->
-<!--                    <div class="swiper-slide">-->
-<!--                        <img class="zb-img" src="https://p.ihuada.com/sample/sample_head.jpg" alt/>-->
-<!--                        <div class="zb-tit">甘坑客家小镇</div>-->
-<!--                        <div class="zb-pos">直线距离约2.5km</div>-->
-<!--                    </div>-->
-<!--                    <div class="swiper-slide">-->
-<!--                        <img class="zb-img" src="https://p.ihuada.com/sample/sample_head.jpg" alt/>-->
-<!--                        <div class="zb-tit">甘坑客家小镇</div>-->
-<!--                        <div class="zb-pos">直线距离约2.5km</div>-->
-<!--                    </div>-->
-<!--                    <div class="swiper-slide">-->
-<!--                        <img class="zb-img" src="https://p.ihuada.com/sample/sample_head.jpg" alt/>-->
-<!--                        <div class="zb-tit">甘坑客家小镇</div>-->
-<!--                        <div class="zb-pos">直线距离约2.5km</div>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </div>-->
 
     <div class="pan2" id="faqEl">
         <div class="pan-tit">常见问题/答疑</div>
@@ -361,7 +305,7 @@
     }
 </script>
 <script type="text/javascript" src="https://webapi.amap.com/maps?v=2.0&key=1acf89333f048989b606d856cba42d2d"></script>
-<script src="js/require.js" data-main="js/hotel_detail"></script>
+<script src="js/require.js" data-main="js/community"></script>
 <script>
     requirejs.config({
         urlArgs: "v=" + (new Date()).getTime()

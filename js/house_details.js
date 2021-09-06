@@ -71,56 +71,56 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
     });
 
 
-    core.request({
-        url: modal.server[modal.env] + "/xiangdao-api/api/house/album_list/" + modal.id,
-        method: "GET",
-        success: function (res) {
-            var list = res.json;
-            if (list && list.length > 0) {
-                console.log(res);
-                var str = '';
-                list.forEach(function (item, index) {
-                    if (item.url) {
-                        var urls = item.url.split(",");
-                        if (urls.length > 0) {
-                            urls.forEach(function (item2, index2) {
-                                str += '<div class="swiper-slide">';
-                                if (item.type === 1 && index2 === 0) {
-                                    str += '<video id="video' + item.id + '" class="head-video-li" preload="auto" controls ' +
-                                        ' webkit-playsinline="true"\n' +
-                                        ' playsinline="true"\n' +
-                                        ' x5-playsinline="true"\n' +
-                                        ' x5-video-player-type="h5"\n' +
-                                        ' x5-video-player-fullscreen=""\n' +
-                                        ' x5-video-orientation="portraint"\n' +
-                                        ' x-webkit-airplay="true"\n' +
-                                        ' controlsList="nodownload"' +
-                                        ' controls="controls"' +
-                                        ' src="' + item2 + '" poster="' + item2 + '?vframe/jpg/offset/2/w/640/h/360" />';
-                                    modal.videoIndexArr.push({"index": index2, "item": item2});
-                                } else {
-                                    str += '<img class="head-img-li" src="' + item2 + '" alt />';
-                                }
-                                str += '</div>';
-                            })
-                        }
+    // core.request({
+    //     url: modal.server[modal.env] + "/xiangdao-api/api/house/album_list/" + modal.id,
+    //     method: "GET",
+    //     success: function (res) {
+    //         var list = res.json;
+    //         if (list && list.length > 0) {
+    //             console.log(res);
+    //             var str = '';
+    //             list.forEach(function (item, index) {
+    //                 if (item.url) {
+    //                     var urls = item.url.split(",");
+    //                     if (urls.length > 0) {
+    //                         urls.forEach(function (item2, index2) {
+    //                             str += '<div class="swiper-slide">';
+    //                             if (item.type === 1 && index2 === 0) {
+    //                                 str += '<video id="video' + item.id + '" class="head-video-li" preload="auto" controls ' +
+    //                                     ' webkit-playsinline="true"\n' +
+    //                                     ' playsinline="true"\n' +
+    //                                     ' x5-playsinline="true"\n' +
+    //                                     ' x5-video-player-type="h5"\n' +
+    //                                     ' x5-video-player-fullscreen=""\n' +
+    //                                     ' x5-video-orientation="portraint"\n' +
+    //                                     ' x-webkit-airplay="true"\n' +
+    //                                     ' controlsList="nodownload"' +
+    //                                     ' controls="controls"' +
+    //                                     ' src="' + item2 + '" poster="' + item2 + '?vframe/jpg/offset/2/w/640/h/360" />';
+    //                                 modal.videoIndexArr.push({"index": index2, "item": item2});
+    //                             } else {
+    //                                 str += '<img class="head-img-li" src="' + item2 + '" alt />';
+    //                             }
+    //                             str += '</div>';
+    //                         })
+    //                     }
+    //
+    //                 }
+    //                 if (index === 0 && item.type === 1) {
+    //                     pag.classList.add("video")
+    //                 }
+    //             });
+    //             modal.q("#headImgs").innerHTML = str;
+    //             swiper2.update();
+    //
+    //         }
+    //     }
+    // });
 
-                    }
-                    if (index === 0 && item.type === 1) {
-                        pag.classList.add("video")
-                    }
-                });
-                modal.q("#headImgs").innerHTML = str;
-                swiper2.update();
 
-            }
-        }
-    });
-
-
-    core.request({
+    $.ajax({
         url: modal.server[modal.env] + "/xiangdao-api/api/house/details/" + modal.id,
-        method: "GET",
+        method: "POST",
         success: function (res2) {
             console.log(res2);
             var data = res2.json;
@@ -184,6 +184,48 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
             var baseSceneryArr = [null, "小区内部", "可见花园", "可见山景", "可见湖景", "可见江景", "可见海景", "可见树林", "可见街景", "可见游泳池", "可见高尔夫球场"];
             // console.log(data);
             // data.baseBedType = "1-1-2,3-1-5,3-2-3";
+
+            if (data.albumList && data.albumList.length > 0) {
+                var list = data.albumList;
+                if (list && list.length > 0) {
+                    var str = '';
+                    list.forEach(function (item, index) {
+                        if (item.url) {
+                            var urls = item.url.split(",");
+                            if (urls.length > 0) {
+                                urls.forEach(function (item2, index2) {
+                                    str += '<div class="swiper-slide">';
+                                    if (item.type === 1 && index2 === 0) {
+                                        str += '<video id="video' + item.id + '" class="head-video-li" preload="auto" controls ' +
+                                            ' webkit-playsinline="true"\n' +
+                                            ' playsinline="true"\n' +
+                                            ' x5-playsinline="true"\n' +
+                                            ' x5-video-player-type="h5"\n' +
+                                            ' x5-video-player-fullscreen=""\n' +
+                                            ' x5-video-orientation="portraint"\n' +
+                                            ' x-webkit-airplay="true"\n' +
+                                            ' controlsList="nodownload"' +
+                                            ' controls="controls"' +
+                                            ' src="' + item2 + '" poster="' + item2 + '?vframe/jpg/offset/2/w/640/h/360" />';
+                                        modal.videoIndexArr.push({"index": index2, "item": item2});
+                                    } else {
+                                        str += '<img class="head-img-li" src="' + item2 + '" alt />';
+                                    }
+                                    str += '</div>';
+                                })
+                            }
+
+                        }
+                        if (index === 0 && item.type === 1) {
+                            pag.classList.add("video")
+                        }
+                    });
+                    modal.q("#headImgs").innerHTML = str;
+                    swiper2.update();
+
+                }
+            }
+
             if (data.baseBedType) {
                 var houseTypeSplit = data.baseBedType.split(",");
                 if (houseTypeSplit && houseTypeSplit.length > 0) {
@@ -291,27 +333,30 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
                 }
             });
 
-            var htArr = data.baseHouseType.split(",");
-            if (htArr && htArr.length > 0) {
-                var htStr = '';
-                htArr.forEach(function (item, index) {
-                    var itemArr = item.split("-");
-                    if (itemArr[1] > 0) {
-                        htStr += itemArr[1] + houseTypeArr[parseInt(itemArr[0])];
-                        (index + 1) < htArr.length && (htStr += "/");
-                    }
-                    if (itemArr[0] === "2") {
-                        modal.q("#roomCount").innerText = itemArr[1]
-                    }
-                    if (itemArr[0] === "1") {
-                        floor.innerText = itemArr[1]
-                    }
-                    if (index === 0 && itemArr[2]) {
-                        floor.innerText = itemArr[1] + "~" + itemArr[2]
-                    }
-                });
-                modal.q("#baseHouseType").innerText = htStr;
+            if (data.baseHouseType) {
+                var htArr = data.baseHouseType.split(",");
+                if (htArr && htArr.length > 0) {
+                    var htStr = '';
+                    htArr.forEach(function (item, index) {
+                        var itemArr = item.split("-");
+                        if (itemArr[1] > 0) {
+                            htStr += itemArr[1] + houseTypeArr[parseInt(itemArr[0])];
+                            (index + 1) < htArr.length && (htStr += "/");
+                        }
+                        if (itemArr[0] === "2") {
+                            modal.q("#roomCount").innerText = itemArr[1]
+                        }
+                        if (itemArr[0] === "1") {
+                            floor.innerText = itemArr[1]
+                        }
+                        if (index === 0 && itemArr[2]) {
+                            floor.innerText = itemArr[1] + "~" + itemArr[2]
+                        }
+                    });
+                    modal.q("#baseHouseType").innerText = htStr;
+                }
             }
+
 
             ownerHouseIsAuthentication.style.display = "flex";
             ownerHouseIsAuthentication.innerText = "房源已认证";
