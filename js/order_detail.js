@@ -13,7 +13,7 @@ define(['common', 'jquery'], function (core, $) {
         }
     };
     modal.env = "dev";
-
+    modal.orderNo = core.parseQueryString().orderNo;
     function q (selector) {
         return document.querySelector(selector)
     }
@@ -35,12 +35,24 @@ define(['common', 'jquery'], function (core, $) {
 
     modal.init = function () {
 
-
+        modal.getData();
 
 
     };
 
-
+    modal.getData = function () {
+        $.ajax({
+            url: modal.server[modal.env] + "/xiangdao-api/api/user_order/user_order_details/" + modal.orderNo,
+            method: "POST",
+            dataType: "json",
+            headers: {"Accept": "application/json", "Content-Type": "application/json"},
+            data: JSON.stringify({"orderNo": modal.orderNo}),
+            success: function (res) {
+                console.log(res);
+                var data = res.json;
+            }
+        })
+    };
 
 
     modal.init();

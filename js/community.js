@@ -30,7 +30,7 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
     };
     modal.env = "dev";
     modal.videoIndexArr = [];
-    modal.id = core.parseQueryString().villageId;
+    modal.id = core.parseQueryString().id;
     modal.parseTime = function (timestamp) {
         if (timestamp) {
             var date = new Date(timestamp);
@@ -144,14 +144,8 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
                     if (areaAddress) {
                         areaAddress.innerText = data.locationProvinceName + data.locationCityName + data.locationTownName;
                     }
-                    if (data.validBeginTime && data.validEndTime && validDate) {
-                        var begin = modal.parseTime(data.validBeginTime);
-                        var end = modal.parseTime(data.validEndTime);
-                        validDate.it(begin + "-" + end);
-                    }
-                    if (priceRemark) {
-                        priceRemark.innerHTML = data.priceRemark;
-                    }
+
+                    modal.getHouse();
 
                     if (data.villageIcon && data.villageIconList && data.villageIconList.length > 0) {
                         let insStr = '';
@@ -241,43 +235,48 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
         modal.onAMapLoaded();
     };
 
-    modal.openRoom = function (){
-        let details = document.querySelectorAll(".nli-inr");
-        if (details && details.length > 0) {
-            details.forEach(function (item) {
-                item.addEventListener("click", function (e) {
-                    q(".dp-wrap").style.display = "block";
-                    lockBg();
-                    modal.getBed(e.target.dataset.id, function () {});
-
-                }, false);
-            })
-        }
-    };
-
-    modal.closeRoom = function () {
-        let houseClose = q("#houseClose");
-        if (houseClose) {
-            houseClose.addEventListener("click", function () {
-                let wrap = q(".dp-wrap");
-                if (wrap) {
-                    wrap.classList.remove("slideUp");
-                    wrap.classList.add("slideDown");
-                    swiper3.removeAllSlides();
-                    swiper3.detachEvents();
-                    swiper3 = null;
-                    swiper4.detachEvents();
-                    wrap.addEventListener("webkitAnimationEnd", function (e) {
-                        if (e.animationName === "slideOut") {
-                            wrap.style.display = "none";
-                            wrap.classList.remove("slideDown");
-                            wrap.classList.add("slideUp");
-                            unLockBg();
-                        }
-                    });
+    modal.getHouse = function () {
+        $.ajax({
+            url: modal.server[modal.env] + "/xiangdao-api/api/house/house_list",
+            method: "POST",
+            dataType: "json",
+            headers: {"Accept": "application/json", "Content-Type": "application/json"},
+            data: JSON.stringify({"villageId": modal.id}),
+            success: function (res) {
+                console.log(res);
+                if (res.status === 0) {
+                    let data = res.json;
+                    if (data && data.result && data.result.length > 0) {
+                        let str = '';
+                        data.result.forEach(item => {
+                            let tagStr = '';
+                            if (item.houseTagName) {
+                                let tagArr = item.houseTagName.split(",");
+                                if (tagArr && tagArr.length > 0) {
+                                    tagArr.forEach(item2 => {
+                                        tagStr += `<div class="hli-tag">${item2}</div>`;
+                                    });
+                                }
+                            }
+                            str += `<div class="hli">
+                                        <div class="hli-tit">${item.infoTitle}</div>
+                                        <div class="hli-row">
+                                            <img class="hli-l" src="${item.infoCover}" alt />
+                                            <div class="hli-r">
+                                                <div class="hli-tags">${tagStr}</div>
+                                                <div class="hli-inf">30晚起租</div>
+                                                <div class="hli-pri">单价<i>￥</i><span>${item.dayReferPrice * 30}</span></div>
+                                                <div class="hli-dw">起/${[null, "床位", "独立房间", "整套出租", "整栋出租"][item.ruleRentType]}/30晚</div>
+                                                <div class="hli-btn">详情</div>
+                                            </div>
+                                        </div>
+                                    </div>`;
+                        });
+                        q("#houseWrap").innerHTML = str;
+                    }
                 }
-            }, false);
-        }
+            }
+        });
     };
 
     modal.bindTag1 = function (){
@@ -297,291 +296,6 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
         }
     };
 
-    modal.bindTag2 = function (){
-        let moreRoomTags = q(".dmt-tags");
-        let closeMoreRoomTags = q(".pe2-close");
-        if (moreRoomTags) {
-            moreRoomTags.addEventListener("click", function (){
-                q(".pe2") && (q(".pe2").style.display = "flex");
-                lockBg();
-            }, false);
-        }
-
-        if (closeMoreRoomTags) {
-            closeMoreRoomTags.addEventListener("click", function (){
-                q(".pe2") && (q(".pe2").style.display = "none");
-                unLockBg();
-            }, false);
-        }
-    };
-
-    modal.getBed = function (id, cb) {
-        let pag = q(".swiper-pagination-pop")
-
-        $.ajax({
-            url: modal.server[modal.env] + "/xiangdao-api/api/news/hotel_room_details/" + id,
-            method: "POST",
-            dataType: "json",
-            headers: {"Accept": "application/json", "Content-Type": "application/json"},
-            data: JSON.stringify({"roomId": id}),
-            success: function (res) {
-                console.log(res);
-                if (res.status === 0) {
-                    let data = res.json;
-                    if (data.albumList && data.albumList.length > 0) {
-                        var list = data.albumList;
-                        if (list && list.length > 0) {
-                            var str = '';
-                            list.forEach(function (item, index) {
-                                if (item.url) {
-                                    var urls = item.url.split(",");
-                                    if (urls.length > 0) {
-                                        urls.forEach(function (item2, index2) {
-                                            str += '<div class="swiper-slide">';
-                                            if (item.type === 1 && index2 === 0) {
-                                                str += '<video id="video' + item.id + '" class="head-video-li" preload="auto" controls ' +
-                                                    ' webkit-playsinline="true"\n' +
-                                                    ' playsinline="true"\n' +
-                                                    ' x5-playsinline="true"\n' +
-                                                    ' x5-video-player-type="h5"\n' +
-                                                    ' x5-video-player-fullscreen=""\n' +
-                                                    ' x5-video-orientation="portraint"\n' +
-                                                    ' x-webkit-airplay="true"\n' +
-                                                    ' controlsList="nodownload"' +
-                                                    ' preload="auto"' +
-                                                    ' controls="controls"' +
-                                                    ' src="' + item2 + '" poster="' + item2 + '?vframe/jpg/offset/2/w/640/h/360" />';
-                                                modal.videoIndexArr.push({"index": index2, "item": item2});
-                                            } else {
-                                                str += '<img class="head-img-li" src="' + item2 + '" alt />';
-                                            }
-                                            str += '</div>';
-                                        })
-                                    }
-
-                                }
-                                if (index === 0 && item.type === 1) {
-                                    pag.classList.add("video")
-                                }
-                            });
-                            q("#headImgs").innerHTML = str;
-                            swiper3 = new Swiper('.swiper-container-head', {
-                                pagination: {
-                                    el: '.swiper-pagination-pop',
-                                    type: 'fraction'
-                                },
-                                lazy: true,
-                                autoplay: {
-                                    delay: 3000,
-                                    disableOnInteraction: false,
-                                },
-                                on: {
-                                    transitionEnd: function () {
-                                        var _this = this;
-                                        if (modal.videoIndexArr.length > 0) {
-                                            modal.videoIndexArr.forEach(function (item) {
-                                                if (item.index === _this.activeIndex) {
-                                                    pag.classList.add("video")
-                                                } else {
-                                                    pag.classList.remove("video")
-                                                }
-                                            })
-                                        } else {
-                                            pag.classList.remove("video")
-                                        }
-                                        var videos = document.querySelectorAll("video");
-                                        if (videos && videos.length > 0) {
-                                            for (var i = 0; i < videos.length; i++) {
-                                                videos[i].pause();
-                                            }
-                                        }
-                                    }
-                                }
-                            });
-
-                        }
-                    }
-
-                    let roomTitle = q("#roomTitle");
-                    let roomTitle2 = q("#roomTitle2");
-
-                    if (roomTitle) { roomTitle.innerText = data.roomTitle }
-                    if (roomTitle2) { roomTitle2.innerText = data.roomTitle }
-                    if (data.roomTagName) {
-                        let tagWrapPop = q(".pe2-list");
-                        let tagStr = '';
-                        let allTagStr = '';
-                        let tagArr = data.roomTagName.split(",");
-                        tagArr.forEach((item, index) => {
-                            if (index < 4) {
-                                tagStr += `<div class="dmt-tag">${item}</div>`;
-                            }
-                            allTagStr += '<div class="top-tag-pop">'+item+'</div>';
-                        });
-                        if (tagArr.length > 3) {
-                            tagStr += `<img class="dmt-tag-more" src="img/icon_arrow_rs.png" alt />`;
-                        }
-                        q("#roomTags").innerHTML = tagStr;
-                        tagWrapPop.innerHTML = allTagStr;
-                    } else {
-                        q("#roomTags").style.display = "none";
-                    }
-                    modal.bindTag2()
-
-                    let houseTypeArr = [null, "室", "厨", "卫", "厅", "厅", "书房", "阳台"];
-                    if (data.houseType) {
-                        let retStr = '';
-                        let houseTypeSplit = data.houseType.split(",");
-                        let retArr = [];
-                        houseTypeSplit.forEach(item => {
-                            let _split = item.split("-");
-                            let _obj = {};
-                            _obj.id = ~~_split[0];
-                            _obj.num = ~~_split[1];
-                            if (_obj.id === 1) {
-                                modal.roomCount = _obj.num;
-                            }
-                            retArr.push(_obj);
-                        });
-                        retArr[3].num += retArr[4].num;
-                        retArr.forEach((item, index) => {
-                            if (index !== 4 && item.num > 0) {
-                                retStr += `/${item.num}${houseTypeArr[item.id]}`
-                            }
-                        });
-                        retStr = retStr.replace("/", '');
-                        q("#houseType").innerText = retStr;
-                    }
-
-                    let roomArea = q("#roomArea");
-                    if (data.roomArea && roomArea) {
-                        roomArea.innerText = data.roomArea;
-                    }
-
-                    if (data.bedType) {
-                        let bdArr = [
-                            {
-                                id: 1,
-                                name: "大床",
-                                icon: "icon_bed.png",
-                                bed: [],
-                                list: [null, "2*1.8m", "2*1.5m", "1.8*1.5m", "2*2m", "2*1.6m", "2.2*2.2m"]
-                            }, {
-                                id: 2,
-                                name: "单人床",
-                                icon: "icon_sbed.png",
-                                bed: [],
-                                list: [null, "2*1m", "2*1.2m", "1.9*2m", "2*0.8m", "2*1.35m", "2*1.1m", "2*1.3m"]
-                            }, {
-                                id: 3,
-                                name: "双层床",
-                                icon: "icon_dbed.png",
-                                bed: [],
-                                list: [null, "0.9*1.9m上，1.2*1.9m下", "1.2*1.9m上，1.5*1.9m下", "1.35*1.9m上，1.5*1.9m下", "0.9*1.8m", "1*1.9m", "1.2*1.9m", "1.8*1.2m"]
-                            },
-                            {id: 4, name: "沙发床", icon: "icon_sofa.png", bed: [], list: [null, "2*1.2m", "2*1.5m"]},
-                            {id: 5, name: "圆床", icon: "icon_cbed.png", bed: [], list: [null, "直径2m", "直径2.2m"]}
-                        ];
-                        swiper4 = new Swiper('.swiper-container-bed', {
-                            slidesPerView: 'auto',
-                            spaceBetween: 30,
-                            lazy: true,
-                            init: false
-                        });
-                        let bedTypeSplit = data.bedType.split(",");
-                        if (bedTypeSplit && bedTypeSplit.length > 0) {
-                            bedTypeSplit.forEach(function (item) {
-                                var htArr = item.split("-");
-                                bdArr.forEach(function (item2) {
-                                    if (parseInt(htArr[0]) === item2.id) {
-                                        item2.bed.push(htArr);
-                                    }
-                                });
-                            });
-                        }
-                        var hcInfo2 = q("#hcInfo2");
-                        bdArr.forEach(function (item) {
-                            let baseHtml = `<div class="hci-tli-wrap swiper-slide">
-                                                <div class="hci-tli">
-                                                    <img class="hci-icon" src="img/icon_guest.png" alt />
-                                                    <div class="hci-text"><span id="liveNumber">${data.liveNumber}</span>个房客</div>
-                                                </div>
-                                            </div>
-                                            <div class="hci-tli-wrap swiper-slide">
-                                                <div class="hci-tli">
-                                                    <img class="hci-icon" src="img/icon_room.png" alt />
-                                                    <div class="hci-text"><span id="roomCount">${modal.roomCount}</span>间卧室</div>
-                                                </div>
-                                            </div>`;
-                            var hcHtml = ``;
-                            if (item.bed.length > 0) {
-                                var bedNum = 0;
-                                item.bed.forEach(function (item3) {
-                                    bedNum += parseInt(item3[2]);
-                                });
-                                hcHtml += '<div class="hci-tli">\n';
-                                hcHtml += '<img class="hci-icon" src="img/' + item.icon + '" alt />';
-                                hcHtml += '<div class="hci-text">' + (bedNum + "张" + item.name) + '</div></div>';
-                                hcHtml += '<div class="hci-trli">';
-                                item.bed.forEach(function (item2) {
-                                    hcHtml += '<div class="hci-trli-row"><span>(' + item.list[item2[1]] + ')</span>&times;' + item2[2] + '</div>'
-                                });
-                                hcHtml += '</div></div>\n';
-                                var el = document.createElement("div");
-                                el.classList.add("hci-tli-wrap");
-                                el.classList.add("swiper-slide");
-                                el.innerHTML = hcHtml;
-                                hcInfo2.innerHTML = baseHtml;
-                                hcInfo2.appendChild(el);
-                            }
-                        });
-                        swiper4.update();
-                        swiper4.init();
-                    }
-
-                    let roomBrief = q("#roomBrief");
-                    let roomBriefEl = q("#roomBriefEl");
-                    if (data.roomBrief && roomBriefEl) {
-                        roomBrief.innerHTML = data.roomBrief;
-                    } else {
-                        roomBriefEl.style.display = 'none'
-                    }
-
-                    if (data.houseIcon && data.houseIconList && data.houseIconList.length > 0) {
-                        let insStr = '';
-                        let iconArr = data.houseIcon.split(",");
-                        data.houseIconList.forEach(item => {
-                            insStr += `<div class="pt-group">
-                                                    <div class="pt-tit"><img class="pt-yqss" src="${item.typeUrl}" alt />${item.typeName}</div>
-                                                    <div class="pt-con">`;
-                            iconArr.forEach(item2 => {
-                                let _iconArr = item2.split('-');
-                                if (~~_iconArr[0] === ~~item.type) {
-                                    let _list = item.list;
-                                    if (_list && _list.length > 0) {
-                                        _list.forEach(item3 => {
-                                            if (~~_iconArr[1] === ~~item3.iconSeq) {
-                                                insStr += `<div class="pt-li">
-                                                                <img class="pt-img" src="${item3.iconUrl}" alt/>
-                                                                <div class="pt-name">${item3.iconName}</div>
-                                                            </div>`;
-                                            }
-                                        });
-                                    }
-                                }
-                            });
-
-                            insStr += `</div></div>`;
-                        });
-                        q("#houseIconWrap").innerHTML = insStr;
-                    }
-
-                    typeof cb === "function" && cb();
-                }
-            }
-        });
-    };
-
     modal.getNear = function (searchLocation) {
         $.ajax({
             url: modal.server[modal.env] + "/xiangdao-api/api/news/search_list",
@@ -597,22 +311,23 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
                     if (list && list.length > 0) {
                         let str = '';
                         list.forEach(item => {
-                            let tagStr = '';
-                            let tagList = [];
-                            if (item.tagName) {
-                                let tagArr = item.tagName.split(",");
-                                tagArr.forEach((item2, index2) => {
-                                    tagList.push(item2);
-                                    if (index2 < 4) {
-                                        tagStr += `<div class="sai-tro sai-tro-all" data-id="${item.id}">${item2}</div>`;
+                            if (item.type === 1) {
+                                let tagStr = '';
+                                let tagList = [];
+                                if (item.tagName) {
+                                    let tagArr = item.tagName.split(",");
+                                    tagArr.forEach((item2, index2) => {
+                                        tagList.push(item2);
+                                        if (index2 < 4) {
+                                            tagStr += `<div class="sai-tro sai-tro-all" data-id="${item.id}">${item2}</div>`;
+                                        }
+                                    });
+                                    if (tagArr && tagArr.length > 4) {
+                                        tagStr += `<img class="sai-tro-more sai-tro-all" data-id="${item.id}" src="img/icon_arrow_rs.png" alt />`;
                                     }
-                                });
-                                if (tagArr && tagArr.length > 4) {
-                                    tagStr += `<img class="sai-tro-more sai-tro-all" data-id="${item.id}" src="img/icon_arrow_rs.png" alt />`;
+                                    item.tagList = tagList;
                                 }
-                                item.tagList = tagList;
-                            }
-                            str += `<div class="sa-li">
+                                str += `<div class="sa-li">
                                         <div class="sai-t">
                                             <div class="sai-tl">
                                                 <img class="sai-tl-img" src="${item.cover}" alt />
@@ -631,6 +346,8 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
                                             <div class="sai-detail">详情</div>
                                         </div>
                                     </div>`;
+                            }
+
                         });
                         q("#saList").innerHTML = str;
 
@@ -743,77 +460,12 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
         }
     };
 
-    modal.getRoomsList = function (startTime, endTime, foodType, hotelId, cb) {
-        let objData = {
-            "foodTypeStr": foodType,
-            "hotelId": hotelId
-        };
-        if (startTime) { objData.rentBeginTime = startTime }
-        if (endTime) { objData.rentEndTime = startTime }
-        $.ajax({
-            url: modal.server[modal.env] + "/xiangdao-api/api/news/hotel_room_list",
-            method: "POST",
-            dataType: "json",
-            headers: {"Accept": "application/json", "Content-Type": "application/json"},
-            data: JSON.stringify(objData),
-            success: function (res) {
-                console.log(res);
-                if (res.status === 0) {
-                    let list = res.json;
-                    let roomStr = '';
-                    if (list && list.length > 0) {
-                        list.forEach(item => {
-                            let tagStr = '', typeStr = '';
-                            if (item.roomTagName) {
-                                let tagArr = item.roomTagName.split(",");
-                                if (tagArr && tagArr.length > 0) {
-                                    tagArr.forEach(item2 => {
-                                        tagStr += `<div class="nli-tag">${item2}</div>`
-                                    })
-                                }
-                            }
-                            if (item.reserveTypeStr) {
-                                let typeArr = item.reserveTypeStr.split(",");
-                                if (typeArr && typeArr.length > 0) {
-                                    typeArr.forEach(item3 => {
-                                        typeStr += `<div class="nli"><div class="nli-ml"><div class="nli-mlt">${modal.rType[item3].name}</div>
-                                                        <div class="nli-mlb">单价<span>￥${item['monthReferPrice'+item3] ? item['monthReferPrice'+item3] : 0}</span>起/${(item3 === "10" ? "人/" : "") + modal.rType[item3].name.slice(-2)}/30晚</div>
-                                                    </div><div class="nli-mr">预订</div></div>`;
-                                    });
-                                }
-                            }
-                            roomStr += `<div class="room-li" ><div class="nli-t">
-                                <img class="nli-tl" src="${item.roomCover}" alt/>
-                                <div class="nli-tr">
-                                    <div class="nli-tit">${item.roomTitle}</div>
-                                    <div class="nli-tags">${tagStr}</div>
-                                    <div class="nli-inf">
-                                        <div class="nli-inl">
-                                            <p>面积约为${item.roomArea}m<sup>2</sup></p>
-                                            <p class="nli-inline">不可取消</p>
-                                            <p class="nli-inline">需等待确认</p>
-                                        </div>
-                                        <div class="nli-inr" data-id="${item.roomId}">详情</div>
-                                    </div>
-                                </div></div>
-                                <div class="nli-m">${typeStr}</div></div>
-                                `;
-                        });
-                    }
-                    typeof cb === "function" && cb(roomStr);
-                }
-            }
-        });
-    };
-
     modal.onAMapLoaded = function() {
         var map = new AMap.Map("mapContainer", {zoom: 11,});
-        console.log(modal);
         AMap.plugin('AMap.Geocoder', function() {
             var geocoder = new AMap.Geocoder();
             // geocoder.getLocation(modal.locationProvinceName + modal.locationCityName + modal.locationTownName, function(status, result) {
             geocoder.getLocation("海南省三亚市", function(status, result) {
-                console.log(status, result);
                 if (status === 'complete'&&result.geocodes.length) {
                     var lnglat = result.geocodes[0].location;
                     map.setCenter([lnglat.lng, lnglat.lat]);

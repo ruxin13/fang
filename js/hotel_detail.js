@@ -30,7 +30,7 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
     };
     modal.env = "dev";
     modal.videoIndexArr = [];
-    modal.id = core.parseQueryString().roomId;
+    modal.id = core.parseQueryString().id;
     modal.parseTime = function (timestamp) {
         if (timestamp) {
             var date = new Date(timestamp);
@@ -116,6 +116,11 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
                     }
                     if (data.content && content) {
                         content.innerHTML = data.content;
+                        q("#allContent").innerHTML = data.content;
+                        q(".ct-back").addEventListener("click", function () {
+                            q(".ct").style.display = "none";
+                            unLockBg();
+                        }, false);
                     } else {
                         q("#contentEl").style.display = "none"
                     }
@@ -251,7 +256,13 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
                     modal.locationTownName = data.locationTownName;
 
 
-                    modal.getNear();
+                    modal.getNear(~~data.locationDistrict > 0 ? data.locationDistrict : data.locationTown);
+
+                    let allHouse = q("#allHouse");
+                    allHouse && allHouse.addEventListener("click", function () {
+                        q(".ct").style.display = "flex";
+                        lockBg();
+                    }, false);
 
                 }
             }
@@ -357,25 +368,27 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
                                     var urls = item.url.split(",");
                                     if (urls.length > 0) {
                                         urls.forEach(function (item2, index2) {
+                                            if (item.type === 2) {
                                             str += '<div class="swiper-slide">';
-                                            if (item.type === 1 && index2 === 0) {
-                                                str += '<video id="video' + item.id + '" class="head-video-li" preload="auto" controls ' +
-                                                    ' webkit-playsinline="true"\n' +
-                                                    ' playsinline="true"\n' +
-                                                    ' x5-playsinline="true"\n' +
-                                                    ' x5-video-player-type="h5"\n' +
-                                                    ' x5-video-player-fullscreen=""\n' +
-                                                    ' x5-video-orientation="portraint"\n' +
-                                                    ' x-webkit-airplay="true"\n' +
-                                                    ' controlsList="nodownload"' +
-                                                    ' preload="auto"' +
-                                                    ' controls="controls"' +
-                                                    ' src="' + item2 + '" poster="' + item2 + '?vframe/jpg/offset/2/w/640/h/360" />';
-                                                modal.videoIndexArr.push({"index": index2, "item": item2});
-                                            } else {
+                                            // if (item.type === 1 && index2 === 0) {
+                                            //     str += '<video id="video' + item.id + '" class="head-video-li" preload="auto" controls ' +
+                                            //         ' webkit-playsinline="true"\n' +
+                                            //         ' playsinline="true"\n' +
+                                            //         ' x5-playsinline="true"\n' +
+                                            //         ' x5-video-player-type="h5"\n' +
+                                            //         ' x5-video-player-fullscreen=""\n' +
+                                            //         ' x5-video-orientation="portraint"\n' +
+                                            //         ' x-webkit-airplay="true"\n' +
+                                            //         ' controlsList="nodownload"' +
+                                            //         ' preload="auto"' +
+                                            //         ' controls="controls"' +
+                                            //         ' src="' + item2 + '" poster="' + item2 + '?vframe/jpg/offset/2/w/640/h/360" />';
+                                            //     modal.videoIndexArr.push({"index": index2, "item": item2});
+                                            // } else {
                                                 str += '<img class="head-img-li" src="' + item2 + '" alt />';
-                                            }
+                                            // }
                                             str += '</div>';
+                                            }
                                         })
                                     }
 
@@ -843,7 +856,6 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
                     modal.lng = lnglat.lng;
                     modal.lat = lnglat.lat;
                     var marker = new AMap.Marker({
-                        icon: "/h5/img/pos.png",
                         position: [lnglat.lng, lnglat.lat],
                         anchor:'bottom-center'
                     });

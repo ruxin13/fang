@@ -31,6 +31,7 @@
                 preload="auto"
                 loop
                 controls
+                autoplay
                 controlsList="nodownload"
                 cover=""
                 src="" style="object-fit: contain;background: black"></video>
@@ -118,7 +119,7 @@
     <div class="pan" style="padding:0 .43rem;" id="contentEl">
         <div class="pan-tit">房源介绍</div>
         <div class="pan-con pan-des" id="content"></div>
-        <div class="pan-showAll">查看全部房源介绍</div>
+        <div class="pan-showAll" id="allHouse">查看全部房源介绍</div>
     </div>
 
     <div class="m-rules" id="bookingNoticeEl">
@@ -316,6 +317,18 @@
     </div>
 </div>
 
+<div class="ct">
+    <div class="ct-mask"></div>
+    <div class="ct-main">
+        <div class="ct-head">
+            <img class="ct-back" src="img/icon_arrow_g2.png" alt />
+            <div class="ct-tit">详情</div>
+            <div class="ct-r"></div>
+        </div>
+        <div class="ct-con" id="allContent"></div>
+    </div>
+</div>
+
 <script type="text/javascript" src="https://webapi.amap.com/maps?v=2.0&key=1acf89333f048989b606d856cba42d2d"></script>
 <script type="text/javascript">
     function GetQueryString(name) {
@@ -361,7 +374,7 @@
     }
 </script>
 <script type="text/javascript" src="https://webapi.amap.com/maps?v=2.0&key=1acf89333f048989b606d856cba42d2d"></script>
-<script src="js/require.js" data-main="js/hotel_detail"></script>
+<script src="js/require.js" data-main="js/hotel_detail.min"></script>
 <script>
     requirejs.config({
         urlArgs: "v=" + (new Date()).getTime()

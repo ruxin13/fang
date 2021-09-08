@@ -129,7 +129,7 @@ body{
     display: flex;
     align-items: center;
     flex-wrap: wrap;
-    margin-bottom: .17rem;
+    margin-bottom: .32rem;
 }
 .hc-tag{
     height: .53rem;
@@ -1792,7 +1792,6 @@ body{
 }
 .hli{
     width: 9.15rem;
-    height: 5.72rem;
     padding: .47rem .37rem .51rem;
     border-radius: .27rem;
     background: #fff;
@@ -1808,7 +1807,7 @@ body{
     border-bottom: dashed 1px #dedede;
 }
 .hli-row{
-    padding: .36rem 0;
+    padding: .36rem 0 0;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -1874,4 +1873,5 @@ body{
     position: absolute;
     right: .37rem;
     bottom: .63rem;
+    text-decoration: none;
 }

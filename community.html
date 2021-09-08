@@ -31,6 +31,7 @@
                    preload="auto"
                    loop
                    controls
+                   autoplay
                    controlsList="nodownload"
                    cover=""
                    src="" style="object-fit: contain;background: black"></video>
@@ -64,24 +65,10 @@
 
     <div class="pan2">
         <div class="pan-tit">预订房型</div>
-        <div class="house-list">
-            <div class="hli">
-                <div class="hli-tit">A座/15楼/南北通透/2房3厅1厨2卫/空中花园/有厨具</div>
-                <div class="hli-row">
-                    <img class="hli-l" src="https://p.ihuada.com/sample/sample_head.jpg" alt />
-                    <div class="hli-r">
-                        <div class="hli-tags">
-                            <div class="hli-tag">有家电</div>
-                            <div class="hli-tag">有阳台</div>
-                            <div class="hli-tag">有厨具</div>
-                        </div>
-                        <div class="hli-inf">30晚起租</div>
-                        <div class="hli-pri">单价<i>￥</i><span>7699</span></div>
-                        <div class="hli-dw">起/整套/30晚</div>
-                        <div class="hli-btn">详情</div>
-                    </div>
-                </div>
-            </div>
+        <div class="house-list" id="houseWrap">
+
+
+
         </div>
     </div>
 
@@ -304,13 +291,7 @@
         document.getElementById("guide-img").style.display = "none";
     }
 </script>
-<script type="text/javascript" src="https://webapi.amap.com/maps?v=2.0&key=1acf89333f048989b606d856cba42d2d"></script>
-<script src="js/require.js" data-main="js/community"></script>
-<script>
-    requirejs.config({
-        urlArgs: "v=" + (new Date()).getTime()
-    });
-</script>
+
 
 <!-- 遮盖层 -->
 <div class="guide" id="guide" onclick="closeGuide()"></div>
@@ -369,7 +350,13 @@
         document.getElementById("guide-img").style.display="none";
     }
 </script>
-
+<script type="text/javascript" src="https://webapi.amap.com/maps?v=2.0&key=1acf89333f048989b606d856cba42d2d"></script>
+<script src="js/require.js" data-main="js/community.min"></script>
+<script>
+    requirejs.config({
+        urlArgs: "v=" + (new Date()).getTime()
+    });
+</script>
 
 </body>
 </html>
