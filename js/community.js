@@ -42,13 +42,21 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
             return ""
         }
     };
-    modal.parseDateForComment = function(timestamp) {
+    function getPageSize(page) {
+        var _page = parseInt(page);
+        if (_page === 1) {
+            return 5
+        } else {
+            return 5
+        }
+    };
+    function parseDateForComment(timestamp) {
         var date = new Date(timestamp);
         return ((date.getMonth() + 1) < 10 ? ("0" + (date.getMonth() + 1)) : (date.getMonth() + 1)) + "-" +
             (date.getDate() < 10 ? ("0" + date.getDate()) : date.getDate()) + " " +
             (date.getHours() < 10 ? ("0" + date.getHours()) : date.getHours()) + ":" +
             (date.getMinutes() < 10 ? ("0" + date.getMinutes()) : date.getMinutes())
-    };
+    }
     var swiper3, swiper4;
 
     function q (selector) {
@@ -68,6 +76,20 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
     function unLockBg(scrollTop) {
         document.body.style.position = "static";
         window.scroll(0, scrollTop ? scrollTop : document.body.dataset.st);
+    }
+    function fadeOut(el, el2, cb) {
+        el.style.opacity = 1;
+        el2 && (el2.style.transform = 'scale(1)');
+        (function fade() {
+            var val = parseFloat(el.style.opacity);
+            if ((el.style.opacity -= .1) < 0) {
+                el.style.display = 'none';
+                typeof cb === 'function' && cb();
+            } else {
+                requestAnimationFrame(fade);
+                el2 && (el2.style.transform = 'scale(' + (.6 + val / 5) + ')');
+            }
+        })();
     }
 
     modal.init = function () {
@@ -120,11 +142,10 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
                         q("#contentEl").style.display = "none"
                     }
                     if (data.bookingNotice && bookingNotice) {
-                        content.innerHTML = data.bookingNotice;
+                        bookingNotice.innerHTML = data.bookingNotice;
                     } else {
                         q("#bookingNoticeEl").style.display = "none"
                     }
-                    bookingNotice.innerHTML = data.bookingNotice;
 
                     if (data.villageTagName) {
                         var tagArr = data.villageTagName.split(",");
@@ -204,6 +225,11 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
                         q(".ask-nodata").style.display = 'none';
                     }
 
+                    if (~~data.commentCount > 1 && data.commentList.length > 1) {
+                        q(".comment-btn").style.display = "block";
+                    } else {
+                        q(".comment-btn").style.display = "none";
+                    }
                     if (!data.commentCount) {
                         var html = '';
                         html += '<div class="comment-nodata">' +
@@ -225,14 +251,14 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
                     modal.locationTownName = data.locationTownName;
 
 
-                    modal.getNear();
+                    modal.getNear(data.locationTown);
+
+                    modal.onAMapLoaded();
 
                 }
             }
         });
         modal.bindTag1();
-
-        modal.onAMapLoaded();
     };
 
     modal.getHouse = function () {
@@ -264,9 +290,9 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
                                             <img class="hli-l" src="${item.infoCover}" alt />
                                             <div class="hli-r">
                                                 <div class="hli-tags">${tagStr}</div>
-                                                <div class="hli-inf">30晚起租</div>
-                                                <div class="hli-pri">单价<i>￥</i><span>${item.dayReferPrice * 30}</span></div>
-                                                <div class="hli-dw">起/${[null, "床位", "独立房间", "整套出租", "整栋出租"][item.ruleRentType]}/30晚</div>
+                                                <div class="hli-inf">${item.ruleLeastDay}晚起租</div>
+                                                <div class="hli-pri">${item.monthReferPrice ? ('单价<i>￥</i><span>' + item.monthReferPrice + '</span>') : ''}</div>
+                                                <div class="hli-dw">${item.monthReferPrice ? ('起/' + [null, "床位", "独立房间", "整套出租", "整栋出租"][item.ruleRentType] + '/'+item.ruleLeastDay+'晚') : '价格待定'}</div>
                                                 <div class="hli-btn">详情</div>
                                             </div>
                                         </div>
@@ -282,15 +308,16 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
     modal.bindTag1 = function (){
         let moreTags = q(".hc-tags");
         let closeMoreTags = q(".pe-close");
+        let pe = q(".pe");
         if (moreTags) {
             moreTags.addEventListener("click", function (){
-                q(".pe") && (q(".pe").style.display = "flex");
+                pe && core.fadeIn(pe, pe.q(".pe-main"));
                 lockBg();
             }, false);
         }
         if (closeMoreTags) {
             closeMoreTags.addEventListener("click", function (){
-                q(".pe") && (q(".pe").style.display = "none");
+                pe && fadeOut(pe, pe.q(".pe-main"));
                 unLockBg();
             }, false);
         }
@@ -311,7 +338,7 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
                     if (list && list.length > 0) {
                         let str = '';
                         list.forEach(item => {
-                            if (item.type === 1) {
+                            if (~~item.id !== ~~modal.id) {
                                 let tagStr = '';
                                 let tagList = [];
                                 if (item.tagName) {
@@ -337,11 +364,11 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
                                         </div>
                                         <div class="sai-st">${item.name}</div>
                                         <div class="sai-tit">${item.title}</div>
-                                        <div class="sai-inf"><span><i>￥</i>${item.monthReferPrice ? item.monthReferPrice : (item.dayReferPrice ? item.dayReferPrice * 30 : 0)}</span>起/${(item.reserveType === "10" ? "人/" : "") + modal.rType[item.reserveType].name.slice(-2)}/30晚</div>
+                                        <div class="sai-inf"><span><i>￥</i>${item.monthReferPrice ? item.monthReferPrice : (item.dayReferPrice ? item.dayReferPrice * item.leastDay : 0)}</span>起/${(item.reserveType === "10" ? "人/" : "") + modal.rType[item.reserveType].name.slice(-2)}/${item.leastDay}晚</div>
                                         <div class="sai-row">
                                             <div class="sai-tags">
                                             ${item.foodType ? ('<div class="sai-tag-l">' + modal.fType[item.foodType] + '</div>') : ''}
-                                            <div class="sai-tag-r ${item.foodType ? '' : 'sai-tag-single'}">30晚起租</div>
+                                            <div class="sai-tag-r ${item.foodType ? '' : 'sai-tag-single'}">${item.leastDay}晚起租</div>
                                             </div>
                                             <div class="sai-detail">详情</div>
                                         </div>
@@ -366,17 +393,19 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
                                                     _list.forEach(item3 => {
                                                         _str += `<div class="top-tag-pop">${item3}</div>`;
                                                     });
+                                                    let pe = q(".pe3");
                                                     q(".pe3-list").innerHTML = _str;
-                                                    q(".pe3").style.display = "flex";
-                                                    q(".pe3-close").addEventListener("click", function () {
-                                                        q(".pe3").style.display = "none";
-                                                    }, false);
+                                                    pe && core.fadeIn(pe, pe.q(".pe3-main"));
                                                 }
                                             }
                                         })
                                     }
                                 }, false);
-                            })
+                            });
+                            q(".pe3-close").addEventListener("click", function () {
+                                let pe = q(".pe3");
+                                pe && fadeOut(pe, pe.q(".pe3-main"));
+                            }, false);
                         }
 
                     }
@@ -410,7 +439,7 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
                 }
 
                 commentHtml += '<div class="comment-fun">\n' +
-                    '                <div class="comment-time">'+modal.parseDateForComment(item.createTime)+' · </div>\n' +
+                    '                <div class="comment-time">'+parseDateForComment(item.createTime)+' · </div>\n' +
                     '                <div class="comment-btn-reply link">回复TA</div>\n' +
                     '                <img class="comment-btn-more link" src="img/icon_more_s.png" alt />\n' +
                     '           </div>';
@@ -436,7 +465,7 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
                         }
                         replyHtml += '                   </div>\n' +
                             '                   <div class="cop-fun">\n' +
-                            '                        <div class="cop-time">'+modal.parseDateForComment(item2.createTime)+' · </div>\n' +
+                            '                        <div class="cop-time">'+parseDateForComment(item2.createTime)+' · </div>\n' +
                             '                        <div class="cop-btn-reply link">回复TA</div>\n' +
                             '                        <img class="cop-btn-more link" src="img/icon_more_s.png" alt />\n' +
                             '                   </div>\n' +
@@ -464,15 +493,14 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
         var map = new AMap.Map("mapContainer", {zoom: 11,});
         AMap.plugin('AMap.Geocoder', function() {
             var geocoder = new AMap.Geocoder();
-            // geocoder.getLocation(modal.locationProvinceName + modal.locationCityName + modal.locationTownName, function(status, result) {
-            geocoder.getLocation("海南省三亚市", function(status, result) {
+            geocoder.getLocation(modal.locationProvinceName + modal.locationCityName + modal.locationTownName, function(status, result) {
+            // geocoder.getLocation("海南省三亚市", function(status, result) {
                 if (status === 'complete'&&result.geocodes.length) {
                     var lnglat = result.geocodes[0].location;
                     map.setCenter([lnglat.lng, lnglat.lat]);
                     modal.lng = lnglat.lng;
                     modal.lat = lnglat.lat;
                     var marker = new AMap.Marker({
-                        icon: "/h5/img/pos.png",
                         position: [lnglat.lng, lnglat.lat],
                         anchor:'bottom-center'
                     });
@@ -483,7 +511,7 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
                             pageSize: 6, // 单页显示结果条数
                             pageIndex: 1, // 页码
                             datatype: "poi",
-                            city: modal.locationCity,
+                            city: modal.locationCityName,
                             citylimit: true,  //是否强制限制在设置的城市内搜索
                             autoFitView: true // 是否自动调整地图视野使绘制的 Marker点都处于视口的可见范围
                         });
@@ -526,6 +554,165 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
         });
     };
 
+    $(document).off("click").on("click", ".cop-more", function () {
+        var $this = $(this);
+        var commentId = parseInt($this.data("id"));
+        var swi = $this.data("switch");
+        var page = parseInt($this[0].dataset.page);
+        if (swi === "off") {
+            modal.requestReplyList(commentId, getPageSize(page), $this, page);
+        } else {
+            var commentList = modal.commentList;
+            if (commentList && commentList.length > 0) {
+                commentList.forEach(function (item) {
+                    if (item.commentId === commentId) {
+                        var num = item.childCommentCount - item.list.length;
+                        var showNum = num > 4 ? 5 : num;
+                        $this.find(".cop-more-text").text("点击展开"+showNum+"条回复");
+                    }
+                })
+            }
+            $this.data("switch", "off");
+            $this.find(".cop-more-btn").removeClass("col");
+            $this[0].dataset.page = 1;
+            $this.prev(".comment-reply").find(".cop-li-add").remove();
+            if (commentList && commentList.length > 0) {
+                commentList.forEach(function (item) {
+                    if (item.commentId === commentId) {
+                        item.totalList = item.list;
+                    }
+                });
+            }
+        }
+    });
+    $(document).on("click", ".full-swiper-slide", function () {
+        swiper2.removeAllSlides();
+        swiper2.updateSlides();
+        swiper2.destroy();
+        $("#fullPageImages").hide();
+    });
+    $(document).on("click", ".comment-img,.cop-con-show-img", function () {
+        var imagesArr = $(this).data("img").split(",");
+        var current = parseInt($(this).data("index"));
+        if (imagesArr && imagesArr.length > 0) {
+            swiper2 = new Swiper("#fullPageImages", {
+                init: false,
+                initialSlide: current,
+                lazy: {
+                    elementClass : 'swiper-lazy',
+                },
+            });
+            var imagesHtml = '';
+            imagesArr.forEach(function (item) {
+                imagesHtml += '<div class="swiper-slide full-swiper-slide" style="background: url('+item+') no-repeat center / 100%"></div>';
+            });
+            q("#fullPageWrap").innerHTML = imagesHtml;
+            q("#fullPageImages").style.display = "block";
+            swiper2.init();
+            swiper2.update();
+        }
+    });
+
+    modal.requestReplyList = function(commentId, pageSize, $obj, page) {
+        $.ajax({
+            url: modal.server[modal.env] + "/xiangdao-api/api/comment/child_list",
+            method: "POST",
+            dataType: "json",
+            async: false,
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json"
+            },
+            data: JSON.stringify({"commentId": commentId, "pageSize": pageSize, "pageNo": page}),
+            success: function (res) {
+                console.log(res);
+                if (res.status === 0) {
+                    var repHtml = '';
+                    var repList = res.json.result;
+                    var commentList = modal.commentList;
+                    if (repList && repList.length > 0) {
+                        repList.forEach(function (item3) {
+                            commentList.forEach(function (item4) {
+                                if (commentId === item4.commentId) {
+                                    if (item4.totalList && item4.totalList.length > 0) {
+                                        item4.totalList.forEach(function (item5) {
+                                            if (item5.commentId === item3.commentId) {
+                                                item3.hide = true
+                                            }
+                                        })
+                                    }
+                                }
+                            })
+                        });
+                        repHtml += modal.renderReplyList(repList);
+                        // $obj.before(repHtml);
+                        // $obj.prev(".comment-reply").append(repHtml);
+                        var prev = $obj.prev(".comment-reply");
+                        if (prev.length > 0) {
+                            prev.append(repHtml);
+                        } else {
+                            $obj.before('<div class="comment-reply">'+repHtml+'</div>');
+                        }
+                        var linkApp = document.querySelectorAll(".link");
+                        if (linkApp && linkApp.length > 0) {
+                            for (var z=0;z<linkApp.length;z++) {
+                                linkApp[z].addEventListener("click", function () {
+                                    openApp();
+                                }, false);
+                            }
+                        }
+                    }
+                    commentList.forEach(function (item2) {
+                        if (item2.commentId === commentId) {
+                            item2.totalList = item2.totalList.concat(repList);
+                            if (item2.totalList.length < res.json.totalCount) {
+                                var num = res.json.totalCount - item2.totalList.length + item2.list.length;
+                                var restNum = num > 4 ? 5 : num;
+                                $obj.find(".cop-more-text").text("点击展开"+restNum+"条回复");
+                                $obj.find(".cop-more-btn").removeClass("col");
+                                page++;
+                                $obj[0].dataset.page = page;
+                            } else {
+                                $obj.find(".cop-more-text").text("收起全部回复");
+                                $obj.find(".cop-more-btn").addClass("col");
+                                $obj.data("switch", "on");
+                            }
+                        }
+                    });
+
+                }
+            }
+        });
+    };
+
+    modal.renderReplyList = function(repList) {
+        var repHtml = '';
+        repList.forEach(function (item) {
+            if (!item.hide) {
+                repHtml += '<div class="cop-li cop-li-add" data-id="'+item.commentId+'">\n' +
+                    '            <img class="cop-l" src="'+item.avatar+'" alt />\n' +
+                    '            <div class="cop-c">\n' +
+                    '                 <div class="cop-name">'+item.nickName+(item.isAuthor === 1 ? '<span class="cop-author">作者</span>' : '')+'</div>\n' +
+                    '                 <div class="cop-con">\n' +((item.parentNickName ?"回复<span class=\"link\" style=\"color:#3397C6\"> @"+item.parentNickName+"</span>：":"") + (item.content?item.content:""));
+                if (item.images) {
+                    repHtml += '<span class="cop-con-show-img swiper-lazy" data-index="0" data-img="'+item.images+'"><img class="cop-con-icon" src="img/icon_img_s.png" alt /><span>查看图片</span></span>\n';
+                }
+                repHtml += '</div>\n' +
+                    '                 <div class="cop-fun">\n' +
+                    '                      <div class="cop-time">'+parseDateForComment(item.createTime)+' · </div>\n' +
+                    '                      <div class="cop-btn-reply link">回复TA</div>\n' +
+                    '                      <img class="cop-btn-more link" src="img/icon_more_s.png" alt />\n' +
+                    '                 </div>\n' +
+                    '            </div>\n' +
+                    '<div class="cop-r link">' +
+                    '<img class="cop-like-icon" src="img/icon_like_g.png" alt />' +
+                    '<div class="cop-like-num">'+(item.likeCount > 0 ? item.likeCount : "")+'</div>'+
+                    '</div>'+
+                    '       </div>';
+            }
+        });
+        return repHtml;
+    };
 
     var showAll = document.querySelectorAll(".pan-showall");
     if (showAll && showAll.length > 0) {

@@ -31,7 +31,7 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
     modal.env = "dev";
     modal.videoIndexArr = [];
     modal.id = core.parseQueryString().id;
-    modal.parseTime = function (timestamp) {
+    function parseTime (timestamp) {
         if (timestamp) {
             var date = new Date(timestamp);
             var y = date.getFullYear().toString().substring(2);
@@ -41,14 +41,22 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
         } else {
             return ""
         }
-    };
-    modal.parseDateForComment = function(timestamp) {
+    }
+    function getPageSize(page) {
+        var _page = parseInt(page);
+        if (_page === 1) {
+            return 5
+        } else {
+            return 5
+        }
+    }
+    function parseDateForComment(timestamp) {
         var date = new Date(timestamp);
         return ((date.getMonth() + 1) < 10 ? ("0" + (date.getMonth() + 1)) : (date.getMonth() + 1)) + "-" +
             (date.getDate() < 10 ? ("0" + date.getDate()) : date.getDate()) + " " +
             (date.getHours() < 10 ? ("0" + date.getHours()) : date.getHours()) + ":" +
             (date.getMinutes() < 10 ? ("0" + date.getMinutes()) : date.getMinutes())
-    };
+    }
     var swiper3, swiper4;
 
     function q (selector) {
@@ -68,6 +76,21 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
     function unLockBg(scrollTop) {
         document.body.style.position = "static";
         window.scroll(0, scrollTop ? scrollTop : document.body.dataset.st);
+    }
+
+    function fadeOut(el, el2, cb) {
+        el.style.opacity = 1;
+        el2 && (el2.style.transform = 'scale(1)');
+        (function fade() {
+            var val = parseFloat(el.style.opacity);
+            if ((el.style.opacity -= .1) < 0) {
+                el.style.display = 'none';
+                typeof cb === 'function' && cb();
+            } else {
+                requestAnimationFrame(fade);
+                el2 && (el2.style.transform = 'scale(' + (.6 + val / 5) + ')');
+            }
+        })();
     }
 
     modal.init = function () {
@@ -118,7 +141,7 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
                         content.innerHTML = data.content;
                         q("#allContent").innerHTML = data.content;
                         q(".ct-back").addEventListener("click", function () {
-                            q(".ct").style.display = "none";
+                            slideOut(q(".ct"));
                             unLockBg();
                         }, false);
                     } else {
@@ -150,8 +173,8 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
                         areaAddress.innerText = data.locationProvinceName + data.locationCityName + data.locationTownName;
                     }
                     if (data.validBeginTime && data.validEndTime && validDate) {
-                        var begin = modal.parseTime(data.validBeginTime);
-                        var end = modal.parseTime(data.validEndTime);
+                        var begin = parseTime(data.validBeginTime);
+                        var end = parseTime(data.validEndTime);
                         validDate.it(begin + "-" + end);
                     }
                     if (priceRemark) {
@@ -164,7 +187,7 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
                         } else {
                             q("#hasFoodWrap").style.display = 'none';
                         }
-                        modal.getRoomsList(null, null, "1,2,3", modal.id, function (roomStr) {
+                        modal.getRoomsList(null, null, "2,3", modal.id, function (roomStr) {
                             if (roomStr) {
                                 q("#noFood").innerHTML = roomStr;
                             } else {
@@ -209,32 +232,45 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
 
                     if (data.faqList && data.faqList.length > 0) {
                         let faqStr = '';
-                        data.faqList.forEach(item => {
-                            faqStr += `<div class="pan-question">
+                        data.faqList.forEach((item, index) => {
+                            if (index < 2) {
+                                faqStr += `<div class="pan-question">
                                             <div class="pq-ask">${item.issue}</div>
                                             <div class="pq-ans"><span>${item.reply}</span>
                                             </div>
                                         </div>`;
+                                q(".pt-btn2").style.display = 'none'
+                            } else {
+                                q(".pt-btn2").style.display = 'block'
+                            }
                         });
                         q("#faqWrap").innerHTML = faqStr;
                     } else {
                         q("#faqEl").style.display = "none";
                     }
-
                     if (data.aqList && data.aqList.length > 0 && data.aqCount > 0) {
                         let aqStr = '';
-                        data.aqList.forEach(item => {
-                            aqStr += `<div class="ask-li">
+                        data.aqList.forEach((item, index) => {
+                            if (index < 2) {
+                                aqStr += `<div class="ask-li">
                                         <div class="ask-l">问</div>
                                         <div class="ask-c">${item.title}</div>
                                         <div class="ask-r">${item.replyCount}个回答</div>
                                     </div>`;
+                            }
                         });
-                        aqStr += '<div class="ask-btn">查看全部</div>';
+                        if (data.aqList.length > 2) {
+                            aqStr += '<div class="ask-btn">查看全部</div>';
+                        }
                         q("#askList").innerHTML = aqStr;
                         q(".ask-nodata").style.display = 'none';
                     }
 
+                    if (~~data.commentCount > 1 && data.commentList.length > 1) {
+                        q(".comment-btn").style.display = "block";
+                    } else {
+                        q(".comment-btn").style.display = "none";
+                    }
                     if (!data.commentCount) {
                         var html = '';
                         html += '<div class="comment-nodata">' +
@@ -260,28 +296,22 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
 
                     let allHouse = q("#allHouse");
                     allHouse && allHouse.addEventListener("click", function () {
-                        q(".ct").style.display = "flex";
+                        slideIn(q(".ct"));
                         lockBg();
                     }, false);
 
                 }
+                modal.onAMapLoaded();
             }
         });
         modal.bindTag1();
-
-        modal.onAMapLoaded();
     };
 
     modal.openRoom = function (){
-        let details = document.querySelectorAll(".nli-inr");
+        let details = document.querySelectorAll(".nli-detail");
         if (details && details.length > 0) {
             details.forEach(function (item) {
-                item.addEventListener("click", function (e) {
-                    q(".dp-wrap").style.display = "block";
-                    lockBg();
-                    modal.getBed(e.target.dataset.id, function () {});
-
-                }, false);
+                item.addEventListener("click", eventOpenRoom, false);
             })
         }
     };
@@ -307,6 +337,10 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
                         }
                     });
                 }
+                let moreRoomTags = q(".dmt-tags");
+                let closeMoreRoomTags = q(".pe2-close");
+                moreRoomTags.removeEventListener("click", PeFadeIn2, false);
+                closeMoreRoomTags.removeEventListener("click", PeFadeOut2, false);
             }, false);
         }
     };
@@ -314,15 +348,16 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
     modal.bindTag1 = function (){
         let moreTags = q(".hc-tags");
         let closeMoreTags = q(".pe-close");
+        let pe = q(".pe");
         if (moreTags) {
             moreTags.addEventListener("click", function (){
-                q(".pe") && (q(".pe").style.display = "flex");
+                pe && core.fadeIn(pe, pe.q(".pe-main"));
                 lockBg();
             }, false);
         }
         if (closeMoreTags) {
             closeMoreTags.addEventListener("click", function (){
-                q(".pe") && (q(".pe").style.display = "none");
+                pe && fadeOut(pe, pe.q(".pe-main"));
                 unLockBg();
             }, false);
         }
@@ -332,19 +367,30 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
         let moreRoomTags = q(".dmt-tags");
         let closeMoreRoomTags = q(".pe2-close");
         if (moreRoomTags) {
-            moreRoomTags.addEventListener("click", function (){
-                q(".pe2") && (q(".pe2").style.display = "flex");
-                lockBg();
-            }, false);
+            moreRoomTags.addEventListener("click", PeFadeIn2, false);
         }
-
         if (closeMoreRoomTags) {
-            closeMoreRoomTags.addEventListener("click", function (){
-                q(".pe2") && (q(".pe2").style.display = "none");
-                unLockBg();
-            }, false);
+            closeMoreRoomTags.addEventListener("click", PeFadeOut2, false);
         }
     };
+
+    function PeFadeIn2() {
+        let pe = q(".pe2");
+        pe && core.fadeIn(pe, pe.q(".pe2-main"));
+    }
+
+    function PeFadeOut2() {
+        let pe = q(".pe2");
+        pe && fadeOut(pe, pe.q(".pe2-main"));
+    }
+
+    function eventOpenRoom () {
+        q(".dp-wrap").style.display = "block";
+        lockBg();
+        modal.getBed(this.dataset.id, function () {
+            modal.bindTag2();
+        });
+    }
 
     modal.getBed = function (id, cb) {
         let pag = q(".swiper-pagination-pop")
@@ -451,7 +497,7 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
                             }
                             allTagStr += '<div class="top-tag-pop">'+item+'</div>';
                         });
-                        if (tagArr.length > 3) {
+                        if (tagArr.length > 4) {
                             tagStr += `<img class="dmt-tag-more" src="img/icon_arrow_rs.png" alt />`;
                         }
                         q("#roomTags").innerHTML = tagStr;
@@ -459,7 +505,6 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
                     } else {
                         q("#roomTags").style.display = "none";
                     }
-                    modal.bindTag2()
 
                     let houseTypeArr = [null, "室", "厨", "卫", "厅", "厅", "书房", "阳台"];
                     if (data.houseType) {
@@ -685,17 +730,19 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
                                                     _list.forEach(item3 => {
                                                         _str += `<div class="top-tag-pop">${item3}</div>`;
                                                     });
+                                                    let pe = q(".pe3");
                                                     q(".pe3-list").innerHTML = _str;
-                                                    q(".pe3").style.display = "flex";
-                                                    q(".pe3-close").addEventListener("click", function () {
-                                                        q(".pe3").style.display = "none";
-                                                    }, false);
+                                                    pe && core.fadeIn(pe, pe.q(".pe3-main"));
                                                 }
                                             }
                                         })
                                     }
                                 }, false);
-                            })
+                            });
+                            q(".pe3-close").addEventListener("click", function () {
+                                let pe = q(".pe3");
+                                pe && fadeOut(pe, pe.q(".pe3-main"));
+                            }, false);
                         }
 
                     }
@@ -715,7 +762,6 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
                     '                        <div class="comment-c">\n' +
                     '                            <div class="comment-name">'+item.nickName+'</div>\n' +
                     '                            <div class="comment-con">'+(item.content?item.content:"")+'</div>\n';
-
                 if (item.images) {
                     var imagesArr = item.images.split(",");
                     if (imagesArr && imagesArr.length > 0) {
@@ -729,7 +775,7 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
                 }
 
                 commentHtml += '<div class="comment-fun">\n' +
-                    '                <div class="comment-time">'+modal.parseDateForComment(item.createTime)+' · </div>\n' +
+                    '                <div class="comment-time">'+parseDateForComment(item.createTime)+' · </div>\n' +
                     '                <div class="comment-btn-reply link">回复TA</div>\n' +
                     '                <img class="comment-btn-more link" src="img/icon_more_s.png" alt />\n' +
                     '           </div>';
@@ -755,7 +801,7 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
                         }
                         replyHtml += '                   </div>\n' +
                             '                   <div class="cop-fun">\n' +
-                            '                        <div class="cop-time">'+modal.parseDateForComment(item2.createTime)+' · </div>\n' +
+                            '                        <div class="cop-time">'+parseDateForComment(item2.createTime)+' · </div>\n' +
                             '                        <div class="cop-btn-reply link">回复TA</div>\n' +
                             '                        <img class="cop-btn-more link" src="img/icon_more_s.png" alt />\n' +
                             '                   </div>\n' +
@@ -812,13 +858,13 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
                                 let typeArr = item.reserveTypeStr.split(",");
                                 if (typeArr && typeArr.length > 0) {
                                     typeArr.forEach(item3 => {
-                                        typeStr += `<div class="nli"><div class="nli-ml"><div class="nli-mlt">${modal.rType[item3].name}</div>
-                                                        <div class="nli-mlb">单价<span>￥${item['monthReferPrice'+item3] ? item['monthReferPrice'+item3] : 0}</span>起/${(item3 === "10" ? "人/" : "") + modal.rType[item3].name.slice(-2)}/30晚</div>
+                                        typeStr += `<div class="nli nli-detail" data-id="${item.roomId}"><div class="nli-ml"><div class="nli-mlt">${modal.rType[item3].name}</div>
+                                                        <div class="nli-mlb">${item['monthReferPrice'+item3] ? ('单价<span>￥' + (item['monthReferPrice'+item3]) + '</span>起/' + ((item3 === "10" ? "人/" : "") + modal.rType[item3].name.slice(-2)) + '/30晚') : '价格待定'}</div>
                                                     </div><div class="nli-mr">预订</div></div>`;
                                     });
-                                }
+                                }``
                             }
-                            roomStr += `<div class="room-li" ><div class="nli-t">
+                            roomStr += `<div class="room-li" ><div class="nli-t nli-detail" data-id="${item.roomId}">
                                 <img class="nli-tl" src="${item.roomCover}" alt/>
                                 <div class="nli-tr">
                                     <div class="nli-tit">${item.roomTitle}</div>
@@ -847,8 +893,8 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
         console.log(modal);
         AMap.plugin('AMap.Geocoder', function() {
             var geocoder = new AMap.Geocoder();
-            // geocoder.getLocation(modal.locationProvinceName + modal.locationCityName + modal.locationTownName, function(status, result) {
-            geocoder.getLocation("海南省三亚市", function(status, result) {
+            geocoder.getLocation(modal.locationProvinceName + modal.locationCityName + modal.locationTownName, function(status, result) {
+            // geocoder.getLocation("海南省三亚市", function(status, result) {
                 console.log(status, result);
                 if (status === 'complete'&&result.geocodes.length) {
                     var lnglat = result.geocodes[0].location;
@@ -910,6 +956,166 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
     };
 
 
+    $(document).off("click").on("click", ".cop-more", function () {
+        var $this = $(this);
+        var commentId = parseInt($this.data("id"));
+        var swi = $this.data("switch");
+        var page = parseInt($this[0].dataset.page);
+        if (swi === "off") {
+            modal.requestReplyList(commentId, getPageSize(page), $this, page);
+        } else {
+            var commentList = modal.commentList;
+            if (commentList && commentList.length > 0) {
+                commentList.forEach(function (item) {
+                    if (item.commentId === commentId) {
+                        var num = item.childCommentCount - item.list.length;
+                        var showNum = num > 4 ? 5 : num;
+                        $this.find(".cop-more-text").text("点击展开"+showNum+"条回复");
+                    }
+                })
+            }
+            $this.data("switch", "off");
+            $this.find(".cop-more-btn").removeClass("col");
+            $this[0].dataset.page = 1;
+            $this.prev(".comment-reply").find(".cop-li-add").remove();
+            if (commentList && commentList.length > 0) {
+                commentList.forEach(function (item) {
+                    if (item.commentId === commentId) {
+                        item.totalList = item.list;
+                    }
+                });
+            }
+        }
+    });
+    $(document).on("click", ".full-swiper-slide", function () {
+        swiper2.removeAllSlides();
+        swiper2.updateSlides();
+        swiper2.destroy();
+        $("#fullPageImages").hide();
+    });
+    $(document).on("click", ".comment-img,.cop-con-show-img", function () {
+        var imagesArr = $(this).data("img").split(",");
+        var current = parseInt($(this).data("index"));
+        if (imagesArr && imagesArr.length > 0) {
+            swiper2 = new Swiper("#fullPageImages", {
+                init: false,
+                initialSlide: current,
+                lazy: {
+                    elementClass : 'swiper-lazy',
+                },
+            });
+            var imagesHtml = '';
+            imagesArr.forEach(function (item) {
+                imagesHtml += '<div class="swiper-slide full-swiper-slide" style="background: url('+item+') no-repeat center / 100%"></div>';
+            });
+            q("#fullPageWrap").innerHTML = imagesHtml;
+            q("#fullPageImages").style.display = "block";
+            swiper2.init();
+            swiper2.update();
+        }
+    });
+
+    modal.requestReplyList = function(commentId, pageSize, $obj, page) {
+        $.ajax({
+            url: modal.server[modal.env] + "/xiangdao-api/api/comment/child_list",
+            method: "POST",
+            dataType: "json",
+            async: false,
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json"
+            },
+            data: JSON.stringify({"commentId": commentId, "pageSize": pageSize, "pageNo": page}),
+            success: function (res) {
+                console.log(res);
+                if (res.status === 0) {
+                    var repHtml = '';
+                    var repList = res.json.result;
+                    var commentList = modal.commentList;
+                    if (repList && repList.length > 0) {
+                        repList.forEach(function (item3) {
+                            commentList.forEach(function (item4) {
+                                if (commentId === item4.commentId) {
+                                    if (item4.totalList && item4.totalList.length > 0) {
+                                        item4.totalList.forEach(function (item5) {
+                                            if (item5.commentId === item3.commentId) {
+                                                item3.hide = true
+                                            }
+                                        })
+                                    }
+                                }
+                            })
+                        });
+                        repHtml += modal.renderReplyList(repList);
+                        // $obj.before(repHtml);
+                        // $obj.prev(".comment-reply").append(repHtml);
+                        var prev = $obj.prev(".comment-reply");
+                        if (prev.length > 0) {
+                            prev.append(repHtml);
+                        } else {
+                            $obj.before('<div class="comment-reply">'+repHtml+'</div>');
+                        }
+                        var linkApp = document.querySelectorAll(".link");
+                        if (linkApp && linkApp.length > 0) {
+                            for (var z=0;z<linkApp.length;z++) {
+                                linkApp[z].addEventListener("click", function () {
+                                    openApp();
+                                }, false);
+                            }
+                        }
+                    }
+                    commentList.forEach(function (item2) {
+                        if (item2.commentId === commentId) {
+                            item2.totalList = item2.totalList.concat(repList);
+                            if (item2.totalList.length < res.json.totalCount) {
+                                var num = res.json.totalCount - item2.totalList.length + item2.list.length;
+                                var restNum = num > 4 ? 5 : num;
+                                $obj.find(".cop-more-text").text("点击展开"+restNum+"条回复");
+                                $obj.find(".cop-more-btn").removeClass("col");
+                                page++;
+                                $obj[0].dataset.page = page;
+                            } else {
+                                $obj.find(".cop-more-text").text("收起全部回复");
+                                $obj.find(".cop-more-btn").addClass("col");
+                                $obj.data("switch", "on");
+                            }
+                        }
+                    });
+
+                }
+            }
+        });
+    };
+
+    modal.renderReplyList = function(repList) {
+        var repHtml = '';
+        repList.forEach(function (item) {
+            if (!item.hide) {
+                repHtml += '<div class="cop-li cop-li-add" data-id="'+item.commentId+'">\n' +
+                    '            <img class="cop-l" src="'+item.avatar+'" alt />\n' +
+                    '            <div class="cop-c">\n' +
+                    '                 <div class="cop-name">'+item.nickName+(item.isAuthor === 1 ? '<span class="cop-author">作者</span>' : '')+'</div>\n' +
+                    '                 <div class="cop-con">\n' +((item.parentNickName ?"回复<span class=\"link\" style=\"color:#3397C6\"> @"+item.parentNickName+"</span>：":"") + (item.content?item.content:""));
+                if (item.images) {
+                    repHtml += '<span class="cop-con-show-img swiper-lazy" data-index="0" data-img="'+item.images+'"><img class="cop-con-icon" src="img/icon_img_s.png" alt /><span>查看图片</span></span>\n';
+                }
+                repHtml += '</div>\n' +
+                    '                 <div class="cop-fun">\n' +
+                    '                      <div class="cop-time">'+parseDateForComment(item.createTime)+' · </div>\n' +
+                    '                      <div class="cop-btn-reply link">回复TA</div>\n' +
+                    '                      <img class="cop-btn-more link" src="img/icon_more_s.png" alt />\n' +
+                    '                 </div>\n' +
+                    '            </div>\n' +
+                    '<div class="cop-r link">' +
+                    '<img class="cop-like-icon" src="img/icon_like_g.png" alt />' +
+                    '<div class="cop-like-num">'+(item.likeCount > 0 ? item.likeCount : "")+'</div>'+
+                    '</div>'+
+                    '       </div>';
+            }
+        });
+        return repHtml;
+    };
+
     var showAll = document.querySelectorAll(".pan-showall");
     if (showAll && showAll.length > 0) {
         for (var i = 0; i < showAll.length; i++) {
@@ -946,6 +1152,26 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
                 openApp();
             }, false);
         }
+    }
+
+    function slideIn(el1, el2) {
+        el1.classList.remove("slideDown");
+        el1.classList.add("slideUp");
+        el1.style.display = "flex";
+        if (el2) {
+            el2.classList.remove("fadeOut");
+            el2.classList.add("fadeIn");
+        }
+    }
+
+    function slideOut(el1) {
+        el1.classList.remove("slideUp");
+        el1.classList.add("slideDown");
+        el1.addEventListener("webkitAnimationEnd", function (e) {
+            if (e.animationName === "slideOut") {
+                el1.style.display = 'none';
+            }
+        }, false);
     }
 
 

@@ -622,7 +622,7 @@ body{
     font-size: .4rem;
     color: #666;
 }
-.pt-btn2{
+.pt-btn2,.comment-btn{
     width: 2.77rem;
     height: .96rem;
     line-height: .96rem;
@@ -1025,7 +1025,7 @@ body{
     font-size: .4rem;
     color: #666;
     text-align: center;
-    margin-bottom: 2rem;
+    margin-bottom: 1.5rem;
 }
 .comment-bar{
     height: 1.31rem;
@@ -1809,7 +1809,6 @@ body{
 .hli-row{
     padding: .36rem 0 0;
     display: flex;
-    align-items: center;
     justify-content: space-between;
 }
 .hli-l{
@@ -1821,13 +1820,11 @@ body{
 }
 .hli-r{
     flex: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    height: 2.85rem;
 }
 .hli-tags{
     display: flex;
+    flex-wrap: wrap;
+    margin-bottom: .1rem;
 }
 .hli-tag{
     height: .51rem;
@@ -1844,6 +1841,7 @@ body{
     font-size: .4rem;
     color: #666;
     flex: 1;
+    margin-bottom: .3rem;
 }
 .hli-pri{
     color: #E02A1C;

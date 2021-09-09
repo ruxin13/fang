@@ -78,7 +78,7 @@ body{
     font-size: .32rem;
     color: #fff;
     position: absolute;
-    left: .43rem;
+    right: .43rem;
     bottom: .37rem;
     z-index: 2;
 }
@@ -91,7 +91,7 @@ body{
     font-size: .32rem;
     color: #fff;
     position: absolute;
-    right: .43rem;
+    left: .43rem;
     bottom: .37rem;
     z-index: 2;
     display: flex;
@@ -622,7 +622,7 @@ body{
     font-size: .4rem;
     color: #666;
 }
-.pt-btn2{
+.pt-btn2,.comment-btn{
     width: 2.77rem;
     height: .96rem;
     line-height: .96rem;
@@ -723,6 +723,7 @@ body{
 .ask-nodata{
     display: block;
     padding-top: .43rem;
+    padding-bottom: .5rem;
 }
 .an-t{
     display: flex;
@@ -730,7 +731,7 @@ body{
     justify-content: space-between;
     padding-bottom: .41rem;
     border-bottom: dashed 1px #DEDEDE;
-    margin-bottom: .61rem;
+    margin-bottom: .21rem;
     margin-top: .43rem;
 }
 .an-avatar{
@@ -801,15 +802,15 @@ body{
     border-radius: .16rem;
     color: #666;
     font-size: .4rem;
-    margin: .51rem auto;
+    margin: .51rem auto 0;
 }
 .aq-list{
-    padding: .21rem 0;
+    padding: .21rem 0 .51rem;
 }
 
 .comment{
     background-color: #fff;
-    padding: 0 .43rem;
+    padding: 0 .43rem .3rem;
     margin-bottom: .27rem;
     border-top: solid 1px #dedede;
     border-bottom: solid 1px #dedede;
@@ -1025,7 +1026,7 @@ body{
     font-size: .4rem;
     color: #666;
     text-align: center;
-    margin-bottom: 2rem;
+    margin-bottom: 1.5rem;
 }
 .comment-bar{
     height: 1.31rem;
@@ -1194,7 +1195,7 @@ body{
     justify-content: center;
 }
 .sai-tro-more{
-    width: .35rem;
+    width: .3rem;
     height: .4rem;
     margin: 0 auto;
     transform: rotate(90deg);
@@ -1341,10 +1342,10 @@ body{
 .dp-wrap.slideDown .dp-mask{
     animation: fadeOut .3s ease;
 }
-.dp-wrap.slideUp .dp-main{
+.dp-wrap.slideUp .dp-main,.ct.slideUp{
     animation: slideIn .3s ease;
 }
-.dp-wrap.slideDown .dp-main{
+.dp-wrap.slideDown .dp-main,.ct.slideDown{
     animation: slideOut .3s ease;
 }
 @keyframes fadeIn {
@@ -1864,4 +1865,38 @@ body{
 }
 .hci-trli-row span{
     color: #999;
+}
+
+#fullPageImages{
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    z-index: 10000;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,1);
+}
+#fullPageImages .swiper-slide{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+#fullPageImages .swiper-slide img{
+    max-width: 100%;
+    max-height: 100%;
+}
+#fullPageImages .swiper-close{
+    width: 1rem;
+    height: 1rem;
+    position: fixed;
+    top: .5rem;
+    right: .5rem;
+    background-color: red;
+    z-index: 10001;
+}
+.full-swiper-slide{
+    padding: .2rem;
+    box-sizing: border-box;
 }
