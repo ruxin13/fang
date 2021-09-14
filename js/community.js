@@ -137,6 +137,9 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
                         q("#housePolicyEl").style.display = "none"
                     }
                     if (data.content && content) {
+                        if (data.content.indexOf('<!DOCTYPE html>') > -1) {
+                            data.content = data.content.replace(/\n/gi, '');
+                        }
                         content.innerHTML = data.content;
                     } else {
                         q("#contentEl").style.display = "none"
@@ -225,7 +228,7 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
                         q(".ask-nodata").style.display = 'none';
                     }
 
-                    if (~~data.commentCount > 1 && data.commentList.length > 1) {
+                    if (~~data.commentCount > 1) {
                         q(".comment-btn").style.display = "block";
                     } else {
                         q(".comment-btn").style.display = "none";
@@ -731,12 +734,12 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
                 var prev = this.previousElementSibling;
                 if (this.dataset.switch !== "1") {
                     // open
-                    this.innerText = "收起 >>";
+                    this.innerText = "收起房源介绍";
                     this.dataset.switch = "1";
                     prev && prev.classList.add("showAll");
                 } else {
                     // close
-                    this.innerText = "详情 >>";
+                    this.innerText = "查看全部房源介绍";
                     this.dataset.switch = "0";
                     prev && prev.classList.remove("showAll");
                 }

@@ -425,7 +425,7 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
                 q("#insWrap").innerHTML = insStr;
             }
 
-            if (~~data.commentCount > 1 && data.commentList.length > 1) {
+            if (~~data.commentCount > 1) {
                 q(".comment-btn").style.display = "block";
             } else {
                 q(".comment-btn").style.display = "none";

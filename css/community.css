@@ -282,7 +282,16 @@ body{
 .pan-des p{
     margin-bottom: .2rem;
 }
-.pan-showAll{
+.pan-des.showAll{
+    overflow: initial;
+    height: auto !important;
+    max-height: inherit !important;
+    display: block;
+}
+.pan-des.showAll:after{
+    display: none;
+}
+.pan-showall2{
     width: 4.77rem;
     height: 1.09rem;
     line-height: 1.09rem;
