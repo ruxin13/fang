@@ -202,12 +202,17 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
 
                     if (data.faqList && data.faqList.length > 0) {
                         let faqStr = '';
-                        data.faqList.forEach(item => {
-                            faqStr += `<div class="pan-question">
+                        data.faqList.forEach((item, index) => {
+                            if (index < 2) {
+                                faqStr += `<div class="pan-question">
                                             <div class="pq-ask">${item.issue}</div>
                                             <div class="pq-ans"><span>${item.reply}</span>
                                             </div>
                                         </div>`;
+                                q(".pt-btn2").style.display = 'none'
+                            } else {
+                                q(".pt-btn2").style.display = 'block'
+                            }
                         });
                         q("#faqWrap").innerHTML = faqStr;
                     } else {
@@ -218,7 +223,7 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
                         let aqStr = '';
                         data.aqList.forEach(item => {
                             aqStr += `<div class="ask-li">
-                                        <div class="ask-l">问</div>
+                                        <div class="ask-l"></div>
                                         <div class="ask-c">${item.title}</div>
                                         <div class="ask-r">${item.replyCount}个回答</div>
                                     </div>`;
@@ -308,6 +313,10 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
         });
     };
 
+    function showNoAq() {
+        q("#saList").innerHTML = `<div class="sa-nodata"><img class="san-img" src="img/aq_nodata.png" alt /><div class="san-txt">同区域内暂无房源</div></div>`;
+    }
+
     modal.bindTag1 = function (){
         let moreTags = q(".hc-tags");
         let closeMoreTags = q(".pe-close");
@@ -340,9 +349,11 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
                     modal.nearList = list;
                     if (list && list.length > 0) {
                         let str = '';
+                        let noData = true;
                         list.forEach(item => {
                             if (~~item.id !== ~~modal.id) {
                                 let tagStr = '';
+                                noData = false;
                                 let tagList = [];
                                 if (item.tagName) {
                                     let tagArr = item.tagName.split(",");
@@ -357,7 +368,7 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
                                     }
                                     item.tagList = tagList;
                                 }
-                                str += `<div class="sa-li">
+                                str += `<div class="sa-li" data-type="${item.type}">
                                         <div class="sai-t">
                                             <div class="sai-tl">
                                                 <img class="sai-tl-img" src="${item.cover}" alt />
@@ -380,37 +391,41 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
 
                         });
                         q("#saList").innerHTML = str;
-
-                        let tags = document.querySelectorAll(".sai-tro-all");
-                        if (tags && tags.length > 0) {
-                            tags.forEach(item => {
-                                item.addEventListener("click", function (e) {
-                                    let id = e.target.dataset.id;
-                                    let list = modal.nearList;
-                                    if (list && list.length > 0) {
-                                        list.forEach(item2 => {
-                                            if (~~id === ~~item2.id) {
-                                                let _list = item2.tagList;
-                                                let _str = '';
-                                                if (_list && _list.length > 0) {
-                                                    _list.forEach(item3 => {
-                                                        _str += `<div class="top-tag-pop">${item3}</div>`;
-                                                    });
-                                                    let pe = q(".pe3");
-                                                    q(".pe3-list").innerHTML = _str;
-                                                    pe && core.fadeIn(pe, pe.q(".pe3-main"));
+                        if (noData) {
+                            showNoAq()
+                        } else {
+                            let tags = document.querySelectorAll(".sai-tro-all");
+                            if (tags && tags.length > 0) {
+                                tags.forEach(item => {
+                                    item.addEventListener("click", function (e) {
+                                        let id = e.target.dataset.id;
+                                        let list = modal.nearList;
+                                        if (list && list.length > 0) {
+                                            list.forEach(item2 => {
+                                                if (~~id === ~~item2.id) {
+                                                    let _list = item2.tagList;
+                                                    let _str = '';
+                                                    if (_list && _list.length > 0) {
+                                                        _list.forEach(item3 => {
+                                                            _str += `<div class="top-tag-pop">${item3}</div>`;
+                                                        });
+                                                        let pe = q(".pe3");
+                                                        q(".pe3-list").innerHTML = _str;
+                                                        pe && core.fadeIn(pe, pe.q(".pe3-main"));
+                                                    }
                                                 }
-                                            }
-                                        })
-                                    }
+                                            })
+                                        }
+                                    }, false);
+                                });
+                                q(".pe3-close").addEventListener("click", function () {
+                                    let pe = q(".pe3");
+                                    pe && fadeOut(pe, pe.q(".pe3-main"));
                                 }, false);
-                            });
-                            q(".pe3-close").addEventListener("click", function () {
-                                let pe = q(".pe3");
-                                pe && fadeOut(pe, pe.q(".pe3-main"));
-                            }, false);
+                            }
                         }
-
+                    } else {
+                        showNoAq()
                     }
                 }
             }
@@ -497,30 +512,27 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
         AMap.plugin('AMap.Geocoder', function() {
             var geocoder = new AMap.Geocoder();
             geocoder.getLocation(modal.locationProvinceName + modal.locationCityName + modal.locationTownName, function(status, result) {
-            // geocoder.getLocation("海南省三亚市", function(status, result) {
+            // geocoder.getLocation("海南省海口市秀英区", function(status, result) {
+                console.log(status, result);
                 if (status === 'complete'&&result.geocodes.length) {
                     var lnglat = result.geocodes[0].location;
                     map.setCenter([lnglat.lng, lnglat.lat]);
                     modal.lng = lnglat.lng;
                     modal.lat = lnglat.lat;
-                    var marker = new AMap.Marker({
-                        position: [lnglat.lng, lnglat.lat],
-                        anchor:'bottom-center'
-                    });
-                    map.add(marker);
 
                     AMap.plugin(["AMap.PlaceSearch"], function() {
                         var placeSearch = new AMap.PlaceSearch({
+                            type: '火车站|机场|高铁站|汽车站|地铁站',
                             pageSize: 6, // 单页显示结果条数
                             pageIndex: 1, // 页码
                             datatype: "poi",
                             city: modal.locationCityName,
-                            citylimit: true,  //是否强制限制在设置的城市内搜索
+                            citylimit: false,  //是否强制限制在设置的城市内搜索
                             autoFitView: true // 是否自动调整地图视野使绘制的 Marker点都处于视口的可见范围
                         });
 
-                        placeSearch.searchNearBy('火车站', [lnglat.lng, lnglat.lat], 100000, function(status, result) {
-
+                        placeSearch.searchNearBy('', [lnglat.lng, lnglat.lat], 50000, function(status, result) {
+                            console.log(status, result);
                             if (result && result.poiList && result.poiList.pois && result.poiList.pois.length > 0) {
                                 let list = result.poiList.pois;
                                 let disArr = [];
@@ -541,7 +553,7 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
                                     driving.search(startLngLat, endLngLat, function (status, result) {
                                         // 未出错时，result即是对应的路线规划方案
                                         let time = result.routes[0].time;
-                                        q("#distance").innerText = `距${min.name}驾车距离${min.distance/1000}公里，约${parseInt(time/60)}分钟`;
+                                        q("#distance").innerText = `距${min.name}驾车距离${(min.distance/1000).toFixed(1)}公里，约${parseInt(time/60)}分钟`;
                                     })
                                 })
 

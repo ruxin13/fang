@@ -175,13 +175,24 @@ body{
     margin-bottom: .25rem;
 }
 .hcr-lb{
-    font-size: .37rem;
+    font-size: .35rem;
     color: #666;
     font-weight: normal;
+    display: flex;
+    align-items: center;
+}
+.hcr-lb:before{
+    content: '';
+    display: block;
+    width: .32rem;
+    height: .39rem;
+    background: url("../img/icon_train.png") no-repeat center / 100%;
+    margin-right: .15rem;
 }
 .hcr-rt{
-    width: .42rem;
-    margin: 0 auto .1rem;
+    width: .45rem;
+    height: .6rem;
+    margin: 0 auto .08rem;
 }
 .hcr-rb{
     font-size: .32rem;
@@ -694,16 +705,11 @@ body{
     margin-bottom: .32rem;
 }
 .pq-ask:before{
-    content: '问';
+    content: '';
     display: block;
     width: .51rem;
     height: .51rem;
-    line-height: .51rem;
-    color: #fff;
-    text-align: center;
-    font-size: .32rem;
-    border-radius: 50%;
-    background-color: #EA584D;
+    background: url("../img/icon_ask.png") no-repeat center / 100%;
     margin-right: .27rem;
 }
 .pq-ans{
@@ -713,16 +719,11 @@ body{
     line-height: .64rem;
 }
 .pq-ans:before{
-    content: '答';
+    content: '';
     display: block;
     width: .51rem;
     height: .51rem;
-    line-height: .51rem;
-    font-size: .32rem;
-    color: #666;
-    text-align: center;
-    background-color: #ddd;
-    border-radius: 50%;
+    background: url("../img/icon_answer.png") no-repeat center / 100%;
     margin-right: .27rem;
 }
 .pq-ans span{
@@ -778,15 +779,11 @@ body{
     padding: .22rem 0;
 }
 .ask-l{
+    content: '';
+    display: block;
     width: .51rem;
     height: .51rem;
-    border-radius: 50%;
-    background: #E02A1C;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #fff;
-    font-size: .32rem;
+    background: url("../img/icon_ask.png") no-repeat center / 100%;
 }
 .ask-c{
     flex: 1;
@@ -814,6 +811,18 @@ body{
 }
 .aq-list{
     padding: .21rem 0;
+}
+.sa-nodata{
+    padding: .69rem 0 .8rem;
+}
+.san-img{
+    width: 3.93rem;
+    margin: 0 auto .24rem;
+}
+.san-txt{
+    font-size: .37rem;
+    color: #999;
+    text-align: center;
 }
 
 .comment{
@@ -1129,8 +1138,8 @@ body{
 }
 .bb-l{}
 .bb-lm{
-    width: .67rem;
-    height: .67rem;
+    width: .69rem;
+    height: .69rem;
     margin: 0 auto .17rem;
 }
 .bb-lt{

@@ -14,6 +14,8 @@ body{
 .head-video-li{
     width: 100%;
     height: 6.67rem;
+    position: relative;
+    z-index: -1;
     object-fit: fill;
 }
 .header-fun{
@@ -102,7 +104,7 @@ body{
     display: block;
     width: .35rem;
     height: .35rem;
-    background: url("../img/icon_photo.png") no-repeat center / 100%;
+    background: url("../img/icon_img_w.png") no-repeat center / 100%;
     margin-right: .12rem;
 }
 .top-info{
@@ -175,13 +177,24 @@ body{
     margin-bottom: .25rem;
 }
 .hcr-lb{
-    font-size: .37rem;
+    font-size: .35rem;
     color: #666;
     font-weight: normal;
+    display: flex;
+    align-items: center;
+}
+.hcr-lb:before{
+    content: '';
+    display: block;
+    width: .32rem;
+    height: .39rem;
+    background: url("../img/icon_train.png") no-repeat center / 100%;
+    margin-right: .15rem;
 }
 .hcr-rt{
-    width: .42rem;
-    margin: 0 auto .1rem;
+    width: .45rem;
+    height: .6rem;
+    margin: 0 auto .08rem;
 }
 .hcr-rb{
     font-size: .32rem;
@@ -532,11 +545,12 @@ body{
     padding: 0 .28rem;
 }
 .nli-mr.nli-sl{
-    width: 1.45rem;
-    height: 1.45rem;
-    line-height: 1.45rem;
+    width: 1.56rem;
+    height: 1.56rem;
+    line-height: 1.56rem;
     padding: 0;
-    background: url("../img/img_sold_out.png") no-repeat center center / 100%;
+    background: url("../img/icon_sold_out2.png") no-repeat center center / 100%;
+    color: transparent;
 }
 .m-rules{
     background-color: #fff;
@@ -633,6 +647,17 @@ body{
     font-size: .4rem;
     color: #666;
 }
+.pt-btn3{
+    width: 2.77rem;
+    height: .96rem;
+    line-height: .96rem;
+    text-align: center;
+    border: solid 1px #dedede;
+    border-radius: .16rem;
+    margin: 0 auto .51rem;
+    font-size: .4rem;
+    color: #666;
+}
 
 .zb-tabs{
     display: flex;
@@ -685,16 +710,11 @@ body{
     margin-bottom: .32rem;
 }
 .pq-ask:before{
-    content: '问';
+    content: '';
     display: block;
     width: .51rem;
     height: .51rem;
-    line-height: .51rem;
-    color: #fff;
-    text-align: center;
-    font-size: .32rem;
-    border-radius: 50%;
-    background-color: #EA584D;
+    background: url("../img/icon_ask.png") no-repeat center / 100%;
     margin-right: .27rem;
 }
 .pq-ans{
@@ -704,16 +724,11 @@ body{
     line-height: .64rem;
 }
 .pq-ans:before{
-    content: '答';
+    content: '';
     display: block;
     width: .51rem;
     height: .51rem;
-    line-height: .51rem;
-    font-size: .32rem;
-    color: #666;
-    text-align: center;
-    background-color: #ddd;
-    border-radius: 50%;
+    background: url("../img/icon_answer.png") no-repeat center / 100%;
     margin-right: .27rem;
 }
 .pq-ans span{
@@ -770,15 +785,11 @@ body{
     padding: .22rem 0;
 }
 .ask-l{
+    content: '';
+    display: block;
     width: .51rem;
     height: .51rem;
-    border-radius: 50%;
-    background: #E02A1C;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #fff;
-    font-size: .32rem;
+    background: url("../img/icon_ask.png") no-repeat center / 100%;
 }
 .ask-c{
     flex: 1;
@@ -806,6 +817,21 @@ body{
 }
 .aq-list{
     padding: .21rem 0 .51rem;
+}
+.aq-more{
+    display: none;
+}
+.sa-nodata{
+    padding: .69rem 0 .8rem;
+}
+.san-img{
+    width: 3.93rem;
+    margin: 0 auto .24rem;
+}
+.san-txt{
+    font-size: .37rem;
+    color: #999;
+    text-align: center;
 }
 
 .comment{
@@ -1121,8 +1147,8 @@ body{
 }
 .bb-l{}
 .bb-lm{
-    width: .67rem;
-    height: .67rem;
+    width: .69rem;
+    height: .69rem;
     margin: 0 auto .17rem;
 }
 .bb-lt{
@@ -1315,7 +1341,7 @@ body{
     bottom: 0;
     right: 0;
     top: 0;
-    z-index: 2000;
+    z-index: 8000;
     background-color: rgba(0,0,0,.65);
 }
 .dp-main{
@@ -1326,7 +1352,7 @@ body{
     left: 0;
     bottom: 0;
     right: 0;
-    z-index: 2010;
+    z-index: 8010;
     display: flex;
     flex-direction: column;
     justify-content: space-between;

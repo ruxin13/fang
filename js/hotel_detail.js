@@ -253,7 +253,7 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
                         data.aqList.forEach((item, index) => {
                             if (index < 2) {
                                 aqStr += `<div class="ask-li">
-                                        <div class="ask-l">问</div>
+                                        <div class="ask-l"></div>
                                         <div class="ask-c">${item.title}</div>
                                         <div class="ask-r">${item.replyCount}个回答</div>
                                     </div>`;
@@ -264,6 +264,9 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
                         }
                         q("#askList").innerHTML = aqStr;
                         q(".ask-nodata").style.display = 'none';
+                        q(".aq-more").style.display = 'block'
+                    } else {
+                        q(".aq-more").style.display = 'none'
                     }
 
                     if (~~data.commentCount > 1) {
@@ -389,6 +392,10 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
         lockBg();
         modal.getBed(this.dataset.id, function () {
             modal.bindTag2();
+            let playVideo = q("#playVideo");
+            if (playVideo && playVideo.src) {
+                playVideo.pause();
+            }
         });
     }
 
@@ -414,30 +421,29 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
                                     var urls = item.url.split(",");
                                     if (urls.length > 0) {
                                         urls.forEach(function (item2, index2) {
-                                            if (item.type === 2) {
+
                                             str += '<div class="swiper-slide">';
-                                            // if (item.type === 1 && index2 === 0) {
-                                            //     str += '<video id="video' + item.id + '" class="head-video-li" preload="auto" controls ' +
-                                            //         ' webkit-playsinline="true"\n' +
-                                            //         ' playsinline="true"\n' +
-                                            //         ' x5-playsinline="true"\n' +
-                                            //         ' x5-video-player-type="h5"\n' +
-                                            //         ' x5-video-player-fullscreen=""\n' +
-                                            //         ' x5-video-orientation="portraint"\n' +
-                                            //         ' x-webkit-airplay="true"\n' +
-                                            //         ' controlsList="nodownload"' +
-                                            //         ' preload="auto"' +
-                                            //         ' controls="controls"' +
-                                            //         ' src="' + item2 + '" poster="' + item2 + '?vframe/jpg/offset/2/w/640/h/360" />';
-                                            //     modal.videoIndexArr.push({"index": index2, "item": item2});
-                                            // } else {
+                                            if (item.type === 1) {
+                                                str += '<video id="video' + item.id + '" class="head-video-li" preload="auto" ' +
+                                                    ' webkit-playsinline="true"' +
+                                                    ' playsinline="true"' +
+                                                    ' x5-playsinline="true"' +
+                                                    ' x5-video-player-type="h5"' +
+                                                    ' x5-video-player-fullscreen=""' +
+                                                    ' x5-video-orientation="portraint"' +
+                                                    ' x-webkit-airplay="true"' +
+                                                    ' controlsList="nodownload"' +
+                                                    ' preload="auto"' +
+                                                    ' autoplay' +
+                                                    ' loop' +
+                                                    ' src="' + item2 + '" poster="' + item2 + '?vframe/jpg/offset/2/w/640/h/360" />';
+                                                modal.videoIndexArr.push({"index": index2, "item": item2, "id": item.id});
+                                            } else {
                                                 str += '<img class="head-img-li" src="' + item2 + '" alt />';
-                                            // }
-                                            str += '</div>';
                                             }
+                                            str += '</div>';
                                         })
                                     }
-
                                 }
                                 if (index === 0 && item.type === 1) {
                                     pag.classList.add("video")
@@ -450,29 +456,33 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
                                     type: 'fraction'
                                 },
                                 lazy: true,
-                                autoplay: {
-                                    delay: 3000,
-                                    disableOnInteraction: false,
-                                },
+                                observer:true,//修改swiper自己或子元素时，自动初始化swiper
+                                observeParents:true,//修改swiper的父元素时，自动初始化swiper
+                                // autoplay: {
+                                //     delay: 3000,
+                                //     disableOnInteraction: false,
+                                // },
                                 on: {
                                     transitionEnd: function () {
                                         var _this = this;
                                         if (modal.videoIndexArr.length > 0) {
                                             modal.videoIndexArr.forEach(function (item) {
                                                 if (item.index === _this.activeIndex) {
-                                                    pag.classList.add("video")
+                                                    pag.classList.add("video");
+                                                    let _videoEl = q(`#video${item.id}`);
+                                                    if (_videoEl && _videoEl.src) {
+                                                        _videoEl.play();
+                                                    }
                                                 } else {
-                                                    pag.classList.remove("video")
+                                                    pag.classList.remove("video");
+                                                    let _videoEl = q(`#video${item.id}`);
+                                                    if (_videoEl && _videoEl.src) {
+                                                        _videoEl.pause();
+                                                    }
                                                 }
                                             })
                                         } else {
                                             pag.classList.remove("video")
-                                        }
-                                        var videos = document.querySelectorAll("video");
-                                        if (videos && videos.length > 0) {
-                                            for (var i = 0; i < videos.length; i++) {
-                                                videos[i].pause();
-                                            }
                                         }
                                     }
                                 }
@@ -578,22 +588,23 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
                             });
                         }
                         var hcInfo2 = q("#hcInfo2");
-                        bdArr.forEach(function (item) {
-                            let baseHtml = `<div class="hci-tli-wrap swiper-slide">
-                                                <div class="hci-tli">
-                                                    <img class="hci-icon" src="img/icon_guest.png" alt />
-                                                    <div class="hci-text"><span id="liveNumber">${data.liveNumber}</span>个房客</div>
-                                                </div>
+                        console.log(bdArr);
+                        hcInfo2.innerHTML = `<div class="hci-tli-wrap swiper-slide">
+                                            <div class="hci-tli">
+                                                <img class="hci-icon" src="img/icon_guest.png" alt />
+                                                <div class="hci-text"><span id="liveNumber">${data.liveNumber}</span>个房客</div>
                                             </div>
-                                            <div class="hci-tli-wrap swiper-slide">
-                                                <div class="hci-tli">
-                                                    <img class="hci-icon" src="img/icon_room.png" alt />
-                                                    <div class="hci-text"><span id="roomCount">${modal.roomCount}</span>间卧室</div>
-                                                </div>
-                                            </div>`;
-                            var hcHtml = ``;
+                                        </div>
+                                        <div class="hci-tli-wrap swiper-slide">
+                                            <div class="hci-tli">
+                                                <img class="hci-icon" src="img/icon_room.png" alt />
+                                                <div class="hci-text"><span id="roomCount">${modal.roomCount}</span>间卧室</div>
+                                            </div>
+                                        </div>`;
+                        bdArr.forEach(function (item) {
                             if (item.bed.length > 0) {
-                                var bedNum = 0;
+                                let hcHtml = ``;
+                                let bedNum = 0;
                                 item.bed.forEach(function (item3) {
                                     bedNum += parseInt(item3[2]);
                                 });
@@ -609,7 +620,6 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
                                 el.classList.add("hci-tli-wrap");
                                 el.classList.add("swiper-slide");
                                 el.innerHTML = hcHtml;
-                                hcInfo2.innerHTML = baseHtml;
                                 hcInfo2.appendChild(el);
                             }
                         });
@@ -674,8 +684,10 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
                     modal.nearList = list;
                     if (list && list.length > 0) {
                         let str = '';
+                        let noData = true;
                         list.forEach(item => {
-                            if (item.type === 2) {
+                            if (item.type === 2 && ~~item.id !== ~~modal.id) {
+                                noData = false;
                                 let tagStr = '';
                                 let tagList = [];
                                 if (item.tagName) {
@@ -691,7 +703,7 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
                                     }
                                     item.tagList = tagList;
                                 }
-                                str += `<div class="sa-li">
+                                str += `<div class="sa-li" data-id="${item.id}">
                                         <div class="sai-t">
                                             <div class="sai-tl">
                                                 <img class="sai-tl-img" src="${item.cover}" alt />
@@ -714,6 +726,7 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
 
                         });
                         q("#saList").innerHTML = str;
+                        if (noData) { showNoAq() }
 
                         let tags = document.querySelectorAll(".sai-tro-all");
                         if (tags && tags.length > 0) {
@@ -745,11 +758,17 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
                             }, false);
                         }
 
+                    } else {
+                        showNoAq();
                     }
                 }
             }
         });
     };
+
+    function showNoAq() {
+        q("#saList").innerHTML = `<div class="sa-nodata"><img class="san-img" src="img/aq_nodata.png" alt /><div class="san-txt">同区域内暂无房源</div></div>`;
+    }
 
     modal.renderCommentList = function() {
         var list = modal.commentList;
@@ -858,9 +877,16 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
                                 let typeArr = item.reserveTypeStr.split(",");
                                 if (typeArr && typeArr.length > 0) {
                                     typeArr.forEach(item3 => {
+                                        let roomStatus = false;
+                                        if (item.reserveTypeStatus) {
+                                            let statusArr = item.reserveTypeStatus.split(",");
+                                            if (statusArr.indexOf(item3) > -1 || statusArr.indexOf("0") > -1) {
+                                                roomStatus = true
+                                            }
+                                        }
                                         typeStr += `<div class="nli nli-detail" data-id="${item.roomId}"><div class="nli-ml"><div class="nli-mlt">${modal.rType[item3].name}</div>
                                                         <div class="nli-mlb">${item['monthReferPrice'+item3] ? ('单价<span>￥' + (item['monthReferPrice'+item3]) + '</span>起/' + ((item3 === "10" ? "人/" : "") + modal.rType[item3].name.slice(-2)) + '/30晚') : '价格待定'}</div>
-                                                    </div><div class="nli-mr">预订</div></div>`;
+                                                    </div><div class="nli-mr ${roomStatus ? 'nli-sl' : ''}">预订</div></div>`;
                                     });
                                 }``
                             }
@@ -901,23 +927,19 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
                     map.setCenter([lnglat.lng, lnglat.lat]);
                     modal.lng = lnglat.lng;
                     modal.lat = lnglat.lat;
-                    var marker = new AMap.Marker({
-                        position: [lnglat.lng, lnglat.lat],
-                        anchor:'bottom-center'
-                    });
-                    map.add(marker);
 
                     AMap.plugin(["AMap.PlaceSearch"], function() {
                         var placeSearch = new AMap.PlaceSearch({
+                            type: '火车站|机场|高铁站|汽车站|地铁站',
                             pageSize: 6, // 单页显示结果条数
                             pageIndex: 1, // 页码
                             datatype: "poi",
                             city: modal.locationCity,
-                            citylimit: true,  //是否强制限制在设置的城市内搜索
+                            citylimit: false,  //是否强制限制在设置的城市内搜索
                             autoFitView: true // 是否自动调整地图视野使绘制的 Marker点都处于视口的可见范围
                         });
 
-                        placeSearch.searchNearBy('火车站', [lnglat.lng, lnglat.lat], 100000, function(status, result) {
+                        placeSearch.searchNearBy('', [lnglat.lng, lnglat.lat], 100000, function(status, result) {
 
                             if (result && result.poiList && result.poiList.pois && result.poiList.pois.length > 0) {
                                 let list = result.poiList.pois;
@@ -939,7 +961,7 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
                                     driving.search(startLngLat, endLngLat, function (status, result) {
                                         // 未出错时，result即是对应的路线规划方案
                                         let time = result.routes[0].time;
-                                        q("#distance").innerText = `距${min.name}驾车距离${min.distance/1000}公里，约${parseInt(time/60)}分钟`;
+                                        q("#distance").innerText = `距${min.name}驾车距离${(min.distance/1000).toFixed(1)}公里，约${parseInt(time/60)}分钟`;
                                     })
                                 })
 
