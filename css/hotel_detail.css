@@ -1145,7 +1145,10 @@ body{
     box-shadow: 0 -.05rem .1rem rgba(0,0,0,.08);
     background-color: #fff;
 }
-.bb-l{}
+.bb-l{
+    display: block;
+    text-decoration: none;
+}
 .bb-lm{
     width: .69rem;
     height: .69rem;
@@ -1174,6 +1177,8 @@ body{
 }
 .sa-li{
     padding: .33rem 0;
+    text-decoration: none;
+    display: block;
 }
 .sai-t{
     display: flex;
@@ -1200,14 +1205,6 @@ body{
     bottom: .2rem;
     color: #fff;
     font-size: .4rem;
-}
-.sai-tl-pos:before{
-    content: '';
-    display: block;
-    width: .37rem;
-    height: .45rem;
-    background: url("../img/icon_pos_gray.png") no-repeat center / 100%;
-    margin-right: .2rem;
 }
 .sai-tro{
     height: .69rem;

@@ -431,19 +431,18 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
                 q(".comment-btn").style.display = "none";
             }
             if (!data.commentCount) {
-                var html = '';
-                html += '<div class="comment-nodata">' +
-                    '<img class="comment-nodata-icon" src="img/comment_nodata.png" alt />' +
-                    '<div class="comment-nodata-tit">暂无评论</div>' +
-                    '<div class="comment-nodata-stit">还没有房客对该房源发出评论</div></div>';
-                q("#commentList").innerHTML = html;
+                showCommentNoData();
             } else {
                 // 评论列表
                 modal.commentList = data.commentList;
-                data.commentList.forEach(function (item) {
-                    item.totalList = item.list;
-                });
-                modal.renderCommentList();
+                if (data.commentList && data.commentList.length > 0) {
+                    data.commentList.forEach(function (item) {
+                        item.totalList = item.list;
+                    });
+                    modal.renderCommentList();
+                } else {
+                    showCommentNoData();
+                }
             }
 
 
@@ -451,6 +450,15 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
 
         }
     });
+
+    function showCommentNoData() {
+        var html = '';
+        html += '<div class="comment-nodata">' +
+            '<img class="comment-nodata-icon" src="img/comment_nodata.png" alt />' +
+            '<div class="comment-nodata-tit">暂无评论</div>' +
+            '<div class="comment-nodata-stit">还没有房客对该房源发出评论</div></div>';
+        q("#commentList").innerHTML = html;
+    }
 
     modal.renderCommentList = function() {
         var list = modal.commentList;

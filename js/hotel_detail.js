@@ -138,6 +138,9 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
                         q("#housePolicyEl").style.display = "none"
                     }
                     if (data.content && content) {
+                        if (data.content.indexOf('<!DOCTYPE html>') > -1) {
+                            data.content = data.content.replace(/\n/gi, '');
+                        }
                         content.innerHTML = data.content;
                         q("#allContent").innerHTML = data.content;
                         q(".ct-back").addEventListener("click", function () {
@@ -364,6 +367,14 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
                 unLockBg();
             }, false);
         }
+
+        let playVideo = q("#playVideo");
+        $(window).scroll(function () {
+            let scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+            if (playVideo && scrollTop > playVideo.clientHeight) {
+                playVideo.pause();
+            }
+        });
     };
 
     modal.bindTag2 = function (){
@@ -703,7 +714,7 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
                                     }
                                     item.tagList = tagList;
                                 }
-                                str += `<div class="sa-li" data-id="${item.id}">
+                                str += `<a class="sa-li" data-id="${item.id}" href="community.html?id=${item.id}">
                                         <div class="sai-t">
                                             <div class="sai-tl">
                                                 <img class="sai-tl-img" src="${item.cover}" alt />
@@ -716,12 +727,12 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
                                         <div class="sai-inf"><span><i>￥</i>${item.monthReferPrice ? item.monthReferPrice : (item.dayReferPrice ? item.dayReferPrice * 30 : 0)}</span>起/${(item.reserveType === "10" ? "人/" : "") + modal.rType[item.reserveType].name.slice(-2)}/30晚</div>
                                         <div class="sai-row">
                                             <div class="sai-tags">
-                                            ${item.foodType ? ('<div class="sai-tag-l">' + modal.fType[item.foodType] + '</div>') : ''}
-                                            <div class="sai-tag-r ${item.foodType ? '' : 'sai-tag-single'}">30晚起租</div>
+                                            ${(item.foodType && ~~item.foodType !== 3) ? ('<div class="sai-tag-l">' + modal.fType[item.foodType] + '</div>') : ''}
+                                            <div class="sai-tag-r ${(item.foodType && ~~item.foodType !== 3) ? '' : 'sai-tag-single'}">30晚起租</div>
                                             </div>
                                             <div class="sai-detail">详情</div>
                                         </div>
-                                    </div>`;
+                                    </a>`;
                             }
 
                         });
@@ -732,6 +743,7 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
                         if (tags && tags.length > 0) {
                             tags.forEach(item => {
                                 item.addEventListener("click", function (e) {
+                                    e.preventDefault();
                                     let id = e.target.dataset.id;
                                     let list = modal.nearList;
                                     if (list && list.length > 0) {
@@ -885,7 +897,7 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
                                             }
                                         }
                                         typeStr += `<div class="nli nli-detail" data-id="${item.roomId}"><div class="nli-ml"><div class="nli-mlt">${modal.rType[item3].name}</div>
-                                                        <div class="nli-mlb">${item['monthReferPrice'+item3] ? ('单价<span>￥' + (item['monthReferPrice'+item3]) + '</span>起/' + ((item3 === "10" ? "人/" : "") + modal.rType[item3].name.slice(-2)) + '/30晚') : '价格待定'}</div>
+                                                        <div class="nli-mlb">${item['monthReferPrice'+item3] ? ('单价<span>￥' + (item['monthReferPrice'+item3]) + '</span>起/' + ((item3 === "10" ? "人/" : "") + modal.rType[item3].name.slice(-2)) + '/30晚') : '<span>价格待定</span>'}</div>
                                                     </div><div class="nli-mr ${roomStatus ? 'nli-sl' : ''}">预订</div></div>`;
                                     });
                                 }``

@@ -141,6 +141,18 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
                             data.content = data.content.replace(/\n/gi, '');
                         }
                         content.innerHTML = data.content;
+                        q("#allContent").innerHTML = data.content;
+                        q(".ct-back").addEventListener("click", function () {
+                            slideOut(q(".ct"));
+                            unLockBg();
+                        }, false);
+                        let allHouse = q("#allHouse");
+                        allHouse && allHouse.addEventListener("click", function () {
+                            slideIn(q(".ct"));
+                            lockBg();
+                        }, false);
+
+                        content.innerHTML = data.content;
                     } else {
                         q("#contentEl").style.display = "none"
                     }
@@ -292,7 +304,7 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
                                     });
                                 }
                             }
-                            str += `<div class="hli">
+                            str += `<a class="hli" href="community_detail.html?id=${item.houseId}">
                                         <div class="hli-tit">${item.infoTitle}</div>
                                         <div class="hli-row">
                                             <img class="hli-l" src="${item.infoCover}" alt />
@@ -300,11 +312,11 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
                                                 <div class="hli-tags">${tagStr}</div>
                                                 <div class="hli-inf">${item.ruleLeastDay}晚起租</div>
                                                 <div class="hli-pri">${item.monthReferPrice ? ('单价<i>￥</i><span>' + item.monthReferPrice + '</span>') : ''}</div>
-                                                <div class="hli-dw">${item.monthReferPrice ? ('起/' + [null, "床位", "独立房间", "整套出租", "整栋出租"][item.ruleRentType] + '/'+item.ruleLeastDay+'晚') : '价格待定'}</div>
+                                                <div class="hli-dw">${item.monthReferPrice ? ('起/' + [null, "床位", "独立房间", "整套出租", "整栋出租"][item.ruleRentType] + '/'+item.ruleLeastDay+'晚') : '<span>价格待定</span>'}</div>
                                                 <div class="hli-btn">详情</div>
                                             </div>
                                         </div>
-                                    </div>`;
+                                    </a>`;
                         });
                         q("#houseWrap").innerHTML = str;
                     }
@@ -333,6 +345,14 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
                 unLockBg();
             }, false);
         }
+
+        let playVideo = q("#playVideo");
+        $(window).scroll(function () {
+            let scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+            if (playVideo && scrollTop > playVideo.clientHeight) {
+                playVideo.pause();
+            }
+        });
     };
 
     modal.getNear = function (searchLocation) {
@@ -368,7 +388,7 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
                                     }
                                     item.tagList = tagList;
                                 }
-                                str += `<div class="sa-li" data-type="${item.type}">
+                                str += `<a class="sa-li" data-type="${item.type}" href="community.html?id=${item.id}">
                                         <div class="sai-t">
                                             <div class="sai-tl">
                                                 <img class="sai-tl-img" src="${item.cover}" alt />
@@ -381,12 +401,12 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
                                         <div class="sai-inf"><span><i>￥</i>${item.monthReferPrice ? item.monthReferPrice : (item.dayReferPrice ? item.dayReferPrice * item.leastDay : 0)}</span>起/${(item.reserveType === "10" ? "人/" : "") + modal.rType[item.reserveType].name.slice(-2)}/${item.leastDay}晚</div>
                                         <div class="sai-row">
                                             <div class="sai-tags">
-                                            ${item.foodType ? ('<div class="sai-tag-l">' + modal.fType[item.foodType] + '</div>') : ''}
-                                            <div class="sai-tag-r ${item.foodType ? '' : 'sai-tag-single'}">${item.leastDay}晚起租</div>
+                                            ${(item.foodType && ~~item.foodType !== 3) ? ('<div class="sai-tag-l">' + modal.fType[item.foodType] + '</div>') : ''}
+                                            <div class="sai-tag-r ${(item.foodType && ~~item.foodType !== 3) ? '' : 'sai-tag-single'}">${item.leastDay}晚起租</div>
                                             </div>
                                             <div class="sai-detail">详情</div>
                                         </div>
-                                    </div>`;
+                                    </a>`;
                             }
 
                         });
@@ -398,6 +418,7 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
                             if (tags && tags.length > 0) {
                                 tags.forEach(item => {
                                     item.addEventListener("click", function (e) {
+                                        e.preventDefault();
                                         let id = e.target.dataset.id;
                                         let list = modal.nearList;
                                         if (list && list.length > 0) {
@@ -739,25 +760,25 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
             }, false);
         }
     }
-    var showAll2 = document.querySelectorAll(".pan-showall2");
-    if (showAll2 && showAll2.length > 0) {
-        for (var m = 0; m < showAll2.length; m++) {
-            showAll2[m].addEventListener("click", function () {
-                var prev = this.previousElementSibling;
-                if (this.dataset.switch !== "1") {
-                    // open
-                    this.innerText = "收起房源介绍";
-                    this.dataset.switch = "1";
-                    prev && prev.classList.add("showAll");
-                } else {
-                    // close
-                    this.innerText = "查看全部房源介绍";
-                    this.dataset.switch = "0";
-                    prev && prev.classList.remove("showAll");
-                }
-            }, false);
-        }
-    }
+    // var showAll2 = document.querySelectorAll(".pan-showall2");
+    // if (showAll2 && showAll2.length > 0) {
+    //     for (var m = 0; m < showAll2.length; m++) {
+    //         showAll2[m].addEventListener("click", function () {
+    //             var prev = this.previousElementSibling;
+    //             if (this.dataset.switch !== "1") {
+    //                 // open
+    //                 this.innerText = "收起房源介绍";
+    //                 this.dataset.switch = "1";
+    //                 prev && prev.classList.add("showAll");
+    //             } else {
+    //                 // close
+    //                 this.innerText = "查看全部房源介绍";
+    //                 this.dataset.switch = "0";
+    //                 prev && prev.classList.remove("showAll");
+    //             }
+    //         }, false);
+    //     }
+    // }
     var linkApp = document.querySelectorAll(".link");
     if (linkApp && linkApp.length > 0) {
         for (var z = 0; z < linkApp.length; z++) {
@@ -767,6 +788,25 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
         }
     }
 
+    function slideIn(el1, el2) {
+        el1.classList.remove("slideDown");
+        el1.classList.add("slideUp");
+        el1.style.display = "flex";
+        if (el2) {
+            el2.classList.remove("fadeOut");
+            el2.classList.add("fadeIn");
+        }
+    }
+
+    function slideOut(el1) {
+        el1.classList.remove("slideUp");
+        el1.classList.add("slideDown");
+        el1.addEventListener("webkitAnimationEnd", function (e) {
+            if (e.animationName === "slideOut") {
+                el1.style.display = 'none';
+            }
+        }, false);
+    }
 
 
     modal.init();
