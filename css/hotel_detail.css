@@ -647,6 +647,9 @@ body{
     font-size: .4rem;
     color: #666;
 }
+.comment-btn{
+    margin-bottom: .51rem;
+}
 .pt-btn3{
     width: 2.77rem;
     height: .96rem;
@@ -1778,6 +1781,11 @@ body{
     border-radius: .32rem;
     margin: .1rem auto;
 }
+.con-img{
+    width: 100%;
+    height: 6rem;
+    border-radius: .32rem;
+}
 
 .top-tags{
     display: flex;
@@ -1828,7 +1836,7 @@ body{
     font-size: .4rem;
     color: #666;
 }
-.swiper-pagination-pop{
+.swiper-pagination-pop, .swiper-pagination-pop2{
     position: absolute;
     width: auto;
     left: auto;

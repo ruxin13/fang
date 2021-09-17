@@ -26,8 +26,10 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
             1: "包三餐",
             2: "可做饭",
             3: "不包吃不可做饭"
-        }
+        },
+        al: []
     };
+    let ruleRentTypeArr = [null, "床位", "独立房间", "整套出租", "整栋出租"];
     modal.env = "dev";
     modal.videoIndexArr = [];
     modal.id = core.parseQueryString().id;
@@ -49,7 +51,7 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
         } else {
             return 5
         }
-    };
+    }
     function parseDateForComment(timestamp) {
         var date = new Date(timestamp);
         return ((date.getMonth() + 1) < 10 ? ("0" + (date.getMonth() + 1)) : (date.getMonth() + 1)) + "-" +
@@ -57,7 +59,7 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
             (date.getHours() < 10 ? ("0" + date.getHours()) : date.getHours()) + ":" +
             (date.getMinutes() < 10 ? ("0" + date.getMinutes()) : date.getMinutes())
     }
-    var swiper3, swiper4;
+    var swiper3, swiper4, conSwiper;
 
     function q (selector) {
         return document.querySelector(selector)
@@ -104,6 +106,57 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
                 console.log(res);
                 if (res.status === 0) {
                     var data = res.json;
+
+                    let topSwiperHtml = '';
+                    if (data.video) {
+                        topSwiperHtml += `
+                            <div class="swiper-slide video-wrap" data-type="1">
+                                <video class="top-video"
+                                       id="playVideo"
+                                       webkit-playsinline="true"
+                                       playsInline="true"
+                                       x5-playsinline="true"
+                                       x5-video-player-type="h5"
+                                       x5-video-player-fullscreen=""
+                                       x5-video-orientation="portraint"
+                                       x-webkit-airplay="true"
+                                       preload="auto"
+                                       loop
+                                       controls
+                                       autoPlay
+                                       controlsList="nodownload"
+                                       src="${data.video}" ${data.cover ? ('poster="' + data.cover + '"') : ''} style="object-fit: contain;background: black"></video>
+                            </div>`;
+                    }
+
+                    // if (data.albumsList && data.albumsList.length > 0) {
+                    //     data.albumsList.forEach(item => {
+                    //         if (item.list && item.list.length > 0) {
+                    //             modal.al = modal.al.concat(item.list);
+                    //         }
+                    //     });
+                    //     if (modal.al && modal.al.length > 0) {
+                    //         modal.al.forEach(item => {
+                    //             if (item.type === 2) {
+                    //                 topSwiperHtml += `<div data-type="2" class="swiper-slide top-swiper-img" style="background: url('${item.url}') no-repeat center / cover"></div>`;
+                    //             }
+                    //         })
+                    //     }
+                    // }
+                    let topSwiper = q("#topSwiper");
+                    let _topFull = document.createElement("div");
+                    _topFull.classList.add("video-full");
+                    _topFull.id = "videoFullScreen";
+                    _topFull.innerText = "全屏";
+                    let _topAll = document.createElement("div");
+                    _topAll.classList.add("video-album");
+                    _topAll.innerText = "全部照片";
+                    topSwiper.appendChild(_topFull);
+                    topSwiper.appendChild(_topAll);
+
+                    let swiperWrap = q("#topSwiperWrap");
+                    swiperWrap.innerHTML = topSwiperHtml;
+
                     let playVideo = q("#playVideo");
                     let videoFullScreen = q("#videoFullScreen");
 
@@ -112,6 +165,21 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
                     playVideo.oncanplay = function () {
                         playVideo.play();
                     }
+                    let imgSwiper = new Swiper('#topSwiper', {
+                        on: {
+                            transitionEnd: function () {
+                                // let _el = this.slides[this.activeIndex];
+                                // let _type = _el.dataset.type;
+                                // if (~~_type === 1) {
+                                //     playVideo.setAttribute("controls", false);
+                                // }
+                            }
+                        }
+                    });
+
+
+
+
                     videoFullScreen.addEventListener("click", function (){
                         if (playVideo.requestFullscreen) {
                             playVideo.requestFullscreen();
@@ -137,11 +205,34 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
                         q("#housePolicyEl").style.display = "none"
                     }
                     if (data.content && content) {
+                        let allContent = '';
+                        if (data.briefImages) {
+                            let briefImagesArr = data.briefImages.split(",");
+                            if (briefImagesArr && briefImagesArr.length > 0) {
+                                let briefImagesStr = '<div class="swiper-container" id="contentSwiper"><div class="swiper-wrapper">';
+                                briefImagesArr.forEach(item => {
+                                    briefImagesStr += `<div class="swiper-slide con-img" style="background: url('${item}')no-repeat center / cover"></div>`
+                                });
+                                briefImagesStr += '</div><div class="swiper-pagination-pop2" id="pag2"></div></div>';
+                                allContent += briefImagesStr;
+                            }
+                        }
                         if (data.content.indexOf('<!DOCTYPE html>') > -1) {
                             data.content = data.content.replace(/\n/gi, '');
                         }
+                        allContent += data.content;
                         content.innerHTML = data.content;
-                        q("#allContent").innerHTML = data.content;
+                        q("#allContent").innerHTML = allContent;
+                        conSwiper = new Swiper("#contentSwiper", {
+                            lazy: true,
+                            spaceBetween: 20,
+                            observer:true,
+                            observeParents:true,
+                            pagination: {
+                                el: '.swiper-pagination-pop2',
+                                type: 'fraction'
+                            },
+                        });
                         q(".ct-back").addEventListener("click", function () {
                             slideOut(q(".ct"));
                             unLockBg();
@@ -233,16 +324,24 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
 
                     if (data.aqList && data.aqList.length > 0 && data.aqCount > 0) {
                         let aqStr = '';
-                        data.aqList.forEach(item => {
-                            aqStr += `<div class="ask-li">
+                        data.aqList.forEach((item, index) => {
+                            if (index < 2) {
+                                aqStr += `<div class="ask-li">
                                         <div class="ask-l"></div>
                                         <div class="ask-c">${item.title}</div>
                                         <div class="ask-r">${item.replyCount}个回答</div>
                                     </div>`;
+                            }
                         });
-                        aqStr += '<div class="ask-btn">查看全部</div>';
+                        if (data.aqList.length > 2 && data.aqCount > 2) {
+                            q(".aq-more").style.display = 'block'
+                        } else {
+                            q(".aq-more").style.display = 'none'
+                        }
                         q("#askList").innerHTML = aqStr;
                         q(".ask-nodata").style.display = 'none';
+                    } else {
+                        q(".aq-more").style.display = 'none'
                     }
 
                     if (~~data.commentCount > 1) {
@@ -310,9 +409,9 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
                                             <img class="hli-l" src="${item.infoCover}" alt />
                                             <div class="hli-r">
                                                 <div class="hli-tags">${tagStr}</div>
-                                                <div class="hli-inf">${item.ruleLeastDay}晚起租</div>
+                                                <div class="hli-inf">${item.ruleLeastDay || 0}晚起租</div>
                                                 <div class="hli-pri">${item.monthReferPrice ? ('单价<i>￥</i><span>' + item.monthReferPrice + '</span>') : ''}</div>
-                                                <div class="hli-dw">${item.monthReferPrice ? ('起/' + [null, "床位", "独立房间", "整套出租", "整栋出租"][item.ruleRentType] + '/'+item.ruleLeastDay+'晚') : '<span>价格待定</span>'}</div>
+                                                <div class="hli-dw">${item.monthReferPrice ? ('起/' + ruleRentTypeArr[item.ruleRentType] + '/'+item.ruleLeastDay+'晚') : '<span>价格待定</span>'}</div>
                                                 <div class="hli-btn">详情</div>
                                             </div>
                                         </div>
@@ -388,11 +487,11 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
                                     }
                                     item.tagList = tagList;
                                 }
+                                !item.leastDay && (item.leastDay = 0);
                                 str += `<a class="sa-li" data-type="${item.type}" href="community.html?id=${item.id}">
                                         <div class="sai-t">
                                             <div class="sai-tl">
                                                 <img class="sai-tl-img" src="${item.cover}" alt />
-                                                <div class="sai-tl-pos">${item.locationProvinceName.replace(/省/, '')} · ${item.locationCityName.replace(/[市县区]/g, '')}</div>
                                             </div>
                                             <div class="sai-tr">${tagStr}</div>
                                         </div>
@@ -402,7 +501,7 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
                                         <div class="sai-row">
                                             <div class="sai-tags">
                                             ${(item.foodType && ~~item.foodType !== 3) ? ('<div class="sai-tag-l">' + modal.fType[item.foodType] + '</div>') : ''}
-                                            <div class="sai-tag-r ${(item.foodType && ~~item.foodType !== 3) ? '' : 'sai-tag-single'}">${item.leastDay}晚起租</div>
+                                            ${item.leastDay ? ('<div class="sai-tag-r ' + ((item.foodType && ~~item.foodType !== 3) ? '' : 'sai-tag-single') + '">' + item.leastDay + '晚起租</div>') : ''}
                                             </div>
                                             <div class="sai-detail">详情</div>
                                         </div>

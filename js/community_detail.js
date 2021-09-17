@@ -8,7 +8,8 @@ require.config({
 define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
     core.init();
     var modal = {
-        s: ["", "栋", "间", "套", "人"]
+        s: ["", "栋", "间", "套", "人"],
+        t: [null, "床位", "独立房间", "整套出租", "整栋出租"]
     };
 
 
@@ -83,7 +84,7 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
         } else {
             return 5
         }
-    };
+    }
 
     var pag = q(".swiper-pagination");
     var swiper2 = new Swiper('.swiper-container-head', {
@@ -140,6 +141,9 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
             var infoBrief = q("#infoBrief");
             var otherDesc = q("#otherDesc");
             var mpConfirm = q("#mpConfirm");
+            var profileOwnerMode = q("#profileOwnerMode");
+            var ruleLeastDay = q("#ruleLeastDay");
+            var ruleLeastDay2 = q("#ruleLeastDay2");
 
             var houseTypeArr = [null, "层", "卧", "浴", "厨", "卫", "客厅", "餐厅", "书房", "阳台"];
             var bdArr = [
@@ -168,6 +172,7 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
             ];
             var baseNoiseArr = [null, "靠近小区内主路", "靠近主道", "靠近停车场", "靠近公园或广场", "靠近夜市", "周边较安静", "周边很安静", "靠近飞机场", "靠近小区出入口"];
             var baseSceneryArr = [null, "小区内部", "可见花园", "可见山景", "可见湖景", "可见江景", "可见海景", "可见树林", "可见街景", "可见游泳池", "可见高尔夫球场"];
+            let profileOwnerModeArr = ['', '房东直租', '托管人代租', '中介代租'];
             // console.log(data);
             // data.baseBedType = "1-1-2,3-1-5,3-2-3";
 
@@ -328,19 +333,34 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
                 q("#houseType").innerText = retStr;
             }
 
+            getHousePrice(data.houseId || modal.id);
 
-            ownerHouseIsAuthentication.style.display = "flex";
-            ownerHouseIsAuthentication.innerText = "房源已认证";
-            ownerHouseIsAuthentication.classList.add("verified");
+            if (ownerHouseIsAuthentication) {
+                ownerHouseIsAuthentication.style.display = "flex";
+                ownerHouseIsAuthentication.innerText = "房源已认证";
+                ownerHouseIsAuthentication.classList.add("verified");
+            }
 
-            ownerAvatar.src = data.ownerAvatar;
+            ownerAvatar && (ownerAvatar.src = data.ownerAvatar);
             // houseNo.innerText = data.houseNo;
-            profileStr.innerText = data.profileStr;
-            infoTitle.innerText = data.infoTitle;
-            baseIndoorArea.innerText = data.baseIndoorArea;
-            baseOrientation.innerText = data.baseOrientation;
-            baseDecorationDate.innerText = new Date(data.baseDecorationDate).getFullYear();
-            ruleRentType.innerText = [null, "床位", "独立房间", "整套出租", "整栋出租"][data.ruleRentType];
+            profileStr && (profileStr.innerText = data.profileStr);
+            infoTitle && (infoTitle.innerText = data.infoTitle);
+            baseIndoorArea && (baseIndoorArea.innerText = data.baseIndoorArea);
+            baseOrientation && (baseOrientation.innerText = data.baseOrientation);
+            baseDecorationDate && (baseDecorationDate.innerText = new Date(data.baseDecorationDate).getFullYear());
+
+            ruleRentType && (ruleRentType.innerText = modal.t[data.ruleRentType]);
+
+            if (profileOwnerMode && data.profileOwnerMode) {
+                profileOwnerMode.innerText = profileOwnerModeArr[~~data.profileOwnerMode];
+            } else {
+                profileOwnerMode.style.display = 'none'
+            }
+
+            if (ruleLeastDay && data.ruleLeastDay) {
+                ruleLeastDay && (ruleLeastDay.innerText = `${data.ruleLeastDay || 0}晚起租`);
+                ruleLeastDay2 && (ruleLeastDay2.innerText = `${data.ruleLeastDay || 0}晚起租`);
+            }
 
             let validDate = q("#validDate");
             if (data.ruleValidBeginTime && data.ruleValidEndTime  && validDate) {
@@ -368,24 +388,26 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
                 this.parentNode.parentNode.style.display = "none"
             }, false);
 
-
-            let aqList = data.aqList;
-            if (data.aqCount > 2) {
-                aqList.length > 2 && (aqList.length = 2);
-                $("#askShowAll").show();
-            }
-            var askHtml = '';
-            if (aqList && aqList.length > 0) {
-                q(".ask-nodata").style.display = "none";
-                aqList.forEach(function (item) {
-                    askHtml += `<div class="ask-li">
-                                    <div class="ask-l">问</div>
-                                    <div class="ask-c">${item.title}</div>
-                                    <div class="ask-r">${item.replyCount}个回答</div>
-                                </div>`;
+            if (data.aqList && data.aqList.length > 0 && data.aqCount > 0) {
+                let aqStr = '';
+                data.aqList.forEach((item, index) => {
+                    if (index < 2) {
+                        aqStr += `<div class="ask-li">
+                                        <div class="ask-l"></div>
+                                        <div class="ask-c">${item.title}</div>
+                                        <div class="ask-r">${item.replyCount}个回答</div>
+                                    </div>`;
+                    }
                 });
-                askHtml += '<div class="btn-all">查看全部</div>';
-                $("#askList").html(askHtml)
+                if (data.aqList.length > 2 && data.aqCount > 2) {
+                    q(".aq-more").style.display = 'block'
+                } else {
+                    q(".aq-more").style.display = 'none'
+                }
+                q("#askList").innerHTML = aqStr;
+                q(".ask-nodata").style.display = 'none';
+            } else {
+                q(".aq-more").style.display = 'none'
             }
 
 
@@ -434,20 +456,33 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
                 showCommentNoData();
             } else {
                 // 评论列表
-                modal.commentList = data.commentList;
-                if (data.commentList && data.commentList.length > 0) {
-                    data.commentList.forEach(function (item) {
-                        item.totalList = item.list;
-                    });
-                    modal.renderCommentList();
-                } else {
-                    showCommentNoData();
-                }
+
+                $.ajax({
+                    url: modal.server[modal.env] + "/xiangdao-api/api/comment/list",
+                    method: "POST",
+                    dataType: "json",
+                    headers: {
+                        "Accept": "application/json",
+                        "Content-Type": "application/json"
+                    },
+                    data: JSON.stringify({"bizId": parseInt(modal.id), "bizType": 4, "pageNo": 1}),
+                    success: function (res3) {
+                        console.log(res3);
+                        if (res3.json && res3.json.result) {
+                            let list = res3.json.result;
+                            modal.commentList = list;
+                            if (list && list.length > 0) {
+                                list.forEach(function (item) {
+                                    item.totalList = item.list;
+                                });
+                                modal.renderCommentList();
+                            } else {
+                                showCommentNoData();
+                            }
+                        }
+                    }
+                });
             }
-
-
-
-
         }
     });
 
@@ -458,6 +493,55 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
             '<div class="comment-nodata-tit">暂无评论</div>' +
             '<div class="comment-nodata-stit">还没有房客对该房源发出评论</div></div>';
         q("#commentList").innerHTML = html;
+    }
+
+    function getHousePrice(id) {
+        $.ajax({
+            url: modal.server[modal.env] + "/xiangdao-api/api/news/house_list",
+            method: "POST",
+            dataType: "json",
+            async: false,
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json"
+            },
+            data: JSON.stringify({"houseId": id}),
+            success: function (res) {
+                console.log(res);
+                if (res.status === 0) {
+                    if (res.json && res.json[0]) {
+                        let data = res.json[0];
+                        let ruleRentType2 = q("#ruleRentType2");
+                        let ruleLeastDay3 = q("#ruleLeastDay3");
+                        let priceEl = q("#price");
+                        ruleRentType2 && (ruleRentType2.innerText = modal.t[data.ruleRentType]);
+                        if (data.monthReferPrice) {
+                            ruleLeastDay3 && (ruleLeastDay3.innerText = `30晚`);
+                            priceEl.innerHTML = `￥<span>${data.monthReferPrice}</span>`;
+                        } else if (data.dayReferPrice) {
+                            ruleLeastDay3 && (ruleLeastDay3.innerText = `${data.ruleLeastDay || 0}晚`);
+                            priceEl.innerHTML = `价格待定`;
+                        }
+                        //na-sl
+                        if (data.ruleReserveTypeStatus) {
+                            let _statusArr = data.ruleReserveTypeStatus.split(",");
+                            if (_statusArr && _statusArr.length > 0) {
+                                let soldOut = true;
+                                if (_statusArr.indexOf("0") > -1 || _statusArr.indexOf(data.ruleRentType.toString()) > -1) {
+                                    soldOut = false;
+                                }
+                                let rent = q(".na-br");
+                                if (soldOut) {
+                                    rent && rent.classList.add("na-sl");
+                                } else {
+                                    rent && rent.classList.remove("na-sl");
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        });
     }
 
     modal.renderCommentList = function() {

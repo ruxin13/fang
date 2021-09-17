@@ -7,6 +7,7 @@ require.config({
 define(['common', 'jquery'], function (core, $) {
     var modal = {};
 
+    core.init();
 
     modal.env = "dev";
 
@@ -29,13 +30,16 @@ define(['common', 'jquery'], function (core, $) {
     modal.q = function(selector) {
         return document.querySelector(selector)
     };
-    modal.id = core.parseQueryString().id;
-    core.init();
+    modal.id = core.parseQueryString().articleid;
+    console.log(modal);
 
 
-    core.request({
+    $.ajax({
         url: modal.server[modal.env] + "/xiangdao-api/api/news/article_details/" + modal.id,
-        method: "GET",
+        method: "POST",
+        dataType: "json",
+        headers: {"Accept": "application/json", "Content-Type": "application/json"},
+        data: JSON.stringify({"articleId": modal.id}),
         success: function (res) {
             console.log(res);
             var data = res.json;
@@ -65,52 +69,52 @@ define(['common', 'jquery'], function (core, $) {
 
 
             // /xiangdao-api/api/news/article/{articleId}/house_list
+            // $.ajax({
+            //     url: modal.server[modal.env] + "/xiangdao-api/api/news/article/"+modal.id+"/house_list",
+            //     method: "GET",
+            //     dataType: "json",
+            //     success: function (res3) {
+            //         console.log(res3);
+            //         if (res3.status === 0) {
+            //             var list = res3.json;
+            //             if (list && list.length > 0) {
+            //                 var vpStr = '';
+            //                 list.forEach(function (item) {
+            //                     vpStr += '<div class="vp-li" data-id="'+item.houseId+'">\n' +
+            //                         '                <img class="vp-l" src="'+item.infoCover+'" alt />\n' +
+            //                         '                <div class="vp-r">\n' +
+            //                         '                    <div class="vp-st">'+item.profileStr+'</div>\n' +
+            //                         '                    <div class="vp-ti">'+item.infoTitle+'</div>\n' +
+            //                         '                    <div class="vp-price"><span>￥<i>'+item.ruleMonthMoney+'</i></span>/月</div>\n' +
+            //                         '                </div>\n' +
+            //                         '            </div>'
+            //                 });
+            //                 modal.q(".vp-list").innerHTML = vpStr;
+            //                 if (list.length === 1) {
+            //                     modal.q(".vp-list").style.height = "2.32rem";
+            //                     modal.q(".show-all").style.display = "none";
+            //                 } else if (list.length === 2){
+            //                     modal.q(".show-all").style.display = "none";
+            //                     modal.q(".vp-list").style.height = "5.6rem"
+            //                 } else {
+            //                     modal.q(".vp-list").style.height = "5.6rem"
+            //                 }
+            //                 $(".vp-li").on("click", function () {
+            //                     var id = $(this).data("id");
+            //                     location.href = "house_details.html?houseId=" + id
+            //                 });
+            //             } else {
+            //                 modal.q(".vp-wrap").style.display = "none"
+            //             }
+            //         }
+            //
+            //     }
+            // });
+
+
+
             $.ajax({
-                url: modal.server[modal.env] + "/xiangdao-api/api/news/article/"+modal.id+"/house_list",
-                method: "GET",
-                dataType: "json",
-                success: function (res3) {
-                    console.log(res3);
-                    if (res3.status === 0) {
-                        var list = res3.json;
-                        if (list && list.length > 0) {
-                            var vpStr = '';
-                            list.forEach(function (item) {
-                                vpStr += '<div class="vp-li" data-id="'+item.houseId+'">\n' +
-                                    '                <img class="vp-l" src="'+item.infoCover+'" alt />\n' +
-                                    '                <div class="vp-r">\n' +
-                                    '                    <div class="vp-st">'+item.profileStr+'</div>\n' +
-                                    '                    <div class="vp-ti">'+item.infoTitle+'</div>\n' +
-                                    '                    <div class="vp-price"><span>￥<i>'+item.ruleMonthMoney+'</i></span>/月</div>\n' +
-                                    '                </div>\n' +
-                                    '            </div>'
-                            });
-                            modal.q(".vp-list").innerHTML = vpStr;
-                            if (list.length === 1) {
-                                modal.q(".vp-list").style.height = "2.32rem";
-                                modal.q(".show-all").style.display = "none";
-                            } else if (list.length === 2){
-                                modal.q(".show-all").style.display = "none";
-                                modal.q(".vp-list").style.height = "5.6rem"
-                            } else {
-                                modal.q(".vp-list").style.height = "5.6rem"
-                            }
-                            $(".vp-li").on("click", function () {
-                                var id = $(this).data("id");
-                                location.href = "house_details.html?houseId=" + id
-                            });
-                        } else {
-                            modal.q(".vp-wrap").style.display = "none"
-                        }
-                    }
-
-                }
-            });
-
-
-
-            $.ajax({
-                url: modal.server[modal.env] + "/xiangdao-api/api/news/comment_list",
+                url: modal.server[modal.env] + "/xiangdao-api/api/comment/list",
                 method: "POST",
                 dataType: "json",
                 headers: {
@@ -119,6 +123,7 @@ define(['common', 'jquery'], function (core, $) {
                 },
                 data: JSON.stringify({"bizId": modal.id, "bizType": 2, "pageNo": 1}),
                 success: function (res2) {
+                    console.log(res2);
                     var commentList = res2.json.result;
                     var html2 = '';
                     if (commentList && commentList.length > 0) {
@@ -147,7 +152,7 @@ define(['common', 'jquery'], function (core, $) {
                                         '                                <div class="clr-name">'+item3.nickName+'</div>\n' +
                                         '                                <div class="clr-cont">'+(item3.parentNickName ? ('回复'+item3.parentNickName+': '):'')+item3.content+'</div>\n' +
                                         '                                <div class="clr-fun">\n' +
-                                        '                                    <div class="clr-fl">'+modal.parseDateComment(item3.createDate)+'</div>\n' +
+                                        '                                    <div class="clr-fl">'+modal.parseDateComment(item3.createTime)+'</div>\n' +
                                         '                                    <div class="clr-fr">\n' +
                                         '                                        <div class="clrr-li link">\n' +
                                         '                                            <img class="clrr-icon" src="img/icon_reply.png" alt />\n' +
@@ -165,7 +170,7 @@ define(['common', 'jquery'], function (core, $) {
                                 replyHtml += '                    </div>';
                             }
                             funHtml += '<div class="cli-fun">\n' +
-                                '                        <div class="cf-l">'+modal.parseDateComment(item.createDate)+'</div>\n' +
+                                '                        <div class="cf-l">'+modal.parseDateComment(item.createTime)+'</div>\n' +
                                 '                        <div class="cf-r">\n' +
                                 '                            <div class="cf-ri link">\n' +
                                 '                                <img class="cfr-icon" src="img/icon_reply.png" alt />\n' +

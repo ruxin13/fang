@@ -57,7 +57,7 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
             (date.getHours() < 10 ? ("0" + date.getHours()) : date.getHours()) + ":" +
             (date.getMinutes() < 10 ? ("0" + date.getMinutes()) : date.getMinutes())
     }
-    var swiper3, swiper4;
+    var swiper3, swiper4, conSwiper;
 
     function q (selector) {
         return document.querySelector(selector)
@@ -137,12 +137,36 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
                     } else {
                         q("#housePolicyEl").style.display = "none"
                     }
-                    if (data.content && content) {
+                    if (content && data.content || data.briefImages) {
+                        let allContent = '';
+                        if (data.briefImages) {
+                            let briefImagesArr = data.briefImages.split(",");
+                            if (briefImagesArr && briefImagesArr.length > 0) {
+                                let briefImagesStr = '<div class="swiper-container" id="contentSwiper"><div class="swiper-wrapper">';
+                                briefImagesArr.forEach(item => {
+                                    briefImagesStr += `<div class="swiper-slide con-img" style="background: url('${item}')no-repeat center / cover"></div>`
+                                });
+                                briefImagesStr += '</div><div class="swiper-pagination-pop2" id="pag2"></div></div>';
+                                allContent += briefImagesStr;
+                            }
+                        }
                         if (data.content.indexOf('<!DOCTYPE html>') > -1) {
                             data.content = data.content.replace(/\n/gi, '');
                         }
+                        allContent += data.content;
                         content.innerHTML = data.content;
-                        q("#allContent").innerHTML = data.content;
+                        q("#allContent").innerHTML = allContent;
+                        conSwiper = new Swiper("#contentSwiper", {
+                            lazy: true,
+                            spaceBetween: 20,
+                            observer:true,
+                            observeParents:true,
+                            pagination: {
+                                el: '.swiper-pagination-pop2',
+                                type: 'fraction'
+                            },
+                        });
+
                         q(".ct-back").addEventListener("click", function () {
                             slideOut(q(".ct"));
                             unLockBg();
@@ -150,6 +174,9 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
                     } else {
                         q("#contentEl").style.display = "none"
                     }
+
+
+
                     if (data.bookingNotice && bookingNotice) {
                         content.innerHTML = data.bookingNotice;
                     } else {
@@ -251,6 +278,7 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
                     } else {
                         q("#faqEl").style.display = "none";
                     }
+
                     if (data.aqList && data.aqList.length > 0 && data.aqCount > 0) {
                         let aqStr = '';
                         data.aqList.forEach((item, index) => {
@@ -262,12 +290,13 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
                                     </div>`;
                             }
                         });
-                        if (data.aqList.length > 2) {
-                            aqStr += '<div class="ask-btn">查看全部</div>';
+                        if (data.aqList.length > 2 && data.aqCount > 2) {
+                            q(".aq-more").style.display = 'block'
+                        } else {
+                            q(".aq-more").style.display = 'none'
                         }
                         q("#askList").innerHTML = aqStr;
                         q(".ask-nodata").style.display = 'none';
-                        q(".aq-more").style.display = 'block'
                     } else {
                         q(".aq-more").style.display = 'none'
                     }
@@ -718,7 +747,6 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
                                         <div class="sai-t">
                                             <div class="sai-tl">
                                                 <img class="sai-tl-img" src="${item.cover}" alt />
-                                                <div class="sai-tl-pos">${item.locationProvinceName.replace(/省/, '')} · ${item.locationCityName.replace(/[市县区]/g, '')}</div>
                                             </div>
                                             <div class="sai-tr">${tagStr}</div>
                                         </div>

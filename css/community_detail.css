@@ -156,6 +156,18 @@ body{
     height: 1.57rem;
     border-radius: .16rem;
 }
+.hc-tbs{
+    font-size: .37rem;
+    margin-bottom: .39rem;
+    color: #666;
+}
+.hc-tbs span{
+    color: #5394F1;
+    padding-right: .2rem;
+}
+.hc-tbs i{
+    font-style: normal;
+}
 .hci-li{
     box-sizing: border-box;
     padding-left: .27rem;
@@ -1002,6 +1014,9 @@ body{
     font-size: .4rem;
     color: #666;
 }
+.comment-btn{
+    margin-bottom: .51rem;
+}
 .btn-all{
     width: 2.77rem;
     height: .96rem;
@@ -1022,15 +1037,11 @@ body{
     padding: .22rem 0;
 }
 .ask-l{
+    content: '';
+    display: block;
     width: .51rem;
     height: .51rem;
-    border-radius: 50%;
-    background: #E02A1C;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #fff;
-    font-size: .32rem;
+    background: url("../img/icon_ask.png") no-repeat center / 100%;
 }
 .ask-c{
     flex: 1;
@@ -1054,12 +1065,25 @@ body{
     border-radius: .16rem;
     color: #666;
     font-size: .4rem;
-    margin: .51rem auto;
+    margin: .51rem auto 0;
 }
 .aq-list{
     padding: .21rem 0;
 }
-
+.aq-more{
+    display: none;
+}
+.pt-btn3{
+    width: 2.77rem;
+    height: .96rem;
+    line-height: .96rem;
+    text-align: center;
+    border: solid 1px #dedede;
+    border-radius: .16rem;
+    margin: 0 auto;
+    font-size: .4rem;
+    color: #666;
+}
 
 
 .comment{
@@ -1465,4 +1489,13 @@ body{
     font-size: .37rem;
     color: #fff;
     text-decoration: none;
+}
+.na-br.na-sl{
+    width: 1.45rem;
+    height: 1.45rem;
+    line-height: 1.45rem;
+    padding: 0;
+    background: url("../img/img_sold_out.png") no-repeat center center / 100%;
+    font-size: 1px;
+    color: transparent;
 }

@@ -24,11 +24,11 @@
         <div class="pan-con pan-txt" id="articleContent"></div>
         <div class="pan-showall">查看更多<img class="more" src="img/more.png" alt /></div>
 
-        <div class="vp-wrap">
-            <div class="vp-tit">文中提及</div>
-            <div class="vp-list"></div>
-            <div class="show-all cols"><span>展开</span><img class="icon-show-all" src="img/icon_arrow_down.png" alt /> </div>
-        </div>
+<!--        <div class="vp-wrap">-->
+<!--            <div class="vp-tit">文中提及</div>-->
+<!--            <div class="vp-list"></div>-->
+<!--            <div class="show-all cols"><span>展开</span><img class="icon-show-all" src="img/icon_arrow_down.png" alt /> </div>-->
+<!--        </div>-->
 
         <div class="pan-fun">
             <img class="pan-l link" src="img/report_txt.png" alt />
@@ -120,9 +120,11 @@
 </script>
 
 
-<script src="js/require.js" data-main="js/article.min"></script>
+<script src="js/require.js" data-main="js/article"></script>
 <script>
-    require(['article.min'], function (modal) {})
+    requirejs.config({
+        urlArgs: "v=" + (new Date()).getTime()
+    });
 </script>
 
 </body>
