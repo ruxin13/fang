@@ -27,7 +27,8 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
             2: "可做饭",
             3: "不包吃不可做饭"
         },
-        al: []
+        al: [],
+        ip: false
     };
     let ruleRentTypeArr = [null, "床位", "独立房间", "整套出租", "整栋出租"];
     modal.env = "dev";
@@ -122,27 +123,27 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
                                        x-webkit-airplay="true"
                                        preload="auto"
                                        loop
-                                       controls
+                                       muted
                                        autoPlay
                                        controlsList="nodownload"
                                        src="${data.video}" ${data.cover ? ('poster="' + data.cover + '"') : ''} style="object-fit: contain;background: black"></video>
                             </div>`;
                     }
 
-                    // if (data.albumsList && data.albumsList.length > 0) {
-                    //     data.albumsList.forEach(item => {
-                    //         if (item.list && item.list.length > 0) {
-                    //             modal.al = modal.al.concat(item.list);
-                    //         }
-                    //     });
-                    //     if (modal.al && modal.al.length > 0) {
-                    //         modal.al.forEach(item => {
-                    //             if (item.type === 2) {
-                    //                 topSwiperHtml += `<div data-type="2" class="swiper-slide top-swiper-img" style="background: url('${item.url}') no-repeat center / cover"></div>`;
-                    //             }
-                    //         })
-                    //     }
-                    // }
+                    if (data.albumsList && data.albumsList.length > 0) {
+                        data.albumsList.forEach(item => {
+                            if (item.list && item.list.length > 0) {
+                                modal.al = modal.al.concat(item.list);
+                            }
+                        });
+                        if (modal.al && modal.al.length > 0) {
+                            modal.al.forEach(item => {
+                                if (item.type === 2) {
+                                    topSwiperHtml += `<div data-type="2" class="swiper-slide top-swiper-img" style="background: url('${item.url}') no-repeat center / cover"></div>`;
+                                }
+                            })
+                        }
+                    }
                     let topSwiper = q("#topSwiper");
                     let _topFull = document.createElement("div");
                     _topFull.classList.add("video-full");
@@ -160,19 +161,31 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
                     let playVideo = q("#playVideo");
                     let videoFullScreen = q("#videoFullScreen");
 
+                    document.body.addEventListener('touchstart', function () {
+                        if (!modal.ip) {
+                            modal.ip = true;
+                            playVideo.play();
+                        }
+                    }, false);
+
                     playVideo.src = data.video;
                     playVideo.poster = data.cover;
                     playVideo.oncanplay = function () {
                         playVideo.play();
                     }
+                    playVideo.onplay = function () {
+                        playVideo.muted = false;
+                    }
                     let imgSwiper = new Swiper('#topSwiper', {
                         on: {
                             transitionEnd: function () {
-                                // let _el = this.slides[this.activeIndex];
-                                // let _type = _el.dataset.type;
-                                // if (~~_type === 1) {
-                                //     playVideo.setAttribute("controls", false);
-                                // }
+                                let _el = this.slides[this.activeIndex];
+                                let _type = _el.dataset.type;
+                                if (~~_type === 1) {
+                                    playVideo.play();
+                                } else {
+                                    playVideo.pause();
+                                }
                             }
                         }
                     });
@@ -369,7 +382,6 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
                     modal.locationCityName = data.locationCityName;
                     modal.locationTownName = data.locationTownName;
 
-
                     modal.getNear(data.locationTown);
 
                     modal.onAMapLoaded();
@@ -488,7 +500,7 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
                                     item.tagList = tagList;
                                 }
                                 !item.leastDay && (item.leastDay = 0);
-                                str += `<a class="sa-li" data-type="${item.type}" href="community.html?id=${item.id}">
+                                str += `<a class="sa-li" data-type="${item.type}" href="${item.type === 1 ? 'community' : 'hotel_detail'}.html?id=${item.id}">
                                         <div class="sai-t">
                                             <div class="sai-tl">
                                                 <img class="sai-tl-img" src="${item.cover}" alt />
@@ -497,7 +509,7 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
                                         </div>
                                         <div class="sai-st">${item.name}</div>
                                         <div class="sai-tit">${item.title}</div>
-                                        <div class="sai-inf"><span><i>￥</i>${item.monthReferPrice ? item.monthReferPrice : (item.dayReferPrice ? item.dayReferPrice * item.leastDay : 0)}</span>起/${(item.reserveType === "10" ? "人/" : "") + modal.rType[item.reserveType].name.slice(-2)}/${item.leastDay}晚</div>
+                                        ${item.monthReferPrice ? ('<div class="sai-inf"><span><i>￥</i>' + item.monthReferPrice + '</span>起/' + ((item.reserveType === "10" ? "人/" : "") + modal.rType[item.reserveType].name.slice(-2)) + '/' + item.leastDay + '晚</div>') : ('<div class="sai-inf">价格待定</div>')}
                                         <div class="sai-row">
                                             <div class="sai-tags">
                                             ${(item.foodType && ~~item.foodType !== 3) ? ('<div class="sai-tag-l">' + modal.fType[item.foodType] + '</div>') : ''}

@@ -61,15 +61,21 @@ body{
 }
 .video-wrap{
     width: 10rem;
-    /*height: 6.67rem;*/
+    height: 6.67rem;
     display: block;
     position: relative;
     margin: 0 auto;
 }
 .top-video{
     width: 100%;
-    /*height: 100%;*/
+    height: 100%;
     display: block;
+    position: relative;
+    z-index: -1;
+}
+.top-swiper-img{
+    width: 100%;
+    height: 6.67rem;
 }
 .video-full{
     height: .56rem;

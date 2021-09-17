@@ -11,32 +11,15 @@
           content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
     <link type="text/css" rel="stylesheet" href="css/reset.css"/>
     <link type="text/css" rel="stylesheet" href="css/swiper.min.css"/>
-    <link type="text/css" rel="stylesheet" href="css/hotel_detail.css?t=7"/>
+    <link type="text/css" rel="stylesheet" href="css/hotel_detail.css"/>
     <title>酒店详情</title>
 </head>
 <body>
 
 <div class="wrap">
     <div class="header">
-        <div class="video-wrap">
-            <video class="top-video"
-                id="playVideo"
-                webkit-playsinline="true"
-                playsinline="true"
-                x5-playsinline="true"
-                x5-video-player-type="h5"
-                x5-video-player-fullscreen=""
-                x5-video-orientation="portraint"
-                x-webkit-airplay="true"
-                preload="auto"
-                loop
-                controls
-                autoplay
-                controlsList="nodownload"
-                cover=""
-                src="" style="object-fit: contain;background: black"></video>
-                <div class="video-full" id="videoFullScreen">全屏</div>
-                <div class="video-album">全部照片</div>
+        <div class="swiper-container" id="topSwiper">
+            <div class="swiper-wrapper" id="topSwiperWrap"></div>
         </div>
         <div class="top-info">
             <div class="hc-inf"></div>
@@ -76,7 +59,7 @@
     <div class="pan" id="hasFoodWrap">
         <div class="pan-sticky">
             <div class="pan-tit">包三餐房型<span>(30晚起租)</span></div>
-            <div class="stk-row" id="firstSelect">
+            <div class="stk-row link" id="firstSelect">
                 <div class="stk-l">
                     <span class="stk-t">入住时间</span>
                     <input class="stk-b" value="" readonly="readonly" name="startDate" id="startDate" type="text"

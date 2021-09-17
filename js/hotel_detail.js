@@ -26,7 +26,8 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
             1: "包三餐",
             2: "可做饭",
             3: "不包吃不可做饭"
-        }
+        },
+        al: []
     };
     modal.env = "dev";
     modal.videoIndexArr = [];
@@ -105,6 +106,58 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
                 console.log(res);
                 if (res.status === 0) {
                     var data = res.json;
+                    // let playVideo = q("#playVideo");
+                    // let videoFullScreen = q("#videoFullScreen");
+                    let topSwiperHtml = '';
+                    if (data.video) {
+                        topSwiperHtml += `
+                            <div class="swiper-slide video-wrap" data-type="1">
+                                <video class="top-video"
+                                       id="playVideo"
+                                       webkit-playsinline="true"
+                                       playsInline="true"
+                                       x5-playsinline="true"
+                                       x5-video-player-type="h5"
+                                       x5-video-player-fullscreen=""
+                                       x5-video-orientation="portraint"
+                                       x-webkit-airplay="true"
+                                       preload="auto"
+                                       loop
+                                       muted
+                                       autoPlay
+                                       controlsList="nodownload"
+                                       src="${data.video}" ${data.cover ? ('poster="' + data.cover + '"') : ''} style="object-fit: contain;background: black"></video>
+                            </div>`;
+                    }
+
+                    if (data.albumsList && data.albumsList.length > 0) {
+                        data.albumsList.forEach(item => {
+                            if (item.list && item.list.length > 0) {
+                                modal.al = modal.al.concat(item.list);
+                            }
+                        });
+                        if (modal.al && modal.al.length > 0) {
+                            modal.al.forEach(item => {
+                                if (item.type === 2) {
+                                    topSwiperHtml += `<div data-type="2" class="swiper-slide top-swiper-img" style="background: url('${item.url}') no-repeat center / cover"></div>`;
+                                }
+                            })
+                        }
+                    }
+                    let topSwiper = q("#topSwiper");
+                    let _topFull = document.createElement("div");
+                    _topFull.classList.add("video-full");
+                    _topFull.id = "videoFullScreen";
+                    _topFull.innerText = "全屏";
+                    let _topAll = document.createElement("div");
+                    _topAll.classList.add("video-album");
+                    _topAll.innerText = "全部照片";
+                    topSwiper.appendChild(_topFull);
+                    topSwiper.appendChild(_topAll);
+
+                    let swiperWrap = q("#topSwiperWrap");
+                    swiperWrap.innerHTML = topSwiperHtml;
+
                     let playVideo = q("#playVideo");
                     let videoFullScreen = q("#videoFullScreen");
 
@@ -113,6 +166,24 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
                     playVideo.oncanplay = function () {
                         playVideo.play();
                     }
+                    playVideo.onplay = function () {
+                        playVideo.muted = false;
+                    }
+
+                    let imgSwiper = new Swiper('#topSwiper', {
+                        on: {
+                            transitionEnd: function () {
+                                let _el = this.slides[this.activeIndex];
+                                let _type = _el.dataset.type;
+                                if (~~_type === 1) {
+                                    playVideo.play();
+                                } else {
+                                    playVideo.pause();
+                                }
+                            }
+                        }
+                    });
+
                     videoFullScreen.addEventListener("click", function (){
                         if (playVideo.requestFullscreen) {
                             playVideo.requestFullscreen();
@@ -376,6 +447,8 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
                 let closeMoreRoomTags = q(".pe2-close");
                 moreRoomTags.removeEventListener("click", PeFadeIn2, false);
                 closeMoreRoomTags.removeEventListener("click", PeFadeOut2, false);
+                let playVideo = q("#playVideo");
+                playVideo && playVideo.play();
             }, false);
         }
     };
@@ -752,11 +825,11 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
                                         </div>
                                         <div class="sai-st">${item.name}</div>
                                         <div class="sai-tit">${item.title}</div>
-                                        <div class="sai-inf"><span><i>￥</i>${item.monthReferPrice ? item.monthReferPrice : (item.dayReferPrice ? item.dayReferPrice * 30 : 0)}</span>起/${(item.reserveType === "10" ? "人/" : "") + modal.rType[item.reserveType].name.slice(-2)}/30晚</div>
+                                        ${item.monthReferPrice ? ('<div class="sai-inf"><span><i>￥</i>' + item.monthReferPrice + '</span>起/' + ((item.reserveType === "10" ? "人/" : "") + modal.rType[item.reserveType].name.slice(-2)) + '/' + item.leastDay + '晚</div>') : ('<div class="sai-inf">价格待定</div>')}
                                         <div class="sai-row">
                                             <div class="sai-tags">
                                             ${(item.foodType && ~~item.foodType !== 3) ? ('<div class="sai-tag-l">' + modal.fType[item.foodType] + '</div>') : ''}
-                                            <div class="sai-tag-r ${(item.foodType && ~~item.foodType !== 3) ? '' : 'sai-tag-single'}">30晚起租</div>
+                                            ${item.leastDay ? ('<div class="sai-tag-r ' + ((item.foodType && ~~item.foodType !== 3) ? '' : 'sai-tag-single') + '">' + item.leastDay + '晚起租</div>') : ''}
                                             </div>
                                             <div class="sai-detail">详情</div>
                                         </div>
@@ -924,7 +997,7 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
                                                 roomStatus = true
                                             }
                                         }
-                                        typeStr += `<div class="nli nli-detail" data-id="${item.roomId}"><div class="nli-ml"><div class="nli-mlt">${modal.rType[item3].name}</div>
+                                        typeStr += `<div class="nli" data-id="${item.roomId}"><div class="nli-ml"><div class="nli-mlt">${modal.rType[item3].name}</div>
                                                         <div class="nli-mlb">${item['monthReferPrice'+item3] ? ('单价<span>￥' + (item['monthReferPrice'+item3]) + '</span>起/' + ((item3 === "10" ? "人/" : "") + modal.rType[item3].name.slice(-2)) + '/30晚') : '<span>价格待定</span>'}</div>
                                                     </div><div class="nli-mr ${roomStatus ? 'nli-sl' : ''}">预订</div></div>`;
                                     });
@@ -944,9 +1017,17 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
                                         <div class="nli-inr" data-id="${item.roomId}">详情</div>
                                     </div>
                                 </div></div>
-                                <div class="nli-m">${typeStr}</div></div>
+                                <div class="nli-m link">${typeStr}</div></div>
                                 `;
                         });
+                    }
+                    var linkApp = document.querySelectorAll(".link");
+                    if (linkApp && linkApp.length > 0) {
+                        for (var z=0;z<linkApp.length;z++) {
+                            linkApp[z].addEventListener("click", function () {
+                                openApp();
+                            }, false);
+                        }
                     }
                     typeof cb === "function" && cb(roomStr);
                 }
