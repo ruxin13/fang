@@ -1466,11 +1466,31 @@ body{
     margin-bottom: .21rem;
 }
 .na-blb{
-    color: #E02A1C;
+    color: #333;
     font-size: .48rem;
 }
 .na-blb span{
+    /*font-size: .37rem;*/
+}
+.na-blb i{
     font-size: .37rem;
+    font-style: normal;
+    padding-left: .1rem;
+    font-weight: bold;
+}
+.na-blb i span{
+    font-size: .48rem;
+}
+.na-bsb{
+    border: solid 1px #ccc;
+    border-radius: .11rem;
+    height: .48rem;
+    line-height: .48rem;
+    padding: 0 .13rem;
+    font-size: .32rem;
+    color: #E02A1C;
+    margin-top: .2rem;
+    display: inline-block;
 }
 .na-bc{
     flex: 1;

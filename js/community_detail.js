@@ -9,7 +9,8 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
     core.init();
     var modal = {
         s: ["", "栋", "间", "套", "人"],
-        t: [null, "床位", "独立房间", "整套出租", "整栋出租"]
+        t: [null, "订床位", "订整间", "订整套", "订整栋"],
+        ot: [null, "床位", "独立房间", "整套出租", "整栋出租"]
     };
 
 
@@ -349,7 +350,7 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
             baseOrientation && (baseOrientation.innerText = data.baseOrientation);
             baseDecorationDate && (baseDecorationDate.innerText = new Date(data.baseDecorationDate).getFullYear());
 
-            ruleRentType && (ruleRentType.innerText = modal.t[data.ruleRentType]);
+            ruleRentType && (ruleRentType.innerText = modal.ot[data.ruleRentType]);
 
             if (profileOwnerMode && data.profileOwnerMode) {
                 profileOwnerMode.innerText = profileOwnerModeArr[~~data.profileOwnerMode];

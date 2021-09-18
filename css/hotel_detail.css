@@ -61,7 +61,7 @@ body{
 }
 .video-wrap{
     width: 10rem;
-    height: 6.67rem;
+    height: auto;
     display: block;
     position: relative;
     margin: 0 auto;
@@ -76,6 +76,12 @@ body{
 .top-swiper-img{
     width: 100%;
     height: 6.67rem;
+}
+.top-swiper-img img{
+    object-fit: cover;
+    max-width: 100%;
+    height: 6.67rem;
+    margin: 0 auto;
 }
 .video-full{
     height: .56rem;
@@ -302,15 +308,15 @@ body{
     margin-bottom: .2rem;
 }
 .pan-showAll{
-    width: 4.77rem;
+    width: 9.17rem;
     height: 1.09rem;
     line-height: 1.09rem;
-    border: solid 1px #E02A1C;
+    border: solid 1px #666;
     border-radius: .24rem;
     margin: 0 auto .43rem;
     text-align: center;
-    font-size: .48rem;
-    color: #E02A1C;
+    font-size: .4rem;
+    color: #666;
 }
 .pan-notice{
     font-size: .4rem;
@@ -388,6 +394,7 @@ body{
     justify-content: space-between;
 }
 .nli-tit{
+    padding-top: .1rem;
     font-size: .45rem;
     color: #333;
     font-weight: bold;
@@ -446,9 +453,9 @@ body{
     line-height: .72rem;
     padding: 0 .27rem;
     border-radius: .16rem;
-    background-color: #E02A1C;
+    border: solid 1px #E02A1C;
     font-size: .4rem;
-    color: #fff;
+    color: #E02A1C;
 }
 .nli-inl p.nli-inline{
     display: inline-flex;
@@ -476,14 +483,16 @@ body{
     font-size: .45rem;
     color: #333;
     margin-bottom: .32rem;
-    font-weight: bold;
+    font-weight: 800;
 }
 .nli-mlb{
     font-size: .37rem;
     color: #666;
 }
 .nli-mlb span{
-    color: #E02A1C;
+    color: #333;
+    font-weight: 800;
+    font-size: .48rem;
 }
 .nli-mlg{
     display: inline-flex;

@@ -126,7 +126,8 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
                                        muted
                                        autoPlay
                                        controlsList="nodownload"
-                                       src="${data.video}" ${data.cover ? ('poster="' + data.cover + '"') : ''} style="object-fit: contain;background: black"></video>
+                                       src="${data.video}" ${data.cover ? ('poster="' + data.cover + '"') : ''} style="object-fit: fill;background: black"></video>
+                                       <div class="video-full" id="videoFullScreen">全屏</div>
                             </div>`;
                     }
 
@@ -139,21 +140,21 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
                         if (modal.al && modal.al.length > 0) {
                             modal.al.forEach(item => {
                                 if (item.type === 2) {
-                                    topSwiperHtml += `<div data-type="2" class="swiper-slide top-swiper-img" style="background: url('${item.url}') no-repeat center / cover"></div>`;
+                                    topSwiperHtml += `<div data-type="2" class="swiper-slide top-swiper-img"><img src="${item.url}" alt /></div>`;
                                 }
                             })
                         }
                     }
-                    let topSwiper = q("#topSwiper");
-                    let _topFull = document.createElement("div");
-                    _topFull.classList.add("video-full");
-                    _topFull.id = "videoFullScreen";
-                    _topFull.innerText = "全屏";
-                    let _topAll = document.createElement("div");
-                    _topAll.classList.add("video-album");
-                    _topAll.innerText = "全部照片";
-                    topSwiper.appendChild(_topFull);
-                    topSwiper.appendChild(_topAll);
+                    // let topSwiper = q("#topSwiper");
+                    // let _topFull = document.createElement("div");
+                    // _topFull.classList.add("video-full");
+                    // _topFull.id = "videoFullScreen";
+                    // _topFull.innerText = "全屏";
+                    // let _topAll = document.createElement("div");
+                    // _topAll.classList.add("video-album");
+                    // _topAll.innerText = "全部照片";
+                    // topSwiper.appendChild(_topFull);
+                    // topSwiper.appendChild(_topAll);
 
                     let swiperWrap = q("#topSwiperWrap");
                     swiperWrap.innerHTML = topSwiperHtml;
@@ -171,6 +172,7 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
                     }
 
                     let imgSwiper = new Swiper('#topSwiper', {
+                        autoHeight: true,
                         on: {
                             transitionEnd: function () {
                                 let _el = this.slides[this.activeIndex];

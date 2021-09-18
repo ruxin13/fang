@@ -30,7 +30,7 @@ body{
     font-size: 0.4rem;
     color: #666;
     line-height: 0.59rem;
-    height: 4.45rem;
+    /*height: 4.45rem;*/
     overflow: hidden;
     padding-bottom: .4rem;
 }
