@@ -252,6 +252,7 @@ body{
     font-size: .38rem;
     color: #333;
     text-align: center;
+    font-weight: bold;
 }
 .hci-trli{
     height: 100%;
@@ -1464,6 +1465,7 @@ body{
     font-size: .45rem;
     color: #333;
     margin-bottom: .21rem;
+    font-weight: bold;
 }
 .na-blb{
     color: #333;
@@ -1471,6 +1473,7 @@ body{
 }
 .na-blb span{
     /*font-size: .37rem;*/
+    font-weight: bold;
 }
 .na-blb i{
     font-size: .37rem;

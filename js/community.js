@@ -13,14 +13,14 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
             "pro": "//www.xiangdao.info"
         },
         rType: {
-            10: { name: "单人订床位" },
-            11: { name: "单人订整间" },
-            12: { name: "双人订整间" },
-            13: { name: "三人订整间" },
-            14: { name: "四人订整间" },
-            20: { name: "订整间" },
-            30: { name: "订整套" },
-            40: { name: "订整栋" }
+            10: { name: "单人订床位", sn: "床位" },
+            11: { name: "整间房单人入住", sn: "整间" },
+            12: { name: "整间房双人入住", sn: "整间"  },
+            13: { name: "整间房三人入住", sn: "整间"  },
+            14: { name: "整间房四人入住", sn: "整间"  },
+            20: { name: "订整间", sn: "整间"  },
+            30: { name: "整套房间", sn: "整套"  },
+            40: { name: "订整栋", sn: "整栋"  }
         },
         fType: {
             1: "包三餐",
@@ -511,7 +511,7 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
                                         </div>
                                         <div class="sai-st">${item.name}</div>
                                         <div class="sai-tit">${item.title}</div>
-                                        ${item.monthReferPrice ? ('<div class="sai-inf"><span><i>￥</i>' + item.monthReferPrice + '</span>起/' + ((item.reserveType === "10" ? "人/" : "") + modal.rType[item.reserveType].name.slice(-2)) + '/' + item.leastDay + '晚</div>') : ('<div class="sai-inf">价格待定</div>')}
+                                        ${item.monthReferPrice ? ('<div class="sai-inf"><span><i>￥</i>' + item.monthReferPrice + '</span>起/' + ((item.reserveType === "10" ? "人/" : "") + modal.rType[item.reserveType].sn) + '/' + item.leastDay + '晚</div>') : ('<div class="sai-inf">价格待定</div>')}
                                         <div class="sai-row">
                                             <div class="sai-tags">
                                             ${(item.foodType && ~~item.foodType !== 3) ? ('<div class="sai-tag-l">' + modal.fType[item.foodType] + '</div>') : ''}

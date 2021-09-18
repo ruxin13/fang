@@ -9,8 +9,8 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
     core.init();
     var modal = {
         s: ["", "栋", "间", "套", "人"],
-        t: [null, "订床位", "订整间", "订整套", "订整栋"],
-        ot: [null, "床位", "独立房间", "整套出租", "整栋出租"]
+        t: [null, "订床位", "订整间", "整套房间", "订整栋"],
+        ot: [null, "床位", "独立房间", "整套", "整栋"]
     };
 
 
@@ -513,14 +513,14 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
                     if (res.json && res.json[0]) {
                         let data = res.json[0];
                         let ruleRentType2 = q("#ruleRentType2");
-                        let ruleLeastDay3 = q("#ruleLeastDay3");
+                        // let ruleLeastDay3 = q("#ruleLeastDay3");
                         let priceEl = q("#price");
                         ruleRentType2 && (ruleRentType2.innerText = modal.t[data.ruleRentType]);
                         if (data.monthReferPrice) {
-                            ruleLeastDay3 && (ruleLeastDay3.innerText = `30晚`);
-                            priceEl.innerHTML = `￥<span>${data.monthReferPrice}</span>`;
+                            // ruleLeastDay3 && (ruleLeastDay3.innerText = `30晚`);
+                            priceEl.innerHTML = `￥<span>${data.monthReferPrice}</span>起/${modal.ot[data.ruleRentType]}/30晚`;
                         } else if (data.dayReferPrice) {
-                            ruleLeastDay3 && (ruleLeastDay3.innerText = `${data.ruleLeastDay || 0}晚`);
+                            // ruleLeastDay3 && (ruleLeastDay3.innerText = `${data.ruleLeastDay || 0}晚`);
                             priceEl.innerHTML = `价格待定`;
                         }
                         //na-sl
