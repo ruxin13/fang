@@ -14,7 +14,7 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
     };
 
 
-    modal.env = "dev";
+    modal.env = "pro";
 
 
     modal.server = {

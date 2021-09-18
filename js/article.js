@@ -9,7 +9,7 @@ define(['common', 'jquery'], function (core, $) {
 
     core.init();
 
-    modal.env = "dev";
+    modal.env = "pro";
 
 
     modal.server = {

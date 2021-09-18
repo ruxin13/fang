@@ -31,7 +31,7 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
         ip: false
     };
     let ruleRentTypeArr = [null, "床位", "独立房间", "整套", "整栋"];
-    modal.env = "dev";
+    modal.env = "pro";
     modal.videoIndexArr = [];
     modal.id = core.parseQueryString().id;
     modal.parseTime = function (timestamp) {
@@ -168,16 +168,17 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
                             playVideo.play();
                         }
                     }, false);
-
+                    let imgSwiper;
                     playVideo.src = data.video;
                     playVideo.poster = data.cover;
                     playVideo.oncanplay = function () {
                         playVideo.play();
+                        imgSwiper && imgSwiper.update();
                     }
                     playVideo.onplay = function () {
                         playVideo.muted = false;
                     }
-                    let imgSwiper = new Swiper('#topSwiper', {
+                    imgSwiper = new Swiper('#topSwiper', {
                         autoHeight: true,
                         on: {
                             transitionEnd: function () {

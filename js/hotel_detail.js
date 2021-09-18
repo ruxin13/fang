@@ -29,7 +29,7 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
         },
         al: []
     };
-    modal.env = "dev";
+    modal.env = "pro";
     modal.videoIndexArr = [];
     modal.id = core.parseQueryString().id;
     function parseTime (timestamp) {
@@ -166,6 +166,7 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
                     playVideo.poster = data.cover;
                     playVideo.oncanplay = function () {
                         playVideo.play();
+                        imgSwiper && imgSwiper.update();
                     }
                     playVideo.onplay = function () {
                         playVideo.muted = false;
