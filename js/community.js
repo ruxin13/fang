@@ -125,6 +125,7 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
                                        loop
                                        muted
                                        autoPlay
+                                       controls
                                        controlsList="nodownload"
                                        src="${data.video}" ${data.cover ? ('poster="' + data.cover + '"') : ''} style="object-fit: fill;background: black"></video>
                                        <div class="video-full" id="videoFullScreen">全屏</div>

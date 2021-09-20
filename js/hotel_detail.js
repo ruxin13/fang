@@ -125,6 +125,7 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
                                        loop
                                        muted
                                        autoPlay
+                                       controls
                                        controlsList="nodownload"
                                        src="${data.video}" ${data.cover ? ('poster="' + data.cover + '"') : ''} style="object-fit: fill;background: black"></video>
                                        <div class="video-full" id="videoFullScreen">全屏</div>
@@ -252,11 +253,11 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
 
 
                     if (data.bookingNotice && bookingNotice) {
-                        content.innerHTML = data.bookingNotice;
+                        bookingNotice.innerHTML = data.bookingNotice;
                     } else {
                         q("#bookingNoticeEl").style.display = "none"
                     }
-                    bookingNotice.innerHTML = data.bookingNotice;
+                    // bookingNotice.innerHTML = data.bookingNotice;
 
                     if (data.hotelTagName) {
                         var tagArr = data.hotelTagName.split(",");
@@ -552,6 +553,7 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
                                                     ' preload="auto"' +
                                                     ' autoplay' +
                                                     ' loop' +
+                                                    ' controls' +
                                                     ' src="' + item2 + '" poster="' + item2 + '?vframe/jpg/offset/2/w/640/h/360" />';
                                                 modal.videoIndexArr.push({"index": index2, "item": item2, "id": item.id});
                                             } else {
@@ -819,7 +821,7 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
                                     }
                                     item.tagList = tagList;
                                 }
-                                str += `<a class="sa-li" data-id="${item.id}" href="community.html?id=${item.id}">
+                                str += `<a class="sa-li" data-id="${item.id}" href="hotel_detail.html?id=${item.id}">
                                         <div class="sai-t">
                                             <div class="sai-tl">
                                                 <img class="sai-tl-img" src="${item.cover}" alt />
