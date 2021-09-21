@@ -73,6 +73,32 @@ body{
     position: relative;
     /*z-index: -1;*/
 }
+.video-btn{
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    font-size: 1rem;
+    color: red;
+}
+.video-progress{
+    width: 90%;
+    height: .1rem;
+    background-color: #fff;
+    position: absolute;
+    left: 5%;
+    bottom: .2rem;
+    border-radius: .05rem;
+}
+.video-bar{
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 1%;
+    height: 100%;
+    background-color: #E02A1C;
+    border-radius: .05rem;
+    transition: width .3s ease;
+}
 .top-swiper-img{
     width: 100%;
     height: 6.67rem;

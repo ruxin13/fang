@@ -188,13 +188,7 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
                         }
                     });
 
-                    videoFullScreen.addEventListener("click", function (){
-                        if (playVideo.requestFullscreen) {
-                            playVideo.requestFullscreen();
-                        } else if (playVideo.webkitRequestFullScreen) {
-                            playVideo.webkitRequestFullScreen();
-                        }
-                    }, false);
+
                     var hotelTitle = q(".hc-tit");
                     var hotelName = q(".hc-inf");
                     var content = q("#content");
@@ -415,6 +409,19 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
             }
         });
         modal.bindTag1();
+
+        modal.history = window.history;
+        window.addEventListener("popstate", function(e) {
+            if (modal.open) {
+                let close = q("#houseClose");
+                if (close) {
+                    close.dispatchEvent(new Event("click"));
+                }
+            } else {
+                window.history.pushState(modal.history, null, "");
+            }
+        })
+
     };
 
     modal.openRoom = function (){
@@ -432,6 +439,7 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
             houseClose.addEventListener("click", function () {
                 let wrap = q(".dp-wrap");
                 if (wrap) {
+                    modal.open = false;
                     wrap.classList.remove("slideUp");
                     wrap.classList.add("slideDown");
                     swiper3.removeAllSlides();
@@ -506,6 +514,8 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
 
     function eventOpenRoom () {
         q(".dp-wrap").style.display = "block";
+        modal.open = true;
+        window.history.pushState(null, null, "");
         lockBg();
         modal.getBed(this.dataset.id, function () {
             modal.bindTag2();
