@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta content="yes" name="apple-touch-fullscreen">
+    <meta content="telephone=no,email=no" name="format-detection">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta name="renderer" content="webkit">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+    <link type="text/css" rel="stylesheet" href="css/reset.css"/>
+    <link type="text/css" rel="stylesheet" href="css/swiper.min.css"/>
+    <link type="text/css" rel="stylesheet" href="css/hotel_detail.css"/>
+    <title>酒店房间详情</title>
+</head>
+<body>
+
+<div class="wrap">
+    <div class="dp-main">
+<!--        <div class="dp-head">-->
+<!--            <img class="dph-close" id="houseClose" src="img/icon_close.png" alt />-->
+<!--            <div class="dph-tit" id="roomTitle2"></div>-->
+<!--            <div class="dph-r"></div>-->
+<!--        </div>-->
+        <div class="dp-mc">
+            <div class="swiper-container swiper-container-head">
+                <div class="swiper-wrapper" id="headImgs"></div>
+                <div class="swiper-pagination-pop" id="pag"></div>
+            </div>
+            <div class="dp-m">
+                <div class="dpm-top">
+                    <div class="dmt-verify">房源已认证</div>
+                    <div class="dmt-tit" id="roomTitle"></div>
+                    <div class="dmt-tags" id="roomTags"></div>
+                    <div class="dmt-row">
+                        <div class="dmt-row-l">房&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;型</div>
+                        <div class="dmt-row-r" id="houseType"></div>
+                    </div>
+                    <div class="dmt-row">
+                        <div class="dmt-row-l">面&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;积</div>
+                        <div class="dmt-row-r"><span id="roomArea"></span>m<sup>2</sup></div>
+                    </div>
+                    <div class="dmt-ins">
+                        <div class="swiper-container swiper-container-bed" id="insSwiper">
+                            <div class="swiper-wrapper" id="hcInfo2">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dpm-pan" id="roomBriefEl">
+                    <div class="dpp-tit">房间介绍</div>
+                    <div class="dpp-con" id="roomBrief"></div>
+                </div>
+
+                <div class="dpm-pan2">
+                    <div class="dpp-tit">设施<span>(照片仅供示意，不是实拍效果)</span></div>
+                    <div class="dpr-con">
+                        <div class="dpr" id="houseIconWrap">
+
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+        <div class="dp-bottom link">
+            <div class="dpb-l">
+                <img class="dpb-lm" src="img/icon_ask_b.png" alt />
+                <div class="dpb-lt">问一问</div>
+            </div>
+            <a class="dpb-r" href="javascript:">查看房型</a>
+        </div>
+
+
+    </div>
+</div>
+
+<div class="pe2">
+    <div class="pe2-mask"></div>
+    <div class="pe2-main">
+        <div class="pe2-tit">房源特色</div>
+        <div class="pe2-list"></div>
+        <img class="pe2-close" src="img/icon_close.png" alt />
+    </div>
+</div>
+
+<!-- 遮盖层 -->
+<div class="guide" id="guide" onclick="closeGuide()"></div>
+<!-- 遮盖层引导 -->
+<div class="guide-img" id="guide-img" onclick="closeGuide()"></div>
+<!-- 打开跳转app -->
+<div class="open-app">
+    <div class="open-app-left">
+        <img src="img/open-app-logo.png" style="margin: 0 15px;width: 52px;" alt />
+        <div style="display:flex;flex-direction:column;justify-content:center;align-items:flex-start;">
+            <label style="color:#343434;font-size:16px;font-weight: 400;">打开乡导APP</label>
+            <label style="color:#666;font-size: 13px;line-height: 22px;">旅居租房</label>
+        </div>
+    </div>
+    <div class="open-app-right" onclick="openApp()">
+        立即打开
+    </div>
+</div>
+
+<script type="text/javascript">
+    function GetQueryString(name) {
+        var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+        var r = window.location.search.substr(1).match(reg);
+        if(r!=null)return  unescape(r[2]); return null;
+    }
+    //打开app逻辑判断: 如果在微信打开引导层，非微信打开app，app未安装直接下载
+    function openApp(href){
+        //检测是否微信内核浏览器
+        var ua = navigator.userAgent.toLowerCase();//获取判断用的对象
+        if (ua.match(/MicroMessenger/i) == "micromessenger") {
+            //在微信中打开，引导跳转外部浏览器
+            document.getElementById("guide").style.display="block";
+            document.getElementById("guide-img").style.display="block";
+        }else{
+            //执行打开app逻辑
+            //ios设备或安卓设备
+            if (navigator.userAgent.match(/(iPhone|iPod|iPad);?/i) || navigator.userAgent.match(/android/i)) {
+                try {
+                    //视频  android://h5/open?type=1&id=64
+                    //文章	android://h5/open?type=2&id=64
+                    //房源  android://h5/open?type=4&id=64
+                    //故事  android://h5/open?type=5&id=64
+                    window.location = "android://h5/open?type=4&id="+GetQueryString("houseId");
+                    window.setTimeout(function() {
+                        //未响应，响应超时则判断未安装app执行下载apk
+                        window.location = "http://www.xiangdao.info/download/sz.xinagdao.apk";
+                    }, 500);
+                } catch (e) {}
+            }
+        }
+
+    }
+    //关闭遮盖层
+    function closeGuide(){
+        document.getElementById("guide").style.display="none";
+        document.getElementById("guide-img").style.display="none";
+    }
+</script>
+<script src="js/require.js" data-main="js/hotel_room"></script>
+<script>
+    requirejs.config({
+        urlArgs: "v=" + (new Date()).getTime()
+    });
+</script>
+
+
+
+</body>
+</html>

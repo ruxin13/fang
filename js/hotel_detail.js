@@ -419,9 +419,10 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
 
     modal.openRoom = function (){
         let details = document.querySelectorAll(".nli-detail");
+        console.log(2);
         if (details && details.length > 0) {
             details.forEach(function (item) {
-                item.addEventListener("click", eventOpenRoom, false);
+                item.addEventListener("click", eventOpenRoomPage, false);
             })
         }
     };
@@ -502,6 +503,12 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
     function PeFadeOut2() {
         let pe = q(".pe2");
         pe && fadeOut(pe, pe.q(".pe2-main"));
+    }
+
+    function eventOpenRoomPage() {
+        let roomId = this.dataset.id;
+        let type = this.dataset.type;
+        window.location.href = `hotel_room.html?type=${type}&roomId=${roomId}`
     }
 
     function eventOpenRoom () {
@@ -1008,7 +1015,7 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
                                     });
                                 }``
                             }
-                            roomStr += `<div class="room-li" ><div class="nli-t nli-detail" data-id="${item.roomId}">
+                            roomStr += `<div class="room-li" ><div class="nli-t nli-detail" data-id="${item.roomId}" data-type="${foodType === '2,3' ? '2' : foodType}">
                                 <img class="nli-tl" src="${item.roomCover}" alt/>
                                 <div class="nli-tr">
                                     <div class="nli-tit">${item.roomTitle}</div>

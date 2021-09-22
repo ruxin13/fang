@@ -1485,6 +1485,7 @@ body{
     display: flex;
     align-items: center;
     margin-bottom: .43rem;
+    flex-wrap: wrap;
 }
 .dmt-tag{
     height: .56rem;
@@ -1494,6 +1495,7 @@ body{
     border-radius: .08rem;
     padding: 0 .2rem;
     margin-right: .24rem;
+    margin-bottom: .2rem;
 }
 .dmt-tags .dmt-tag:nth-child(2){
     background-color: #FDF4E7;
@@ -1510,6 +1512,7 @@ body{
 .dmt-tag-more{
     width: .2rem;
     height: .4rem;
+    margin-bottom: .2rem;
 }
 .dmt-row{
     display: flex;
