@@ -180,6 +180,11 @@ body{
     color: #333;
     font-weight: bold;
     flex: 1;
+    margin-right: .3rem;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
 }
 .hcr-r{
     font-size: .37rem;
@@ -187,6 +192,9 @@ body{
 }
 .hcr-lt{
     margin-bottom: .25rem;
+}
+.hcr-lt span{
+    font-weight: normal;
 }
 .hcr-lb{
     font-size: .35rem;

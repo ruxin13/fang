@@ -24,7 +24,7 @@
         <div class="header-con">
             <div class="hc-ver verified"></div>
             <img class="hc-user" src="" alt />
-            <div class="hc-st" id="profileStr"></div>
+<!--            <div class="hc-st" id="profileStr"></div>-->
             <div class="hc-tit"></div>
 <!--            <div class="hc-code">房源编号 <span id="houseNo"></span></div>-->
             <div class="hc-tags">
@@ -242,7 +242,7 @@
                     //文章	android://h5/open?type=2&id=64
                     //房源  android://h5/open?type=4&id=64
                     //故事  android://h5/open?type=5&id=64
-                    window.location = "android://h5/open?type=4&id="+GetQueryString("houseId");
+                    window.location = "android://h5/open?type=4&id="+GetQueryString("id");
                     window.setTimeout(function() {
                         //未响应，响应超时则判断未安装app执行下载apk
                         window.location = "http://www.xiangdao.info/download/sz.xinagdao.apk";

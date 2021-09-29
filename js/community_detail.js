@@ -109,7 +109,7 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
                 }
                 var videos = document.querySelectorAll("video");
                 if (videos && videos.length > 0) {
-                    for (var i = 0; i < videos.length; i++) {
+                    for (let i = 0; i < videos.length; i++) {
                         videos[i].pause();
                     }
                 }
@@ -197,9 +197,14 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
                                             ' x5-video-orientation="portraint"\n' +
                                             ' x-webkit-airplay="true"\n' +
                                             ' controlsList="nodownload"' +
-                                            ' controls="controls"' +
+                                            ' preload="auto"' +
+                                            ' loop' +
+                                            ' muted' +
+                                            ' autoPlay' +
+                                            ' controls' +
+                                            ' controlsList="nodownload"' +
                                             ' src="' + item2 + '" poster="' + item2 + '?vframe/jpg/offset/2/w/640/h/360" />';
-                                        modal.videoIndexArr.push({"index": index2, "item": item2});
+                                        modal.videoIndexArr.push({"index": index2, "item": item2, "id": item.id});
                                     } else {
                                         str += '<img class="head-img-li" src="' + item2 + '" alt />';
                                     }
@@ -344,8 +349,11 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
 
             ownerAvatar && (ownerAvatar.src = data.ownerAvatar);
             // houseNo.innerText = data.houseNo;
-            profileStr && (profileStr.innerText = data.profileStr);
-            infoTitle && (infoTitle.innerText = data.infoTitle);
+            // profileStr && (profileStr.innerText = data.profileStr);
+            if (infoTitle) {
+                infoTitle.innerText = data.infoTitle;
+                document.title = data.infoTitle;
+            }
             baseIndoorArea && (baseIndoorArea.innerText = data.baseIndoorArea);
             baseOrientation && (baseOrientation.innerText = data.baseOrientation);
             baseDecorationDate && (baseDecorationDate.innerText = new Date(data.baseDecorationDate).getFullYear());
@@ -447,6 +455,28 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
                 });
                 q("#insWrap").innerHTML = insStr;
             }
+
+            $(window).scroll(function () {
+                let scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+                if (modal.videoIndexArr && modal.videoIndexArr.length > 0) {
+                    modal.videoIndexArr.forEach(item => {
+                        let _el = q("#video" + item.id);
+                        if (_el && scrollTop > _el.clientHeight) {
+                            _el.pause();
+                        }
+                    })
+                }
+            });
+
+            let videos = document.querySelectorAll(".head-video-li");
+            if (videos && videos.length > 0) {
+                videos.forEach(item => {
+                    item.onplay = function () {
+                        item.muted = false;
+                    }
+                })
+            }
+
 
             if (~~data.commentCount > 1) {
                 q(".comment-btn").style.display = "block";

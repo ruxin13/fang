@@ -286,7 +286,7 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
                         tagWrapPop.innerHTML = allTagStr;
                     }
                     if (areaAddress) {
-                        areaAddress.innerText = data.locationProvinceName + data.locationCityName + data.locationTownName;
+                        areaAddress.innerHTML = `地址 <span>${data.locationDetail}</span>`;
                     }
 
                     modal.getHouse();
@@ -389,7 +389,13 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
                     modal.getNear(data.locationTown);
 
                     modal.onAMapLoaded();
-
+                    // let playVideo = q("#playVideo");
+                    $(window).scroll(function () {
+                        let scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+                        if (playVideo && scrollTop > playVideo.clientHeight) {
+                            playVideo.pause();
+                        }
+                    });
                 }
             }
         });
@@ -461,13 +467,7 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
             }, false);
         }
 
-        let playVideo = q("#playVideo");
-        $(window).scroll(function () {
-            let scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
-            if (playVideo && scrollTop > playVideo.clientHeight) {
-                playVideo.pause();
-            }
-        });
+
     };
 
     modal.getNear = function (searchLocation) {
@@ -667,34 +667,34 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
                             autoFitView: true // 是否自动调整地图视野使绘制的 Marker点都处于视口的可见范围
                         });
 
-                        placeSearch.searchNearBy('', [lnglat.lng, lnglat.lat], 50000, function(status, result) {
-                            console.log(status, result);
-                            if (result && result.poiList && result.poiList.pois && result.poiList.pois.length > 0) {
-                                let list = result.poiList.pois;
-                                let disArr = [];
-                                list.forEach(function (item) {
-                                    disArr.push(item)
-                                });
-                                modal.distance = disArr;
-                                let min = disArr.sort((a, b) => { return a.distance - b.distance })[0];
-                                AMap.plugin('AMap.Driving', function() {
-                                    var driving = new AMap.Driving({
-                                        // 驾车路线规划策略，AMap.DrivingPolicy.LEAST_TIME是最快捷模式
-                                        policy: AMap.DrivingPolicy.LEAST_TIME
-                                    })
-
-                                    var startLngLat = [min.location.lng, min.location.lat];
-                                    var endLngLat = [lnglat.lng, lnglat.lat];
-
-                                    driving.search(startLngLat, endLngLat, function (status, result) {
-                                        // 未出错时，result即是对应的路线规划方案
-                                        let time = result.routes[0].time;
-                                        q("#distance").innerText = `距${min.name}驾车距离${(min.distance/1000).toFixed(1)}公里，约${parseInt(time/60)}分钟`;
-                                    })
-                                })
-
-                            }
-                        });
+                        // placeSearch.searchNearBy('', [lnglat.lng, lnglat.lat], 50000, function(status, result) {
+                        //     console.log(status, result);
+                        //     if (result && result.poiList && result.poiList.pois && result.poiList.pois.length > 0) {
+                        //         let list = result.poiList.pois;
+                        //         let disArr = [];
+                        //         list.forEach(function (item) {
+                        //             disArr.push(item)
+                        //         });
+                        //         modal.distance = disArr;
+                        //         let min = disArr.sort((a, b) => { return a.distance - b.distance })[0];
+                        //         AMap.plugin('AMap.Driving', function() {
+                        //             var driving = new AMap.Driving({
+                        //                 // 驾车路线规划策略，AMap.DrivingPolicy.LEAST_TIME是最快捷模式
+                        //                 policy: AMap.DrivingPolicy.LEAST_TIME
+                        //             })
+                        //
+                        //             var startLngLat = [min.location.lng, min.location.lat];
+                        //             var endLngLat = [lnglat.lng, lnglat.lat];
+                        //
+                        //             driving.search(startLngLat, endLngLat, function (status, result) {
+                        //                 // 未出错时，result即是对应的路线规划方案
+                        //                 let time = result.routes[0].time;
+                        //                 q("#distance").innerText = `距${min.name}驾车距离${(min.distance/1000).toFixed(1)}公里，约${parseInt(time/60)}分钟`;
+                        //             })
+                        //         })
+                        //
+                        //     }
+                        // });
                     });
 
 

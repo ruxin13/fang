@@ -35,7 +35,7 @@
             <div class="hc-row" style="padding-bottom: 0">
                 <div class="hcr-l">
                     <div class="hcr-lt" id="areaAddress"></div>
-                    <div class="hcr-lb" id="distance"></div>
+<!--                    <div class="hcr-lb" id="distance"></div>-->
                 </div>
                 <div class="hcr-r">
                     <img class="hcr-rt" src="img/icon_pos_red.png" alt/>
@@ -353,7 +353,7 @@
                     //文章	android://h5/open?type=2&id=64
                     //房源  android://h5/open?type=4&id=64
                     //故事  android://h5/open?type=5&id=64
-                    window.location = "android://h5/open?type=4&id="+GetQueryString("houseId");
+                    window.location = "android://h5/open?type=4&id="+GetQueryString("id");
                     window.setTimeout(function() {
                         //未响应，响应超时则判断未安装app执行下载apk
                         window.location = "http://www.xiangdao.info/download/sz.xinagdao.apk";

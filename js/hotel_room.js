@@ -371,6 +371,17 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
                         });
                         q("#houseIconWrap").innerHTML = insStr;
                     }
+                    $(".dp-mc").scroll(function () {
+                        let scrollTop = this.scrollTop || document.body.scrollTop;
+                        if (modal.videoIndexArr && modal.videoIndexArr.length > 0) {
+                            modal.videoIndexArr.forEach(item => {
+                                let _el = q("#video" + item.id);
+                                if (_el && scrollTop > _el.clientHeight) {
+                                    _el.pause();
+                                }
+                            })
+                        }
+                    });
 
                     typeof cb === "function" && cb();
                 }
