@@ -325,6 +325,16 @@ body{
     right: 0;
     top: 0;
 }
+.pan-coi{
+    background-color: #F6F6F6;
+    border-radius: .24rem;
+    padding: .32rem .24rem;
+    line-height: .51rem;
+    font-size: .37rem;
+    color: #333;
+    margin: 0 0 .39rem;
+    white-space: pre-line;
+}
 .pan-txt{
     font-size: 0.4rem;
     color: #666;

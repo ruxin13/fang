@@ -145,6 +145,8 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
             var profileOwnerMode = q("#profileOwnerMode");
             var ruleLeastDay = q("#ruleLeastDay");
             var ruleLeastDay2 = q("#ruleLeastDay2");
+            var rulePriceRemarkEl = q("#rulePriceRemarkEl");
+            var rulePriceRemark = q("#rulePriceRemark");
 
             var houseTypeArr = [null, "层", "卧", "浴", "厨", "卫", "客厅", "餐厅", "书房", "阳台"];
             var bdArr = [
@@ -318,7 +320,7 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
             if (data.profileHouseType) {
                 let typeArr = [null, "室", "厨", "卫", "厅", "厅", "书房", "阳台"];
                 let houseTypeArr = data.profileHouseType.split(",");
-                let retArr = [], retStr = '';;
+                let retArr = [], retStr = '';
                 houseTypeArr.forEach(item => {
                     let _split = item.split("-");
                     let _obj = {};
@@ -337,6 +339,10 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
                 });
                 retStr = retStr.replace("/", '');
                 q("#houseType").innerText = retStr;
+            }
+            let roomCount = q("#roomCount");
+            if (modal.roomCount && roomCount) {
+                roomCount.innerText = modal.roomCount;
             }
 
             getHousePrice(data.houseId || modal.id);
@@ -392,6 +398,11 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
                 infoTitle2.innerText = data.infoTitle;
             }
 
+            if (data.rulePriceRemark && rulePriceRemarkEl && rulePriceRemark) {
+                rulePriceRemark.innerHTML = data.rulePriceRemark;
+            } else {
+                rulePriceRemarkEl.style.display = 'none';
+            }
 
             mpConfirm.addEventListener("click", function () {
                 this.parentNode.parentNode.style.display = "none"
