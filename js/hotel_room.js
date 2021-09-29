@@ -378,6 +378,11 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
                                 let _el = q("#video" + item.id);
                                 if (_el && scrollTop > _el.clientHeight) {
                                     _el.pause();
+                                } else {
+                                    // _el.play();
+                                    if (_el.parentNode.classList.contains("swiper-slide-active")) {
+                                        _el.play();
+                                    }
                                 }
                             })
                         }

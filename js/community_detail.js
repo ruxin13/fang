@@ -96,23 +96,28 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
         on: {
             transitionEnd: function () {
                 var _this = this;
-                if (modal.videoIndexArr.length > 0) {
-                    modal.videoIndexArr.forEach(function (item) {
-                        if (item.index === _this.activeIndex) {
-                            pag.classList.add("video")
-                        } else {
-                            pag.classList.remove("video")
-                        }
-                    })
-                } else {
-                    pag.classList.remove("video")
-                }
                 var videos = document.querySelectorAll("video");
                 if (videos && videos.length > 0) {
                     for (let i = 0; i < videos.length; i++) {
                         videos[i].pause();
                     }
                 }
+                if (modal.videoIndexArr.length > 0) {
+                    modal.videoIndexArr.forEach(function (item) {
+                        if (item.index === _this.activeIndex) {
+                            pag.classList.add("video");
+                            let _el = q("#video" + item.id);
+                            if (_el) {
+                                _el.play();
+                            }
+                        } else {
+                            pag.classList.remove("video");
+                        }
+                    })
+                } else {
+                    pag.classList.remove("video")
+                }
+
             }
         }
     });
@@ -474,6 +479,11 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
                         let _el = q("#video" + item.id);
                         if (_el && scrollTop > _el.clientHeight) {
                             _el.pause();
+                        } else {
+                            // _el.play();
+                            if (_el.parentNode.classList.contains("swiper-slide-active")) {
+                                _el.play();
+                            }
                         }
                     })
                 }

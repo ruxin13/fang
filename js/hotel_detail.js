@@ -417,6 +417,10 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
                     let scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
                     if (playVideo && scrollTop > playVideo.clientHeight) {
                         playVideo.pause();
+                    } else {
+                        if (playVideo.parentNode.classList.contains("swiper-slide-active")) {
+                            playVideo.play();
+                        }
                     }
                 });
             }

@@ -127,7 +127,7 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
                                        autoPlay
                                        controls
                                        controlsList="nodownload"
-                                       src="${data.video}" ${data.cover ? ('poster="' + data.cover + '"') : ''} style="object-fit: fill;background: black"></video>
+                                       src="${data.video}" ${data.cover ? ('poster="' + data.cover + '"') : ''} style="object-fit: contain;background: black"></video>
                                        <div class="video-full" id="videoFullScreen">全屏</div>
                             </div>`;
                     }
@@ -394,6 +394,10 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
                         let scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
                         if (playVideo && scrollTop > playVideo.clientHeight) {
                             playVideo.pause();
+                        } else {
+                            if (playVideo.parentNode.classList.contains("swiper-slide-active")) {
+                                playVideo.play();
+                            }
                         }
                     });
                 }
