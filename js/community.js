@@ -163,12 +163,12 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
                     let playVideo = q("#playVideo");
                     let videoFullScreen = q("#videoFullScreen");
 
-                    document.body.addEventListener('touchstart', function () {
-                        if (!modal.ip) {
-                            modal.ip = true;
-                            playVideo.play();
-                        }
-                    }, false);
+                    // document.body.addEventListener('touchstart', function () {
+                    //     if (!modal.ip) {
+                    //         modal.ip = true;
+                    //         playVideo.play();
+                    //     }
+                    // }, false);
                     let imgSwiper;
                     playVideo.src = data.video;
                     playVideo.poster = data.cover;
@@ -253,12 +253,13 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
                         q(".ct-back").addEventListener("click", function () {
                             slideOut(q(".ct"));
                             unLockBg();
+                            modal.playLock = false;
                         }, false);
                         let allHouse = q("#allHouse");
                         allHouse && allHouse.addEventListener("click", function () {
                             slideIn(q(".ct"));
                             lockBg();
-                            playVideo.pause();
+                            modal.playLock = true;
                         }, false);
 
                         content.innerHTML = data.content;
@@ -396,7 +397,7 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
                         if (playVideo && scrollTop > playVideo.clientHeight) {
                             playVideo.pause();
                         } else {
-                            if (playVideo.parentNode.classList.contains("swiper-slide-active")) {
+                            if (playVideo.parentNode.classList.contains("swiper-slide-active") && !modal.playLock) {
                                 playVideo.play();
                             }
                         }

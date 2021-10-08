@@ -245,6 +245,7 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
                         q(".ct-back").addEventListener("click", function () {
                             slideOut(q(".ct"));
                             unLockBg();
+                            modal.playLock = false;
                         }, false);
                     } else {
                         q("#contentEl").style.display = "none"
@@ -408,7 +409,7 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
                     allHouse && allHouse.addEventListener("click", function () {
                         slideIn(q(".ct"));
                         lockBg();
-                        playVideo.pause();
+                        modal.playLock = true;
                     }, false);
 
                 }
@@ -419,7 +420,7 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
                     if (playVideo && scrollTop > playVideo.clientHeight) {
                         playVideo.pause();
                     } else {
-                        if (playVideo.parentNode.classList.contains("swiper-slide-active")) {
+                        if (playVideo.parentNode.classList.contains("swiper-slide-active") && !modal.playLock) {
                             playVideo.play();
                         }
                     }
