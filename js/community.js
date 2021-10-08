@@ -258,6 +258,7 @@ define(['common', 'jquery', 'swiper'], function (core, $, Swiper) {
                         allHouse && allHouse.addEventListener("click", function () {
                             slideIn(q(".ct"));
                             lockBg();
+                            playVideo.pause();
                         }, false);
 
                         content.innerHTML = data.content;

@@ -191,7 +191,7 @@ body{
     color: #E02A1C;
 }
 .hcr-lt{
-    margin-bottom: .25rem;
+    /*margin-bottom: .25rem;*/
 }
 .hcr-lt span{
     font-weight: normal;
@@ -623,6 +623,7 @@ body{
     display: flex;
     align-items: center;
     margin-bottom: .43rem;
+    font-weight: bold;
 }
 .pt-yqss{
     width: .56rem;
@@ -794,7 +795,7 @@ body{
     font-size: .35rem;
     color: #999;
     text-align: center;
-    margin-bottom: .28rem;
+    margin-bottom: 1rem;
 }
 
 .ask-li{
@@ -1135,7 +1136,7 @@ body{
     border: solid 1px #ccc;
     border-radius: .32rem;
     padding: 0 .48rem;
-    font-size: .35rem;
+    font-size: .4rem;
     color: #666;
 }
 .m-tit-h.m-tit-l:before{
@@ -1244,6 +1245,7 @@ body{
     display: flex;
     align-items: center;
     justify-content: center;
+    font-size: .43rem;
 }
 .sai-tro-more{
     width: .35rem;
@@ -1271,11 +1273,11 @@ body{
 .sai-inf{
     font-size: .43rem;
     color: #333;
-    margin-bottom: .35rem;
+    margin-bottom: .24rem;
 }
 .sai-inf span{
-    color: #E02A1C;
-    font-size: .51rem;
+    color: #333;
+    font-size: .54rem;
     font-weight: bold;
 }
 .sai-inf span i{
@@ -1302,7 +1304,7 @@ body{
     align-items: center;
     justify-content: center;
     padding: 0 .16rem;
-    background-color: #f3f3f3;
+    /*background-color: #f3f3f3;*/
 }
 .sai-tag-r{
     border: solid 1px #ccc;
@@ -1874,11 +1876,18 @@ body{
 }
 .hli-r{
     flex: 1;
+    overflow: hidden;
 }
 .hli-tags{
     display: flex;
-    flex-wrap: wrap;
-    margin-bottom: .1rem;
+    flex-wrap: nowrap;
+    white-space: nowrap;
+    overflow-x: auto;
+    overflow-y: hidden;
+    margin-bottom: .32rem;
+}
+.hli-tags::-webkit-scrollbar{
+    display: none;
 }
 .hli-tag{
     height: .51rem;
@@ -1889,7 +1898,6 @@ body{
     font-size: .32rem;
     color: #666;
     margin-right: .24rem;
-    margin-bottom: .11rem;
 }
 .hli-inf{
     font-size: .4rem;
@@ -1911,7 +1919,7 @@ body{
     font-weight: bold;
 }
 .hli-dw{
-    font-size: .37rem;
+    font-size: .4rem;
     color: #333;
 }
 .hli-dw span{

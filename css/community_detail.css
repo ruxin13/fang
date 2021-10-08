@@ -234,7 +234,7 @@ body{
 .hci-tli-wrap{
     display: flex;
     align-items: center;
-    padding-top: .3rem;
+    /*padding-top: .3rem;*/
     width: auto;
 }
 .hci-tli{
@@ -800,7 +800,7 @@ body{
     font-size: .35rem;
     color: #999;
     text-align: center;
-    margin-bottom: .28rem;
+    margin-bottom: .48rem;
 }
 .ali-t{
     display: flex;
@@ -973,6 +973,7 @@ body{
     display: flex;
     align-items: center;
     margin-bottom: .43rem;
+    font-weight: bold;
 }
 .pt-yqss{
     width: .56rem;
@@ -1370,7 +1371,7 @@ body{
     border: solid 1px #ccc;
     border-radius: .32rem;
     padding: 0 .48rem;
-    font-size: .35rem;
+    font-size: .4rem;
     color: #666;
 }
 .m-tit-h.m-tit-l:before{
@@ -1397,7 +1398,7 @@ body{
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding-bottom: .28rem;
+    padding-bottom: .36rem;
     border-bottom: solid 1px #dedede;
 }
 .na-lt,.na-rt{
@@ -1461,7 +1462,7 @@ body{
     -webkit-box-orient: vertical;
 }
 .na-inf{
-    font-size: .37rem;
+    font-size: .4rem;
     color: #666;
 }
 .na-b{
@@ -1482,7 +1483,7 @@ body{
     font-size: .48rem;
 }
 .na-blb span{
-    /*font-size: .37rem;*/
+    font-size: .56rem;
     font-weight: bold;
 }
 .na-blb i{

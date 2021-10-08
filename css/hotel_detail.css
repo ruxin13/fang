@@ -191,7 +191,7 @@ body{
     color: #E02A1C;
 }
 .hcr-lt{
-    margin-bottom: .25rem;
+    /*margin-bottom: .25rem;*/
 }
 .hcr-lt span{
     font-weight: normal;
@@ -364,9 +364,9 @@ body{
 .stk-b{
     font-size: .45rem;
     color: #333;
-    font-weight: bold;
     width: 3.5rem;
     border: 0;
+    padding: 0;
 }
 .stk-b::placeholder{
     color: #333;
@@ -460,7 +460,8 @@ body{
 .nli-inr{
     height: .72rem;
     line-height: .72rem;
-    padding: 0 .27rem;
+    width: 1.31rem;
+    text-align: center;
     border-radius: .16rem;
     border: solid 1px #E02A1C;
     font-size: .4rem;
@@ -491,7 +492,7 @@ body{
 .nli-mlt{
     font-size: .45rem;
     color: #333;
-    margin-bottom: .32rem;
+    margin-bottom: .26rem;
     font-weight: 800;
 }
 .nli-mlb{
@@ -501,7 +502,7 @@ body{
 .nli-mlb span{
     color: #333;
     font-weight: 800;
-    font-size: .48rem;
+    font-size: .51rem;
 }
 .nli-mlg{
     display: inline-flex;
@@ -566,7 +567,8 @@ body{
     background-color: #E02A1C;
     font-size: .37rem;
     color: #fff;
-    padding: 0 .28rem;
+    width: 1.31rem;
+    text-align: center;
 }
 .nli-mr.nli-sl{
     width: 1.56rem;
@@ -619,6 +621,7 @@ body{
     display: flex;
     align-items: center;
     margin-bottom: .43rem;
+    font-weight: bold;
 }
 .pt-yqss{
     width: .56rem;
@@ -1079,7 +1082,7 @@ body{
     font-size: .4rem;
     color: #666;
     text-align: center;
-    margin-bottom: 1.5rem;
+    margin-bottom: 1rem;
 }
 .comment-bar{
     height: 1.31rem;
@@ -1134,7 +1137,7 @@ body{
     border: solid 1px #ccc;
     border-radius: .32rem;
     padding: 0 .48rem;
-    font-size: .35rem;
+    font-size: .4rem;
     color: #666;
 }
 .m-tit-h.m-tit-l:before{
@@ -1243,6 +1246,7 @@ body{
     display: flex;
     align-items: center;
     justify-content: center;
+    font-size: .43rem;
 }
 .sai-tro-more{
     width: .3rem;
@@ -1270,11 +1274,11 @@ body{
 .sai-inf{
     font-size: .43rem;
     color: #333;
-    margin-bottom: .35rem;
+    margin-bottom: .24rem;
 }
 .sai-inf span{
-    color: #E02A1C;
-    font-size: .51rem;
+    color: #333;
+    font-size: .54rem;
     font-weight: bold;
 }
 .sai-inf span i{
@@ -1301,7 +1305,7 @@ body{
     align-items: center;
     justify-content: center;
     padding: 0 .16rem;
-    background-color: #f3f3f3;
+    /*background-color: #f3f3f3;*/
 }
 .sai-tag-r{
     border: solid 1px #ccc;
@@ -1890,7 +1894,7 @@ body{
 .hci-tli-wrap{
     display: flex;
     align-items: center;
-    padding-top: .3rem;
+    /*padding-top: .3rem;*/
     width: auto;
 }
 .hci-tli{
